@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE configuration PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<environments default="test">
+		<environment id="test">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="org.h2.Driver"></property>
+				<property name="url" value="jdbc:h2:mem:rubanDao;MODE=MYSQL;"></property>
+				<property name="username" value="sa"></property>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="com/ruban/framework/dao/mapping/userMapper.xml" />
+	</mappers>
+
+</configuration>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" >
+
+  <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="File" value="log/gdabc/management.log"/>
+    <param name="BufferedIO" value="true"/> 
+    <param name="BufferSize" value="1024"/>
+    <param name="Append" value="true"/>
+    <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+    <param name="Encoding" value="utf-8" />
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p (%t:%X{context})%X{ip} %X{name} %X{custid}[%c{1}] %m%n"/>
+    </layout>
+  </appender>
+
+   <appender name="asyncFILE" class="org.apache.log4j.AsyncAppender">
+       <param name="BufferSize" value="256"/>
+       <appender-ref ref="FILE"/>
+   </appender>
+
+  <!-- ============================== -->
+  <!-- Append messages to the console -->
+  <!-- ============================== -->
+
+  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+    <param name="Target" value="System.out"/>
+	<param name="Encoding" value="utf-8" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p (%t:%X{context})%X{ip} %X{name} %X{custid}[%c{1}] %m%n"/>
+    </layout>
+  </appender>
+	
+  <root>
+    <level value="INFO"/>
+    <appender-ref ref="asyncFILE"/>
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+</log4j:configuration>
