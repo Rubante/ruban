@@ -12,14 +12,12 @@
 
 	<name>framework</name>
 	<groupId>com.ruban.framework</groupId>
-	<artifactId>project</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>dao</artifactId>
+	<packaging>jar</packaging>
 
-	<modules>
-		<module>parent</module>
-		<module>dao</module>
-		<module>utils</module>
-	</modules>
+	<dependencies>
+
+	</dependencies>
 
 </project>
 
