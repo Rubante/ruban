@@ -10,16 +10,16 @@
 		<relativePath>./parent/</relativePath>
 	</parent>
 
-	<packaging>pom</packaging>
 	<name>framework</name>
+	<groupId>com.ruban.framework</groupId>
+	<artifactId>parent</artifactId>
+	<packaging>pom</packaging>
 
 	<modules>
 		<module>parent</module>
 		<module>dao</module>
 		<module>utils</module>
 	</modules>
-	<groupId>com.ruban.framework</groupId>
-	<artifactId>parent</artifactId>
-	<version>0.0.1</version>
+
 </project>
 
