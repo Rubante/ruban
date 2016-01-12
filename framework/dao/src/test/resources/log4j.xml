@@ -4,7 +4,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" >
 
   <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
-    <param name="File" value="log/gdabc/management.log"/>
+    <param name="File" value="log/test.log"/>
     <param name="BufferedIO" value="true"/> 
     <param name="BufferSize" value="1024"/>
     <param name="Append" value="true"/>
@@ -34,7 +34,7 @@
   </appender>
 	
   <root>
-    <level value="INFO"/>
+    <level value="DEBUG"/>
     <appender-ref ref="asyncFILE"/>
     <appender-ref ref="CONSOLE"/>
   </root>
