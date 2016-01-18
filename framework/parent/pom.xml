@@ -14,6 +14,7 @@
 		<activemq.version>5.13.0</activemq.version>
 		<fastjson.version>1.2.7</fastjson.version>
 		<mybatis.version>3.3.0</mybatis.version>
+		<pagehelper.version>4.1.0</pagehelper.version>
 		<mysql.version>5.1.38</mysql.version>
 		<dbunit.version>2.5.1</dbunit.version>
 		<h2.version>1.4.190</h2.version>
@@ -121,6 +122,12 @@
 				<artifactId>dbunit</artifactId>
 				<version>${dbunit.version}</version>
 				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<!-- SPRING mvc -->
@@ -306,6 +313,12 @@
 				<scope>provided</scope>
 			</dependency>
 			<!-- JAVAX SERVLET END -->
+			
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.1.0.Final</version>
+			</dependency>
 
 			<!-- jackson版本 -->
 			<dependency>
@@ -399,6 +412,11 @@
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-spring</artifactId>
 				<version>1.2.3</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper</artifactId>
+				<version>${pagehelper.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>mysql</groupId>
