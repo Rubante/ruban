@@ -2,10 +2,11 @@ package com.ruban.framework.dao.database;
 
 import java.sql.Connection;
 
-import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.excel.XlsDataSet;
+import org.dbunit.ext.h2.H2Connection;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.ClassPathResource;
@@ -27,7 +28,8 @@ public class DataSourceConfiguration4Test implements InitializingBean {
         Connection connection = builder.build().getConnection();
         IDataSet dataSet = new XlsDataSet(new ClassPathResource("data.xls").getFile());
 
-        IDatabaseConnection databaseConnection = new DatabaseConnection(connection);
+        IDatabaseConnection databaseConnection = new H2Connection(connection, null);
+        databaseConnection.getConfig().setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, "true");
         DatabaseOperation databaseOperation = ((DatabaseOperation) DatabaseOperation.CLEAN_INSERT);
         databaseOperation.execute(databaseConnection, dataSet);
 

@@ -4,6 +4,6 @@
 	
 	<select id="findById" parameterType="int"
 		resultType="com.ruban.framework.dao.domain.TestUser">
-		select * from users where id=#{id}
+		select * from users where ID=#{id}
 	</select>
 </mapper>

@@ -34,9 +34,8 @@ public class TestConfiguration {
 
         // 执行
         TestUser user = sqlSession.selectOne(statement, 1);
-
+        
         System.out.println(user);
-
     }
 
 }
