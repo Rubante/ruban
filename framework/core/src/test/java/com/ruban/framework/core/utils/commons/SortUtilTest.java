@@ -17,11 +17,11 @@ public class SortUtilTest {
             list.add(random.nextInt(3000));
         }
 
-        SortUtil.sort(list, "doubleValue");
+        ListSortUtil.sort(list, "doubleValue");
         int first = list.get(0);
         int middle1 = list.get(50);
 
-        SortUtil.reverseSort(list, "doubleValue");
+        ListSortUtil.reverseSort(list, "doubleValue");
         int last = list.get(list.size() - 1);
         int middle2 = list.get(50);
 

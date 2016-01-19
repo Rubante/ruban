@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
  *
  * @param <E>
  */
-public class SortUtil<E> {
+public class ListSortUtil<E> {
 
-    private static Logger logger = LoggerFactory.getLogger(SortUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(ListSortUtil.class);
 
     /**
      * 对list的对象进行排序，method为排序依据
@@ -27,7 +27,7 @@ public class SortUtil<E> {
      * @param method
      */
     public static <E> void sort(List<E> list, final String method) {
-        SortUtil.sort(list, method, null);
+        ListSortUtil.sort(list, method, null);
     }
 
     /**
@@ -37,7 +37,7 @@ public class SortUtil<E> {
      * @param method
      */
     public static <E> void reverseSort(List<E> list, final String method) {
-        SortUtil.sort(list, method, "desc");
+        ListSortUtil.sort(list, method, "desc");
     }
 
     /**
