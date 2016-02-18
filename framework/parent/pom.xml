@@ -15,15 +15,15 @@
 		<fastjson.version>1.2.7</fastjson.version>
 		<mybatis.version>3.3.0</mybatis.version>
 		<pagehelper.version>4.1.0</pagehelper.version>
-		<mysql.version>5.1.38</mysql.version>
 		<dbunit.version>2.5.1</dbunit.version>
 		<h2.version>1.4.190</h2.version>
 		<aspectj.version>1.8.2</aspectj.version>
-		<jackson.version>2.6.4</jackson.version>
 		<httpclient.version>4.5.1</httpclient.version>
 		<bouncycastle.version>1.46</bouncycastle.version>
 		<powermock.version>1.6.4</powermock.version>
 		<jetty.version>9.3.7.RC0</jetty.version>
+		<hibernate-validator.version>5.2.3.Final</hibernate-validator.version>
+		<ruban.version>0.0.1-SNAPSHOT</ruban.version>
 	</properties>
 
 	<groupId>com.ruban.framework</groupId>
@@ -168,6 +168,12 @@
 				</exclusions>
 			</dependency>
 
+			<dependency>
+				<groupId>jstl</groupId>
+				<artifactId>jstl</artifactId>
+				<version>1.2</version>
+			</dependency>
+			
 			<!-- json -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
@@ -293,12 +299,6 @@
 			</dependency>
 			<!-- MEMCACHE END -->
 
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>druid</artifactId>
-				<version>1.0.16</version>
-			</dependency>
-
 			<!-- JAVAX SERVLET BEGIN -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
@@ -313,30 +313,12 @@
 				<scope>provided</scope>
 			</dependency>
 			<!-- JAVAX SERVLET END -->
-			
+
 			<dependency>
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
 				<version>1.1.0.Final</version>
 			</dependency>
-
-			<!-- jackson版本 -->
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.module</groupId>
-				<artifactId>jackson-module-jaxb-annotations</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<!-- JACKSON END -->
 
 			<!-- HTTPCLIENT BEGIN -->
 			<dependency>
@@ -419,11 +401,6 @@
 				<version>${pagehelper.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${mysql.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
 				<version>${h2.version}</version>
@@ -499,6 +476,23 @@
 				<scope>test</scope>
 			</dependency>
 			<!-- TEST END -->
+			<!-- ruban framework -->
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-core</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-dao</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-web</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<!-- ruban framework -->
 		</dependencies>
 	</dependencyManagement>
 

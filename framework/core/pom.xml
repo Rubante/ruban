@@ -7,7 +7,7 @@
 		<groupId>com.ruban.framework</groupId>
 		<artifactId>ruban-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>./parent</relativePath>
+		<relativePath>../parent</relativePath>
 	</parent>
 
 	<name>ruban-core</name>
@@ -38,14 +38,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
 		</dependency>
 	</dependencies>
 

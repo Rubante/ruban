@@ -3,22 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.ruban.framework</groupId>
-		<artifactId>parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>./parent/</relativePath>
-	</parent>
-
-	<name>framework</name>
+	<name>ruban-framework</name>
 	<groupId>com.ruban.framework</groupId>
-	<artifactId>project</artifactId>
+	<artifactId>ruban-framework</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>parent</module>
+		<module>core</module>
 		<module>dao</module>
-		<module>utils</module>
+		<module>web</module>
 	</modules>
 
 </project>

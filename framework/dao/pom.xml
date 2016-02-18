@@ -7,7 +7,7 @@
 		<groupId>com.ruban.framework</groupId>
 		<artifactId>ruban-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>./parent</relativePath>
+		<relativePath>../parent</relativePath>
 	</parent>
 
 	<name>ruban-dao</name>
@@ -51,12 +51,14 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

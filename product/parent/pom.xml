@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<jdk.version>1.7</jdk.version>
+
+		<mysql.version>5.1.38</mysql.version>
+		<jackson.version>2.6.4</jackson.version>
+		<ruban.version>0.0.1-SNAPSHOT</ruban.version>
+	</properties>
+
+	<groupId>com.ruban.product</groupId>
+	<artifactId>ruban-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>1.0.16</version>
+			</dependency>
+
+			<!-- jackson版本 -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<!-- JACKSON END -->
+
+			<!-- ruban framework -->
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-core</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-dao</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-web</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<!-- ruban framework -->
+
+			<!-- JAVAX SERVLET BEGIN -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>2.5</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>2.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- JAVAX SERVLET END -->
+
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- compiler插件, 设定JDK版本 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<source>${jdk.version}</source>
+						<target>${jdk.version}</target>
+						<showWarnings>true</showWarnings>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+
+				<!-- resource插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

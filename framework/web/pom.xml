@@ -7,7 +7,7 @@
 		<groupId>com.ruban.framework</groupId>
 		<artifactId>ruban-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>./parent</relativePath>
+		<relativePath>../parent</relativePath>
 	</parent>
 
 	<name>ruban-web</name>
@@ -16,12 +16,32 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.ruban.framework</groupId>
+			<artifactId>ruban-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
 		</dependency>
 	</dependencies>
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 请求转化器 -->
+	<bean id="handlerAdapter"
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		
+		 <property name='webBindingInitializer'>
+			 <bean class='org.springframework.web.bind.support.ConfigurableWebBindingInitializer'>
+				 <property name='conversionService' ref='conversionService'></property>
+				 <property name='validator'>
+					<ref bean="validator"/>
+				 </property>
+			  </bean>
+		 </property>
+
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/vnd.wap.wml</value>
+							<value>application/json</value>
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- MVC注解配置 -->
+    <mvc:annotation-driven validator="validator" conversion-service="conversionService" />
+    
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass"  value="org.hibernate.validator.HibernateValidator"/>
+        <!--不设置则默认为classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="validatemessageSource"/>
+    </bean>
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+    
+    <bean id="validatemessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">  
+        <property name="basename" value="classpath:validateMessages"/>  
+        <property name="fileEncodings" value="utf-8"/>  
+        <property name="cacheSeconds" value="120"/>  
+	</bean>
+
+	<!-- 处理所有静态资源及未对应RequestMapping的URL -->
+	<mvc:default-servlet-handler />
+
+	<!-- 定义无需Controller的url<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="redirect:/oauthJoin" />
+
+	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Throwable">error/500</prop>
+			</props>
+		</property>
+	</bean>
+</beans>
