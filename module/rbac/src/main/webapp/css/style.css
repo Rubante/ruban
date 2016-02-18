@@ -1,0 +1,17 @@
+/**加载面板**/
+#loadPanel {
+	overflow-y: auto;
+	overflow-x: auto;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	background-color: gray;
+	filter: alpha(opacity =   30);
+	opacity: .3;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	z-index: 99999;
+	background-image: url("images/loading.gif");
+	background-repeat: no-repeat;
+	background-position: center;
+}
