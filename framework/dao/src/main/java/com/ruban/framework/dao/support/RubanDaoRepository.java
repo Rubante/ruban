@@ -13,5 +13,5 @@ import org.springframework.stereotype.Component;
 @Documented
 @Component
 public @interface RubanDaoRepository {
-    public abstract String value();
+    public abstract String value() default "";
 }
