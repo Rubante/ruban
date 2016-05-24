@@ -1,0 +1,35 @@
+{
+	"manifest_version":2,
+	"name":"分享",
+	"version":"1.0",
+	"description":"分享你的阅读观点",
+	"icons":{
+		"16":"images/icon.png",
+		"48":"images/icon.png",
+		"128":"images/icon.png"
+	},
+	"browser_action":{
+		"default_icon":{
+			"19":"images/icon.png",
+			"38":"images/icon.png"
+		},
+		"default_title":"分享",
+		"default_popup":"login.html"
+	},
+	"content_scripts" :[
+		{
+			"js":["js/jquery-1.12.0.min.js","js/alert/jquery.alerts.js","js/hello.js"],
+			"matches":["*://*/*"],
+			"run_at":"document_end"
+		}
+	],
+	"background":{
+		"scripts":["js/jquery-1.12.0.min.js","js/menu.js"]
+	},
+    "permissions": [
+        "tabs",
+        "contextMenus",
+        "*://*/*",
+        "notifications"
+     ]
+}

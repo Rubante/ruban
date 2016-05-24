@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>登录-分享者</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/page.js"></script>
+</head>
+<body style="background-color: #f8f8f8">
+	<h2>分享者</h2>
+	<div id="loginDiv" style="width: 350px;">
+		<div id="inputAlert" class="alert alert-warning" style="display:none">
+			<button id="closeAlert" type="button" class="close" >&times;</button>
+			用户名及密码必须填写！
+		</div>
+
+		<table class="table">
+			<tr>
+				<td class="text-right"><label class="label-control">用户名</label></td>
+				<td><input id="userno" name="userno" type="text" /></td>
+			</tr>
+			<tr>
+				<td class="text-right"><label class="label-control">密码</label></td>
+				<td><input id="password" name="password" type="password"  data-bv-notempty data-bv-notempty-message="密码必须填写" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><button id="login" style="width: 120px"
+						class="btn btn-success">登录</button></td>
+			</tr>
+		</table>
+
+	</div>
+	<div id="test"></div>
+</body>
+</html>
