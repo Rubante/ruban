@@ -58,15 +58,15 @@ public class ListSortUtil<E> {
                 try {
                     Method m1 = (a).getClass().getMethod(method);
                     Method m2 = (b).getClass().getMethod(method);
-                    E valueB = (E)m2.invoke(b);
-                    E valueA = (E)m1.invoke(a);
+                    Object valueB = (Object)m2.invoke(b);
+                    Object valueA = (Object)m1.invoke(a);
 
                     if (sort != null && "desc".equals(sort)) {
                         // 倒序
-                        ret = (int) ((Comparable<E>) valueB).compareTo(valueA);
+                        ret = (int) ((Comparable<Object>) valueB).compareTo(valueA);
                     } else {
                         // 正序
-                        ret = (int) ((Comparable<E>) valueA).compareTo(valueB);
+                        ret = (int) ((Comparable<Object>) valueA).compareTo(valueB);
                     }
                 } catch (NoSuchMethodException ne) {
                     logger.error("NoSuchMethod", ne);

@@ -9,6 +9,60 @@ package com.ruban.framework.core.utils.commons;
 public class SqlUtil {
 
     /**
+     * 去除SQL字串中的控制字符
+     * 
+     * @param str
+     *            SQL字串
+     * @return 返回的字串
+     */
+    public static String escapeTabSql(String str) {
+        int length = str.length();
+        int newLength = length;
+        for (int i = 0; i < length;) {
+            char c = str.charAt(i);
+            switch (c) {
+            case 0:
+            case '"':
+            case '\'':
+            case '\\':
+                newLength++;
+            default:
+                i++;
+                break;
+            }
+        }
+        if (length == newLength)
+            return str;
+
+        StringBuffer sb = new StringBuffer(newLength);
+        for (int i = 0; i < length; i++) {
+            char c = str.charAt(i);
+            switch (c) {
+            case '\\':
+                sb.append("\\\\");
+                break;
+
+            case '"':
+                sb.append("\\\"");
+                break;
+
+            case '\'':
+                sb.append("\\'");
+                break;
+
+            case 0:
+                sb.append("\\0");
+                break;
+
+            default:
+                sb.append(c);
+                break;
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
      * 
      * 描 述：转义SQL字符
      * 
@@ -147,22 +201,22 @@ public class SqlUtil {
     public static String generateDateToCharSql(String columnName) {
         return " TO_CHAR(" + columnName + ",'yyyy-MM-dd HH24:mi:ss')";
     }
-    
-    public  static String inSql(int... inValues){
-    	StringBuilder inSql = new StringBuilder();
-    	
-    	inSql.append("(");
-    	if(inValues!=null){
-    		for(int i=0;i<inValues.length;i++){
-    			inSql.append(inValues[i]);
-    			if(i<inValues.length-1){
-    				inSql.append(",");
-    			}
-    		}
-    	}
-    	inSql.append(")");
-    	
-    	return inSql.toString();
+
+    public static String inSql(int... inValues) {
+        StringBuilder inSql = new StringBuilder();
+
+        inSql.append("(");
+        if (inValues != null) {
+            for (int i = 0; i < inValues.length; i++) {
+                inSql.append(inValues[i]);
+                if (i < inValues.length - 1) {
+                    inSql.append(",");
+                }
+            }
+        }
+        inSql.append(")");
+
+        return inSql.toString();
     }
 
 }

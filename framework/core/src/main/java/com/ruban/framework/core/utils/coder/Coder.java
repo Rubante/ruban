@@ -5,7 +5,7 @@
  * All rights reserved.
  */
 
-package com.ruban.framework.core.utils.commons;
+package com.ruban.framework.core.utils.coder;
 
 public interface Coder {
 

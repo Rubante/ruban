@@ -3,6 +3,8 @@ package com.ruban.framework.core.utils.commons;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+import com.ruban.framework.core.utils.Constants;
+
 /**
  * BCD码
  * 
@@ -125,43 +127,4 @@ public class BcdUtil {
         }
         return moneyStr;
     }
-
-    /**
-     * 格式化数字为千分位显示 ，保留小数点后两位有效数字 "1088903.635656"-->"1,088,903.64"
-     * "1088903.63"-->"1,088,903.63" "1088903.6"-->"1,088,903.60"
-     * "1088903"-->"1,088,903.00" "1"-->"1.00"
-     * 
-     * @param text
-     *            要格式化数字
-     * @return 格式化后的字符串
-     */
-    public static String fmtMicrometer(String amount) {
-        DecimalFormat df = null;
-        df = new DecimalFormat("###,##0.00");
-        double number = 0.0;
-        try {
-            number = Double.parseDouble(amount);
-        } catch (Exception e) {
-            number = 0.0;
-        }
-        return df.format(number);
-    }
-
-    /**
-     * 格式化数字为千分位显示 ，保留小数点后两位有效数字 "1088903.635656"-->"1,088,903.64"
-     * "1088903.63"-->"1,088,903.63" "1088903.6"-->"1,088,903.60"
-     * "1088903"-->"1,088,903.00" "1"-->"1.00"
-     * 
-     * @param amount
-     *            要格式化数字(BigDecimal型)
-     * @return 格式化后的字符串
-     */
-    public static String fmtMicrometer(BigDecimal amount) {
-    	if(amount==null){
-    		amount = BigDecimal.ZERO;
-    	}
-        DecimalFormat df = new DecimalFormat("###,##0.00");
-        return df.format(amount);
-    }
-
 }

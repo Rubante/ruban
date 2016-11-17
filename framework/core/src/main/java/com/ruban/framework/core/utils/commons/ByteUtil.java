@@ -9,11 +9,12 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ruban.framework.core.utils.Constants;
+import com.ruban.framework.core.utils.coder.CoderUtil;
+
 public class ByteUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(ByteUtil.class);
-
-    private static char[] HexCode = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
     /**
      * 把整数转为字节
@@ -419,14 +420,11 @@ public class ByteUtil {
     /**
      * 字节转十六进制字符串
      * 
-     * @param b
+     * @param byt
      * @return
      */
-    public static String byte2HexString(final byte b) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(HexCode[(b >>> 4) & 0x0f]);
-        buffer.append(HexCode[b & 0x0f]);
-        return buffer.toString();
+    public static String byte2HexString(final byte byt) {
+        return CoderUtil.byte2HexStr(byt);
     }
 
     /**
@@ -436,14 +434,7 @@ public class ByteUtil {
      * @return
      */
     public static String bytes2HexString(final byte[] bytes) {
-
-        StringBuffer buffer = new StringBuffer();
-        if (bytes != null) {
-            for (int i = 0; i < bytes.length; i++) {
-                buffer.append(ByteUtil.byte2HexString(bytes[i]));
-            }
-        }
-        return buffer.toString();
+        return CoderUtil.bytes2HexStr(bytes);
     }
 
     /**

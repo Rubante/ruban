@@ -11,7 +11,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.ruban.framework.core.utils.commons.ByteUtil;
-import com.ruban.framework.core.utils.commons.MessageDigestUtil;
 
 public class HMAC {
 

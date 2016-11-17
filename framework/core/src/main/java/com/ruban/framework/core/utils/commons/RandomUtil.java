@@ -88,7 +88,7 @@ public class RandomUtil {
      * @param array
      */
     public static void shuffle(byte[] array) {
-        List list = new ArrayList();
+        List<Byte> list = new ArrayList<Byte>();
         for (int i = 0; i < array.length; i++) {
             list.add(array[i]);
         }

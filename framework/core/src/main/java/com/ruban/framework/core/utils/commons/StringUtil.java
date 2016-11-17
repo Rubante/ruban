@@ -13,12 +13,9 @@ import java.beans.PropertyDescriptor;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,12 +23,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ruban.framework.core.utils.Constants;
 
 /**
  * StringUtil.java 字符串处理工具类
@@ -195,60 +193,6 @@ public class StringUtil {
                     sb.append(c);
                     break;
                 }
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 去除SQL字串中的控制字符
-     * 
-     * @param str
-     *            SQL字串
-     * @return 返回的字串
-     */
-    public static String escapeSQL(String str) {
-        int length = str.length();
-        int newLength = length;
-        for (int i = 0; i < length;) {
-            char c = str.charAt(i);
-            switch (c) {
-            case 0:
-            case '"':
-            case '\'':
-            case '\\':
-                newLength++;
-            default:
-                i++;
-                break;
-            }
-        }
-        if (length == newLength)
-            return str;
-
-        StringBuffer sb = new StringBuffer(newLength);
-        for (int i = 0; i < length; i++) {
-            char c = str.charAt(i);
-            switch (c) {
-            case '\\':
-                sb.append("\\\\");
-                break;
-
-            case '"':
-                sb.append("\\\"");
-                break;
-
-            case '\'':
-                sb.append("\\'");
-                break;
-
-            case 0:
-                sb.append("\\0");
-                break;
-
-            default:
-                sb.append(c);
-                break;
-            }
         }
         return sb.toString();
     }
@@ -672,18 +616,6 @@ public class StringUtil {
     }
 
     /**
-     * 转换为十六进制格式（小写）
-     * 
-     * @param abyte0
-     * @return
-     */
-    private static HexCoder coder = new HexCoder();
-
-    public static final String bytes2HexStr(byte abyte0[]) {
-        return coder.encode(abyte0);
-    }
-
-    /**
      * 判断对象或对象数组中每一个对象是否为空: 对象为null，字符序列长度为0，集合类、Map为empty
      * 
      * @param obj
@@ -753,7 +685,7 @@ public class StringUtil {
      * @param str
      * @return
      */
-    public static String filterSBCCase(String str) {
+    public static String filterWhilteSpace(String str) {
         char[] ch = str.toCharArray();
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < ch.length; i++) {
@@ -830,23 +762,6 @@ public class StringUtil {
         System.arraycopy(orgBytes, startPos, newBytes, 0, newLength);
 
         return new String(newBytes);
-    }
-
-    /**
-     * 按千位分割格式格式化数字
-     * 
-     * @param v
-     * @param scale
-     * @return
-     */
-    public static String parseStringPattern(Object v, int scale) {
-        String temp = "###,###,###,###,###,###,###,##0";
-        if (scale > 0)
-            temp += ".";
-        for (int i = 0; i < scale; i++)
-            temp += "0";
-        DecimalFormat format = new DecimalFormat(temp);
-        return format.format(v).toString();
     }
 
     /**
@@ -1033,26 +948,6 @@ public class StringUtil {
     }
 
     /**
-     * 海外对公交易查询汇总公用方法 将总金额按照币种分类，组成字符串
-     * 
-     * @param list
-     * @return String
-     */
-    public static String ListToString(List<?> list) {
-        String listString = "";
-        if (list != null && list.size() != 0) {
-            for (int i = 0; i < list.size(); i++) {
-                String curr = (String) (((Map<?, ?>) (list.get(i))).get("currency"));
-                String amout = ((Map<?, ?>) (list.get(i))).get("amount").toString();
-                listString = listString + curr + "|" + amout + "@";
-            }
-            return listString;
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * <p>
      * 方法shortClassName()。
      * </p>
@@ -1093,22 +988,7 @@ public class StringUtil {
             return "null";
         }
     }
-
-    public static String stringOf(Date date) {
-        return stringOf(TimeZone.getDefault(), date);
-    }
-
-    public static String stringOf(TimeZone timeZone, Date date) {
-        if (date == null) {
-            return "null";
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        if (timeZone != null) {
-            formatter.setTimeZone(timeZone);
-        }
-        return formatter.format(date);
-    }
-
+    
     /**
      * 返回srcStr字符串的前truncByteLen字节长度的子串。<br>
      * <p/>
