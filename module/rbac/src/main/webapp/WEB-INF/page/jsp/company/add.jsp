@@ -13,7 +13,7 @@
 			</div>
 			<div class="modal-body">
 				<!-- PAGE CONTENT BEGINS -->
-				<form:form modelAttribute="companyForm" class="form-horizontal" role="form">
+				<form:form modelAttribute="companyForm" class="form-horizontal" role="form" id="companyAddForm">
 					<!-- #section:elements.form -->
 					<div class="form-group form-group-sm">
 						<label class="col-sm-3 control-label no-padding-right" for="code"> 编码 </label>
@@ -57,14 +57,15 @@
 				</form:form>
 			</div>
 			<div class="modal-footer">
-				<button onclick="addForm();" type="button" class="btn btn-primary btn-xs">保存</button>
+				<button onclick="company.addForm();" type="button" class="btn btn-primary btn-xs">保存</button>
 			</div>
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#myModal").modal('toggle');
+	$(".modal-backdrop").remove();
+	$("#myModal").modal('show');
 	$("#myModal").draggable({
 	    handle: ".modal-header"
 	});

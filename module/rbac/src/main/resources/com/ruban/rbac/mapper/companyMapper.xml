@@ -9,6 +9,16 @@
 		FROM ORG_T_COMPANY
 	</select>
 	
+	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.organization.Company">
+		SELECT 
+			ID as id, CODE as code, NAME as name, ADDRESS as address,POST_CODE as postcode, TITLE as title, TEL as tel,
+			EMAIL as email, PARENT_ID as parentId, TYPE as type, MEMO as memo, UPDATETIME as updatetime
+		FROM ORG_T_COMPANY where 1 = 1 
+		<if test="code != null and code != ''">
+			and code = #{code}
+		</if>
+	</select>
+	
 	<insert id="insert" parameterType="com.ruban.rbac.domain.organization.Company" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO ORG_T_COMPANY(
 			ID, CODE, NAME, ADDRESS, POST_CODE, TITLE, TEL, EMAIL, PARENT_ID, TYPE, MEMO, UPDATETIME

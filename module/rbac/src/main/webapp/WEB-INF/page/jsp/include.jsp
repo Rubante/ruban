@@ -24,7 +24,7 @@
 
 		<!-- ace settings handler -->
 		<script src="../js/ace-extra.js"></script>
-		<script src="../js/page.js"></script>
+		<script src="../js/ruban.page.js"></script>
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 

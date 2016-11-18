@@ -1,7 +1,5 @@
 package com.ruban.rbac.organization.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ruban.framework.dao.helper.ResultInfo;
 import com.ruban.rbac.domain.organization.Company;
-import com.ruban.rbac.login.form.SearchForm;
 import com.ruban.rbac.organization.form.CompanyForm;
+import com.ruban.rbac.organization.form.SearchForm;
 import com.ruban.rbac.service.ServiceLocator;
 
 @Controller
@@ -25,10 +24,15 @@ public class CompanyController {
     private ServiceLocator serviceLocator;
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String search(Model model, @ModelAttribute("form") SearchForm form) {
-        List<Company> result = serviceLocator.getCompanyService().selectAll();
+    public String search(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
 
-        model.addAttribute("list", result);
+        ResultInfo<Company> result = serviceLocator.getCompanyService().selectByPage(searchForm);
+
+        model.addAttribute("list", result.getList());
+        model.addAttribute("startIndex", result.getStartRow());
+        model.addAttribute("firstPage", result.isFirstPage());
+        model.addAttribute("lastPage", result.isLastPage());
+        model.addAttribute("pages", result.getPages());
 
         return "company/list";
     }
@@ -53,6 +57,7 @@ public class CompanyController {
         company.setEmail(companyForm.getEmail());
 
         serviceLocator.getCompanyService().insert(company);
-        return "company/list";
+
+        return "company/add";
     }
 }

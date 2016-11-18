@@ -3,23 +3,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="company.jsp"></jsp:include>
 <div class="widget-box widget-color-orange">
-	<div class="widget-header widget-header-small widget-header-flat">
-		<h5 class="widget-title widget-title-small">
-			<i class="ace-icon fa fa-search"></i>
-			<b>组织管理</b>
-		</h5>
-	</div>
-
 	<div class="widget-body">
 		<div class="widget-main">
 			<div class="row">
 				<div class="col-sm-12">
 					<form id="searchForm" class="form-inline" role="form">
-						<div id="searchForm" class="form-group">
-							<label for="code"> 编码 </label>
-							<input type="text" id="code" name="code" placeholder="编码" />
+						<div class="form-group">
+							<label for="code">编码</label>
+							<input type="text" id="code" name="code" placeholder="编码" value="${searchForm.code}" />
 						</div>
-						<input type="hidden" name="currentPage" />
+						<input type="hidden" name="startIndex" value="${startIndex}"/>
 						<button onclick="company.search();" type="button" class="btn btn-success btn-sm">查询</button>
 					</form>
 				</div>

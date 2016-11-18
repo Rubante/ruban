@@ -1,0 +1,11 @@
+.ruban-error {
+	background-color: red;
+	color: white;
+}
+
+.ime-mode {
+	ime-mode: disabled;
+	-ms-ime-mode: disabled;
+	-moz-ime-mode: disabled;
+	-webkit-ime-mode: disabled;
+}

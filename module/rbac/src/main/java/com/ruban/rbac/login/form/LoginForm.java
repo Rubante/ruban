@@ -1,5 +1,8 @@
 package com.ruban.rbac.login.form;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 public class LoginForm {
 
     /**
@@ -18,6 +21,7 @@ public class LoginForm {
      * 验证码
      * 
      */
+    @Min(value=4)
     private String validation;
 
     public String getUserno() {

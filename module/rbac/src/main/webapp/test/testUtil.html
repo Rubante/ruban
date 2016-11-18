@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+body{
+font-family: 'Microsoft Yahei';
+}
+</style>
+<title>Insert title here</title>
+<script src="../js/jquery-1.12.0.min.js"></script>
+<script src="../js/ruban.util.js"></script>
+<script src="../js/ruban.validate.js"></script>
+<link rel="stylesheet" href="../css/validate.css" />
+</head>
+<body>
+
+	输入数字校验：<input valid="number" name="number" /><br />
+	输入字符校验：<input valid="alpha" name="alpha" /><br />
+	输入数字字符校验：<input valid="char" name="char" /><br />
+	
+	校验数字：<input check="number" /><br />
+	校验邮箱：<input check="email" /><br />
+	校验电话：<input check="tel" /><br />
+	输入长度校验：<input check="minLength = 10" />
+	<br />
+	<textarea rows="10" cols="50" maxlength="10"></textarea>
+	<br />
+</body>
+
+<script type="text/javascript">
+	var strTrim = "  ab c   ";
+	document.write("before trim:"+strTrim.length);
+	document.write("<br />");
+	document.write("after trim:" + strTrim.trim().length);
+	document.write("<br />");
+	document.write("left trim :" + strTrim.ltrim().length);
+	document.write("<br />");
+	document.write("right trim:" + strTrim.rtrim().length);
+	document.write("<br />");
+	
+	var email = "290368375@qq.com";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	email = "wangin1013@163.com";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	email = "290368375@qq..com";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	email = "290368375@qq.m";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	email = "290368375@163.qq.com";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	email = "290368375@1_63.q-q.com";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	email = "290368375@1_63.q-q.中国";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	email = "-290368375@136.com";
+	document.write("isEmail (" + email+ "):" + isEmail(email));
+	document.write("<br />");
+	
+	var number = "2323131";
+	document.write("isNumber ( "+number+") : "+isNumber(number));
+	document.write("<br />");
+	
+	number = "3232da"
+	document.write("isNumber (" + number + ") : " + isNumber(number));
+	document.write("<br />");
+	
+	number = "232da323"
+	document.write("isNumber ( " + number + " ) :"+ isNumber(number));
+	document.write("<br />");
+	
+	number = "2";
+	document.write("isNumber ( " + number + " ) : " + isNumber(number)); 
+	document.write("<br />");
+	
+	var word = "abc";
+	document.write("isAlpha ( " + word + " ) : " + isAlpha(word));
+	document.write("<br />");
+	
+	word = "aABC";
+	document.write("isAlpha ( " + word + " ) : " + isAlpha(word));
+	document.write("<br />");
+	
+	word = "232.dadsa"
+	document.write("isAlpha ( " + word + " ) : " + isAlpha(word));
+	document.write("<br />");
+	
+	var ff = "23.32"
+	document.write("isFloat ( " + ff + " ) : " + isFloat(ff));
+	document.write("<br />");
+	
+	ff = "323.32.32";
+	document.write("isFloat ( " + ff + " ) : " + isFloat(ff)); 
+	document.write("<br />");
+	
+	ff="3";
+	document.write("isFloat ( " + ff + " ) : " + isFloat(ff));
+	document.write("<br />");
+	
+	ff = "33."
+	document.write("isFloat ( " + ff + " ) : " + isFloat(ff));
+	document.write("<br />");
+	
+	ff = "35";
+	document.write("isFloat ( " + ff + " ) : " + isFloat(ff));
+	document.write("<br />");
+	
+	ff = "4.6";
+	document.write("isFloat ( " + ff + " ) : " + isFloat(ff));
+	document.write("<br />");
+	
+	document.write("isAlphaNumber ( " + number + " ) : " + isAlphaNumber(number));
+	document.write("<br />");
+	
+	document.write("isAlphaNumber ( " + ff +" ) : " +isAlphaNumber(ff) );
+	document.write("<br />");
+	
+	var tel = "13011817610";
+	document.write("isTel ( " + tel +" ) : " + isTel(tel));
+	document.write("<br />");
+	
+	tel = "12011817612"
+	document.write("isTel ( " + tel + " ) : " + isTel(tel));
+	document.write("<br />");
+	
+	tel = "1401181761";
+	document.write("isTel ( " + tel + " ) : " + isTel(tel));
+	document.write("<br />");
+	
+	tel = "14011817610"
+	document.write("isTel ( " + tel + " ) : " + isTel(tel));
+	document.write("<br />");
+	
+	tel = "185180929613"
+	document.write("isTel ( " + tel + " ) : " + isTel(tel));
+	document.write("<br />");
+	
+	var fileName = "a.jpg";
+	document.write("ck4Img ( " + fileName +" ) : " + ck4Img(fileName));
+	document.write("<br />");
+	
+	fileName = "a.JPg.abc";
+	document.write("ch4Img ( " + fileName + " ) : " + ck4Img(fileName));
+	document.write("<br />");
+	
+	var chinese = "中国";
+	document.write("isChinese ( "+chinese + " ) : " + isChinese(chinese));
+	document.write("<br />");
+	
+	document.write("lenByte4GBK ( " + chinese + " ) : " + lenByte4GBK(chinese)) ;
+	document.write("<br />");
+	
+	document.write("lenByte4UTF8 ( " + chinese + " ) : " + lenByte4UTF8(chinese));
+	document.write("<br />");
+	
+	document.write("randomInt (64) : " + randomInt(64));
+	document.write("<br />");
+	document.write("randomAlpha(64) : " + randomAlpha(64));
+	document.write("<br />");
+	
+	document.write("randomAlphaInt(64) : " + randomAlphaInt(64));
+	document.write("<br />");
+	
+</script>
+</html>

@@ -30,5 +30,6 @@
 			<jsp:include page="footer.jsp"></jsp:include>
 		</div><!-- /.main-container -->
 		<div id="loadPanel"></div>
+		<div id="modal"></div>
 	</body>
 </html>

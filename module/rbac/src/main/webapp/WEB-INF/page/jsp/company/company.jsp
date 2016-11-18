@@ -8,15 +8,11 @@ company.search=function(){
 	$('#searchForm').ajaxSubmit(options);
 }
 company.addForm=function(){
-	$("#myModal").modal('hide');
-	
 	var options = ajaxOption("../company/addForm",function(html){
 		$("#addModal").html(html);
 	});
 	
-	setTimeout(function(){
-		$('#companyForm').ajaxSubmit(options);
-	},400);
+	$("#companyAddForm").ajaxSubmit(options);
 };
 company.add=function(){
 	if($("#addModal").length == 0 ){

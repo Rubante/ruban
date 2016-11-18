@@ -1,5 +1,7 @@
 package com.ruban.rbac.login.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@ModelAttribute("form") LoginForm form) {
+    public String login(@Valid @ModelAttribute("form") LoginForm form) {
         System.out.println(form.getUserno());
         return "main";
     }
