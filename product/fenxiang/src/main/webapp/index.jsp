@@ -1,22 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>纪录你的思考历程，分享你的专业观点</title>
+
+<title><s:message code="title"></s:message></title>
+
 <link href="<c:url value='/css/CustomerIndex.css' />" type="text/css"
 	rel="stylesheet" />
 <link href="<c:url value='/css/global.css' />" type="text/css"
 	rel="stylesheet" />
 
 <script language="javascript"
-	src="<c:url value='/js/CustomerIndex.js' />"></script>
-<script language="javascript" src="<c:url value='/js/trim.js' />"></script>
-<script language="javascript"
 	src="<c:url value='/js/jquery-1.12.0.min.js' />"></script>
+<script language="javascript" src="<c:url value='/js/commons.js' />"></script>
+<script language="javascript"
+	src="<c:url value='/js/CustomerIndex.js' />"></script>
+
 </head>
 
 <body style="filter: alpha(opacity = 100)" id="totop">
@@ -27,12 +31,6 @@
 			<div id="top">
 				<!-- top部分的LogoDIV -->
 				<div id="topLogo">
-					<!-- topLogo部分的icoDIV -->
-					<div id="topLogoIco">
-						<a href="CustomerIndex.html"><img src="images/logo_ipad.png"
-							width="72" height="72" alt="" /></a>
-					</div>
-					<!-- topLogo部分的icoDIV结束 -->
 
 					<!-- topLogo部分的wordDIV -->
 					<div id="topLogoWord">
@@ -60,149 +58,67 @@
 			<!-- topDIv 结束-->
 			<!-- 内容总容器 mainDIV 开 始-->
 			<div id="main">
-				<!-- 左侧mainBannerDIV 开始 -->
-				<div id="mainBanner">
-					<!-- mainBannerTop DIV 开始 -->
-					<div id="mainBannerTop">
-						<!--id=mainBannerTopIssue 发布框-->
-						<div id="mainBannerTopIssue">
-							<!--id=mainBannerTopIssuePoint 提示-->
-							<div id="mainBannerTopIssuePoint">输入你对这篇文章的评论</div>
-							<div style="float: right;">
-								您还可以输入<font id="counter1">500</font>字！
-							</div>
-							<form action="" method="post" id="">
-								<div id="mainBannerTopIssueForm">
-									<!--id="mainBannerTopIssueFrame-->
-									<div id="mainBannerTopIssueFrame">
-										<textarea name="textfield1" rows="4" class="Size"
-											id="textfield2"
-											style="overflow: hidden; border: 1px #0CF solid;"
-											onkeyup="calNum(this,counter1,0)"></textarea>
-									</div>
-									<!--id="mainBannerTopIssueInsert 插入链接-->
-									<div id="mainBannerTopIssueInsert">
-										<!--4个小div-->
-									</div>
-									<!--确认发布-->
-									<div id="mainBannerTopIssueSure">
-										<div id="mainBannerTopIssueSure2">
-											<a href="javascript:biaoQingXianShi()" class="a1">
-												<div id="mainBannerTopIssueInsert5"></div>
-												<div id="mainBannerTopIssueInsert6">选择标签</div>
-											</a> <input type="button" name="button1" id="button1" value="发布"
-												style="background-color: #3295E6; border: none"
-												onclick="submitState()" />
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-						<!-- 表情DIV -->
-						<div id="biaoqing">
-							<table width="200" class="table">
-								<tr>
-									<td><input type="checkbox" /></td>
-									<td>JAVA</td>
-									<td><input type="checkbox" /></td>
-									<td>Spring</td>
-									<td><input type="checkbox" /></td>
-									<td>hibernate</td>
-								</tr>
-								<tr>
-									<td><input type="checkbox" /></td>
-									<td>css</td>
-									<td><input type="checkbox" /></td>
-									<td>javascript</td>
-									<td><input type="checkbox" /></td>
-									<td>python</td>
-								</tr>
-							</table>
 
-						</div>
-					</div>
 
-					<!--id="mainBannerTitle 首页-->
-					<div id="mainBannerTitle">
-						<!--id="mainBannerTitleWord"-->
-						<div id="mainBannerTitleWord">
-							<b>首页</b>
+				<!-- mainBannerTop DIV 开始 -->
+				<div id="mainBannerTop">
+					<!--id=mainBannerTopIssue 发布框-->
+					<div id="mainBannerTopIssue">
+						<!--id=mainBannerTopIssuePoint 提示-->
+						<div id="mainBannerTopIssuePoint">输入你对这篇文章的评论</div>
+						<div style="float: right;">
+							您还可以输入<font id="counter1">500</font>字！
 						</div>
-						<!--首页提示与隐藏-->
-						<div id="mainBannerTitleWord2">
-							<input type="checkbox" name="checkbox" id="checkbox"
-								onclick="tdImgState()" /> 隐藏图片
-						</div>
-					</div>
-					<!--不同人的内容-->
-					<div id="mainBannerContent">
-						<!--个人展示-->
-						<c:forEach var="item" items="${list}">
-							<div class="stateShow" onmouseover="stateMouseOver(this)"
-								onmouseout="stateMouseOut(this)">
-								<div class="stateShowWord">
-									<table width="450" border="0" cellpadding="0" cellspacing="0"
-										class="stateTable">
-										<tr>
-											<td width="70" align="center" valign="top"><a href="#"><img
-													src="images/mainBannerContent2People2Img.gif" width="54"
-													height="54" alt="" title="" /></a></td>
-											<td width="380"><a href="#">不明真真相</a><img
-												src="images/1.gif" align="absmiddle" style="border: none;" />
-												<c:out value="${item.memo}"></c:out>
-											</td>
-										</tr>
-									</table>
+						<form id="postArticleForm" method="post">
+							<div id="mainBannerTopIssueForm">
+								<!--id="mainBannerTopIssueFrame-->
+								<div id="mainBannerTopIssueFrame">
+									<textarea name="comments" rows="4" class="Size" id="textfield2"
+										style="overflow: hidden; border: 1px #0CF solid;"
+										onkeyup="calNum(this,counter1,0)"></textarea>
 								</div>
-								<div class="stateImgShow">
-									<img src="images/SCT.gif" width="34" height="166" alt=""
-										title="" />
+								<!--id="mainBannerTopIssueInsert 插入链接-->
+								<div id="mainBannerTopIssueInsert">
+									<!--4个小div-->
 								</div>
-								<div class="stateShowtime">
-									<c:out value="${item.createTime}"/>
-								</div>
-								<div class="stateOp">
-									<a onclick="reXianShi(this)" class="opState">回复</a><a
-										class="opState">转发</a><a class="opState"
-										onclick="delState(this)">删除</a>
-								</div>
-								<div class="huifu"></div>
-							</div>
-						</c:forEach>
-						<!--个人展示结束-->
-						
-						<div id="recieve">
-							<div id="ff" style="float: left;">
-								<font style="font-size: 16px; color: #FDFDFD">&nbsp;&nbsp;&nbsp;&nbsp;回&nbsp;&nbsp;复</font>
-							</div>
-							<div id="left"
-								style="float: right; margin-top: 10px; color: #FFF; margin-right: 10px;">
-								您还有可以输入<font id="counter2" color="#ffffff">140</font>字！&nbsp;&nbsp;&nbsp;<img
-									src="images/hongcha1.gif" alt="" width="14" height="13"
-									align="absmiddle" title="" onclick="windowClose()" />
-							</div>
-							<br />
-							<div id="wt">
-								<form action="" method="get">
-									<textarea name="ta" cols="" rows="" id="ta1"
-										onkeyup="calNum(this,counter2,1)"
-										style="overflow: hidden; border: 1px #0CF solid;">
-                            </textarea>
-									<br />
-									<div
-										style="float: right; margin-right: 25px; margin-top: 7px; text-align: right;">
-										<!--&nbsp;&nbsp;<input type="checkbox" name="引用原微博" value="复选框"/>&nbsp;&nbsp;引用原微博-->
-										<input name="" type="button" value=" 回 复 " id="sub1"
-											onclick="submitRstate()" />
+								<!--确认发布-->
+								<div id="mainBannerTopIssueSure">
+									<div id="mainBannerTopIssueSure2">
+										<a href="javascript:biaoQingXianShi()" class="a1">
+											<div id="mainBannerTopIssueInsert5"></div>
+											<div id="mainBannerTopIssueInsert6">选择标签</div>
+										</a> <input type="button" name="button1" id="button1" value="发布"
+											style="background-color: #3295E6; border: none"
+											onclick="submitState()" />
 									</div>
-								</form>
+								</div>
 							</div>
-							<!-- 回复DIV 结束 -->
-						</div>
+						</form>
+					</div>
+					<!-- 表情DIV -->
+					<div id="biaoqing">
+						<table width="200" class="table">
+							<tr>
+								<td><input type="checkbox" /></td>
+								<td>JAVA</td>
+								<td><input type="checkbox" /></td>
+								<td>Spring</td>
+								<td><input type="checkbox" /></td>
+								<td>hibernate</td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" /></td>
+								<td>css</td>
+								<td><input type="checkbox" /></td>
+								<td>javascript</td>
+								<td><input type="checkbox" /></td>
+								<td>python</td>
+							</tr>
+						</table>
 
 					</div>
 				</div>
-				<!-- 左侧mainBanner DIV 结束-->
+
 				<!-- 右侧mainRight DIV开始 -->
 				<div id="mainRight">
 					<table width="200" border="0" cellpadding="0" cellspacing="0"
@@ -221,9 +137,8 @@
 										<!-- 右侧mainRightPostionFirstLineIcon DIV 结束 -->
 										<!-- 右侧mainRightPostionFirstLineWord1 DIV 开始 -->
 										<div id="mainRightPostionFirstLineWord1">
-											&nbsp;<font color="#005DC3"><b><a
-													href="MyWB.html" class="a1">DarkDemon</a></b></font><br />
-											&nbsp;天津&nbsp;&nbsp;河西区
+											&nbsp;<font color="#005DC3"><b><a href="MyWB.html"
+													class="a1">DarkDemon</a></b></font><br /> &nbsp;天津&nbsp;&nbsp;河西区
 										</div>
 									</div>
 									<!-- 右侧mainRightPostionFirstLineWord1 DIV 结束 -->
@@ -231,14 +146,11 @@
 									<div id="mainRightPostionFirstLineWord2">
 										<ul>
 											<a href="MyWB.html" class="a1"><li><font
-													class="style1">2</font><br />
-												<font class="style2">文章</font></li></a>
+													class="style1">2</font><br /> <font class="style2">文章</font></li></a>
 											<a href="friend.html" class="a1"><li><font
-													class="style1">12</font><br />
-												<font class="style2">关注</font></li></a>
+													class="style1">12</font><br /> <font class="style2">关注</font></li></a>
 											<a href="focusonyou.html" class="a1"><li><font
-													class="style1">23</font><br />
-												<font class="style2">粉丝</font></li></a>
+													class="style1">23</font><br /> <font class="style2">粉丝</font></li></a>
 										</ul>
 									</div>
 									<!-- 右侧mainRightPostionFirstLineWord2 DIV 结束 -->
@@ -340,14 +252,11 @@
 									</div>
 									<ul>
 										<a href="#" class="a1"><li><img src="images/WBXM.gif"
-												border="0" /><br />
-											<font class="style2">微博小秘</font></li></a>
+												border="0" /><br /> <font class="style2">微博小秘</font></li></a>
 										<a href="#" class="a1"><li><img src="images/AXXR.gif"
-												border="0" /><br />
-											<font class="style2">&nbsp;&nbsp;转&nbsp;&nbsp;发</font></li></a>
+												border="0" /><br /> <font class="style2">&nbsp;&nbsp;转&nbsp;&nbsp;发</font></li></a>
 										<a href="#" class="a1"><li><img src="images/LBXR.gif"
-												border="0" /><br />
-											<font class="style2">微博新人</font></li></a>
+												border="0" /><br /> <font class="style2">微博新人</font></li></a>
 									</ul>
 								</div> <!-- 右侧mainRightPostionSixthLine DIV 结束 -->
 							</td>
@@ -358,8 +267,8 @@
 								<div id="mainRightPostionSeventhLine">
 									<div id="mainRightPositionSevenLineContent">
 										灵步微博的成长，离不开你们。<br /> <font class="style2"><a href="#"
-											class="a1">有意见要提（点击） </a><br />
-										<br /> <a href="#" class="a1" onclick="set()">不良信息举报中心</a></font>
+											class="a1">有意见要提（点击） </a><br /> <br /> <a href="#"
+											class="a1" onclick="set()">不良信息举报中心</a></font>
 									</div>
 								</div> <!-- 右侧mainRightPostionSeventhLine DIV 结束 -->
 							</td>
@@ -367,6 +276,84 @@
 					</table>
 				</div>
 				<!-- 右侧mainRightDiv 结束 -->
+				<!--id="mainBannerTitle 首页-->
+				<div id="mainBannerTitle">
+					<!--id="mainBannerTitleWord"-->
+					<div id="mainBannerTitleWord">
+						<b>首页</b>
+					</div>
+					<!--首页提示与隐藏-->
+					<div id="mainBannerTitleWord2">
+						<input type="checkbox" name="checkbox" id="checkbox"
+							onclick="tdImgState()" /> 隐藏图片
+					</div>
+				</div>
+				<!--不同人的内容-->
+				<div id="mainBannerContent">
+					<!--个人展示-->
+					<c:forEach var="item" items="${list}">
+						<div class="stateShow" onmouseover="stateMouseOver(this)"
+							onmouseout="stateMouseOut(this)">
+							<div class="stateShowWord">
+								<table width="450" border="0" cellpadding="0" cellspacing="0"
+									class="stateTable">
+									<tr>
+										<td width="70" align="center" valign="top"><a href="#"><img
+												src="<c:url value='/images/mainBannerContent2People1Img.gif' />"
+												width="54" height="54" alt="" title="" /></a></td>
+										<td width="380"><a href="#">不明真真相</a><img
+											src="<c:url value='/images/1.gif' />" align="absmiddle"
+											style="border: none;" /> <c:out value="${item.memo}"></c:out>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="stateImgShow"></div>
+							<div class="stateShowtime">
+								<c:out value="${item.createTime}" />
+							</div>
+							<div class="stateOp">
+								<a onclick="reXianShi(this)" class="opState">回复</a><a
+									class="opState">转发</a><a class="opState"
+									onclick="delState(this)">删除</a>
+							</div>
+							<div class="huifu"></div>
+						</div>
+					</c:forEach>
+					<!--个人展示结束-->
+
+					<div id="recieve">
+						<div id="ff" style="float: left;">
+							<font style="font-size: 16px; color: #FDFDFD">&nbsp;&nbsp;&nbsp;&nbsp;回&nbsp;&nbsp;复</font>
+						</div>
+						<div id="left"
+							style="float: right; margin-top: 10px; color: #FFF; margin-right: 10px;">
+							您还有可以输入<font id="counter2" color="#ffffff">140</font>字！&nbsp;&nbsp;&nbsp;<img
+								src="images/hongcha1.gif" alt="" width="14" height="13"
+								align="absmiddle" title="" onclick="windowClose()" />
+						</div>
+						<br />
+						<div id="wt">
+							<form action="" method="get">
+								<textarea name="ta" cols="" rows="" id="ta1"
+									onkeyup="calNum(this,counter2,1)"
+									style="overflow: hidden; border: 1px #0CF solid;">
+                            </textarea>
+								<br />
+								<div
+									style="float: right; margin-right: 25px; margin-top: 7px; text-align: right;">
+									<!--&nbsp;&nbsp;<input type="checkbox" name="引用原微博" value="复选框"/>&nbsp;&nbsp;引用原微博-->
+									<input name="" type="button" value=" 回 复 " id="sub1"
+										onclick="submitRstate()" />
+								</div>
+							</form>
+						</div>
+						<!-- 回复DIV 结束 -->
+					</div>
+
+				</div>
+
+
 			</div>
 			<!-- 回复DIV 开始 -->
 			<!-- 内容总容器 mainDIV 结束-->

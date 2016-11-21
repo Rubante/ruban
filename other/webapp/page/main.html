@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<title>权限管理系统</title>
+<style type="text/css">
+.menu_bg1 {
+	background: #426ab3
+}
+</style>
+
+<script type="text/javascript">
+	var selectedMenu=function(event){
+		var target = event.srcElement?event.srcElement:event.target;
+		$(event.target).css("background","red");
+		alert(Number.MAX_VALUE);
+		alert(Number.MIN_VALUE);
+		alert(Number.POSITIVE_INFINITY);
+		alert(Number.NEGATIVE_INFINITY);
+		alert(delete target.style);
+		alert(Date.UTC(2015,10,10,10,10,10));
+	}
+</script>
+</head>
+<body>
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">鲁班权限管理系统</a>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="navbar-left" >
+				<ul class="nav nav-pills nav-stacked">
+					<li>
+					<a data-toggle="collapse" href="#first" onclick="selectedMenu(event);">系统管理
+						<b class="arrow icon-angle-down"></b>
+					</a>
+					<div id="first" class="collapse">
+						<ul class="nav nav-pills nav-stacked">
+							<li><a href="#">组织机构</a></li>
+							<li><a href="#">员工管理</a></li>
+							<li><a href="#">角色管理</a></li>
+							<li><a href="#">系统资源</a></li>
+							<li><a href="#">授权管理</a></li>
+							<li><a href="#">资源属性</a></li>
+						</ul>
+					</div>
+					</li>
+				</ul>
+				<ul class="nav nav-pills nav-stacked">
+					<li>
+					<a data-toggle="collapse" href="#second" onclick="selectedMenu(event);">组织结构
+						<b class="arrow icon-angle-down"></b>
+					</a>
+					<div id="second" class="collapse">
+						<ul class="nav nav-pills nav-stacked">
+							<li><a href="#">组织机构</a></li>
+							<li><a href="#">员工管理</a></li>
+							<li><a href="#">角色管理</a></li>
+							<li><a href="#">系统资源</a></li>
+							<li><a href="#">授权管理</a></li>
+							<li><a href="#">资源属性</a></li>
+						</ul>
+					</div>
+					</li>
+				</ul>
+			</div>
+			<div class="col-md-11">
+				测试系统	
+			</div>
+		</div>
+	</div>
+</body>
+</html>

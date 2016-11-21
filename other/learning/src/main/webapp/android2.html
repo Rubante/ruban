@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>K宝打开方式</title>
+<link rel="styelsheet" href="bootstrap/bootstrap.min.css">
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="yunba/socket.io-1.3.5.min.js"></script>
+<script type="text/javascript" src="yunba/yunba-js-sdk.js"></script>
+<script type="text/javascript">
+	$(document).ready(
+		function(){
+			var yunba= new Yunba({server:'sock.yunba.io',port:3000,appkey:'56d534384407a3cd028ace8e'});
+			yunba.init(function (success) {
+			    if (success) {
+			        yunba.connect_by_customid('wangin1013', function (success, msg, sessionid) {
+			            if (success) {
+			                console.log('你已成功连接到消息服务器，会话ID：' + sessionid);
+			                yunba.subscribe({'topic': 'my_topic'}, 
+			                	    function (success, msg) {
+			                	        if (success) {
+			                	            $(document.body).append('你已成功订阅频道：my_topic');
+			                	        } else {
+			                	        	$(document.body).append(msg);
+			                	        }
+			                	    }
+			                	);
+			                yunba.set_message_cb(function (data) {
+			                	$(document.body).append('Topic:' + data.topic + ',Msg:' + data.msg);
+			                });
+			            } else {
+			            	$(document.body).append(msg);
+			            }
+			        });
+			    }
+			});
+		}
+	);
+	
+</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<a href='demo2://?orderNo=123457890&pa=1399' onerror="alert(111);">K宝支付12345</a>
+	</div>
+</div>
+</body>
+</html>

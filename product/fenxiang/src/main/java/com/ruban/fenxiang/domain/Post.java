@@ -22,6 +22,12 @@ public class Post {
     private String articleId;
 
     /**
+     * 星级
+     * 
+     */
+    private String start;
+
+    /**
      * 评论创建者
      * 
      */
@@ -71,6 +77,14 @@ public class Post {
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
     }
 
     public User getCreateUser() {

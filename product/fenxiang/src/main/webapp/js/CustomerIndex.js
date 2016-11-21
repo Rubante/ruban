@@ -51,32 +51,14 @@ function judeState(){
 		divObj.style.visibility = "hidden";//隐藏表情框
 	}
 }
-/* 初始化表情框里面的表情 */
-function initImgFace(){
-	var n=1;
-	var divObj = document.getElementById("biaoqing");
-	var trObj = divObj.childNodes[0].childNodes[0].childNodes;//取得tr对象数组
-	for(var i=0;i<trObj.length;i++){
-		var tdObj = trObj[i].childNodes;//取得相对tr的td对象数组
-		for(var j=0;j<tdObj.length;j++){//将td里面填充出相应的图片
-			tdObj[j].innerHTML = "<img src='images/biaoqing/"+n+".gif' width='24' height='24' alt='' title= '"+bqvalue[n-1]+"'/>";
-			n++;
-		}
-	}
-}
 /* 当点提交按钮时，对文本框里面的内容进行处理，并进行提交 */
 function submitState(){
 	var txtObj = document.getElementById("textfield2");
-	txtObj.value = trim(txtObj.value);
-	if(txtObj.value.length>0){
-		var str = changetxt(txtObj.value);//替换文本框中的表情
-		var time = inittime();//取出当前时间
-		var innerht = "<div class='stateShow' onmouseover='stateMouseOver(this)' onmouseout='stateMouseOut(this)'><div class='stateShowWord'><table width='450' border='0' cellpadding='0' cellspacing='0' class='stateTable'><tr><td width='70' align='center' valign='top'><a href='#'><img src='images/MainRightFirstLineTitle.gif' alt='' width='48' height='48' /></a></td><td width='380'><a href='#'>DarkDemon</a><img src='images/1.gif' align='absmiddle' style='border:none;' />&nbsp;"+str+"</td></tr></table></div><div class='stateImgShow'></div><div class='stateShowtime'>"+time+"</div><div class='stateOp'><a onclick='reXianShi(this)' class='opState'>回复</a><a class='opState'>转发</a><a onclick='delState(this)' class='opState'>删除</a></div><div class='huifu'></div></div>";
-		var divObj = document.getElementById("mainBannerContent");
-		divObj.innerHTML = innerht + divObj.innerHTML;
-	}
-	txtObj.value = "";//清空文本框
-	changeDivHeight();//重设页面高度
+	txtObj.value = txtObj.value.trim();
+	
+	// 提交评论
+	var postForm = document.getElementById("postArticleForm");
+	postForm.submit();
 }
 
 
@@ -162,7 +144,8 @@ function delState(divObj){
 /* 点击回复时，将回复写入窗口 */
 function submitRstate(){
 	var txtObj = document.getElementById("ta1");
-	txtObj.value = trim(txtObj.value);
+	alert(typeof(txtObj.value));
+	txtObj.value = txtObj.value.trim();
 	if(txtObj.value.length>0){
 		var str = changetxt(txtObj.value);//替换文本框中的表情
 		var time = inittime();//取出当前时间
@@ -233,7 +216,6 @@ function stateMouseOut(divObj){
 /* 函数绑定*/
 window.onload = function(){
 	changeDivHeight();//开始的时候设置左栏和右栏的高度
-	initImgFace();//初始化table里面的图像
 	document.onclick = judeState;//设置单机取消显示
 	var imgObj = document.getElementById("biaoqing").getElementsByTagName("img");//为biaoqingDIV下的所有img设置单机事件
 	for(var i = 0;i < imgObj.length ;i++){

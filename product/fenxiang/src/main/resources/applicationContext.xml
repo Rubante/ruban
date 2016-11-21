@@ -14,7 +14,12 @@
 	<mvc:resources location="/chrome/" mapping="/chrome/**" />
 	<mvc:resources location="/css/" mapping="/css/**" />
 	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/images/" mapping="images/*" />
 
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="message" />
+	</bean>
+	
 	<import resource="mongo-config.xml" />
 
 	<!--json数据转换 -->

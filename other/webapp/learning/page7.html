@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Insert title here</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"><</script>
+</head>
+<body>
+	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">弹出框</button>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style="border:solid 4px #426ab3;">
+				<div class="modal-header" style="background:#426ab3;height:25px;">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-10px;">
+						<span style="color:white;" aria-hidden="true">&times;</span>
+					</button>
+					<div class="modal-title" style="margin-top:-13px;color:white;">标题</div>
+				</div>
+				<div class="modal-body">
+					这个地方可以自由发挥
+					<time datetime="2014-10-10">时间</time>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary">保存</button>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</body>
+</html>

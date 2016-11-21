@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function downloadFile(url, success) {
+    var xhr = new XMLHttpRequest(); 
+    xhr.onprogress = updateProgress;
+    xhr.upload.onprogress = updateProgress;
+    xhr.open('GET', url, true); 
+    xhr.responseType = "blob";
+    xhr.onreadystatechange = function () { 
+        if (xhr.readyState == 4) {
+            if (success) success(xhr.response);
+        }
+    };
+    xhr.send(null);
+    
+}
+function down(){
+	downloadFile("http://120.52.41.175/85/1/59/letv-itv/0/ext/common/data/html/static/android/20140828070710/letv_v2.5.30_android_releaseguanwang_Letvcommon_201408.apk?crypt=7aa7f2e65297&b=123456&nlh=4096&nlt=60&bf=42&p2p=1&video_type=apk&termid=0&tss=no&platid=5&splatid=500&its=0&qos=5&fcheck=0&mltag=8888&proxy=2016684440,1035374018,2007471048&uid=1920040771.rp&keyitem=GOw_33YJAAbXYE-cnQwpfLlv_b2zAkYctFVqe5bsXQpaGNn3T1-vhw..&ntm=1464957000&nkey=39e12a5d718102f5ac987fd4de91bfe4&nkey2=3ac67caa40a4caf20e3f748c3afc870a&geo=CN-1-1000-2&errc=0&gn=1158&vrtmcd=104&buss=8888&cips=114.113.127.67",function(){
+		alert('2');
+	})
+}
+
+function updateProgress(event) {
+　　　　if (event.lengthComputable) {
+　　　　　　var percentComplete = event.loaded / event.total;
+			alert(percentComplete);
+			document.getElementById("test").innerHTML=percentComplete;
+　　　　}
+　　}
+</script>
+</head>
+<body>
+	<a href="#" onclick="down()">lkkllklk</a>
+	<div id="test"></div>
+</body>
+</html>
