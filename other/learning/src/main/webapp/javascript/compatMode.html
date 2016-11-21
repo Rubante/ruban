@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=7">
+<title>Insert title here</title>
+<script type="text/javascript">
+	console.log(document.compatMode);
+	console.log(document.documentElement.clientWidth);
+	if(document.compatMode=='BackCompat'){
+		console.log(document.body.clientWidth);	
+	}
+	
+	console.log("search:"+window.location.search.substring(1));
+	console.log("hash:"+window.location.hash);
+	
+</script>
+</head>
+<body>
+
+</body>
+</html>

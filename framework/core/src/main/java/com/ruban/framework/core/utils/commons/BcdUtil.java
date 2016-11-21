@@ -1,8 +1,5 @@
 package com.ruban.framework.core.utils.commons;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-
 import com.ruban.framework.core.utils.Constants;
 
 /**
@@ -69,7 +66,9 @@ public class BcdUtil {
     }
 
     /***
-     * 从BCD获取金额，单位是元， "000000011023"-->"110.23"; "000000000013"-->"0.13"
+     * 从BCD获取金额，单位是元<br />
+     * "000000011023"-->"110.23";<br />
+     * "000000000013"-->"0.13"
      * 
      * @param bcd
      * @return

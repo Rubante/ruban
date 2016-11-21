@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.1.0.js"></script>
+<script type="text/javascript">
+var supportsCORS = (new XMLHttpRequest()).withCredentials !== undefined;
+alert(supportsCORS);
+$.ajax({
+	url:"http://172.16.32.243:8080/management/mm/home.action#",
+	type:"head",
+	success:function(data,status,xhr){
+		alert("type:"+xhr.getResponseHeader("Content-Type"));
+		alert("Allow:"+xhr.getResponseHeader("Allow"));
+		alert("data:"+data);
+		alert("status:"+status);
+		alert("xhr:"+JSON.stringify(xhr));
+	},
+	error:function(xhr,status,errorThrown){
+		alert(JSON.stringify(xhr));
+		alert(status);
+		alert(JSON.stringify(errorThrown));
+	}
+});
+var xhr = new XMLHttpRequest();
+xhr.open('HEAD', 'http://172.16.32.243:8080/management/mm/home.action#', true);
+
+// Hack to pass bytes through unprocessed.
+xhr.overrideMimeType('text/plain; charset=UTF-8');
+
+xhr.onreadystatechange = function(e) {
+  if (this.readyState == 4 && this.status == 200) {
+	  var contentType = xhr.getResponseHeader("Content-Type");
+	  alert(contentType);
+	  var length = xhr.getResponseHeader("Content-Length");
+	  alert(length);
+	  
+	    var binStr = this.responseText;
+	    alert(binStr);
+	    for (var i = 0, len = binStr.length; i < len; ++i) {
+	      var c = binStr.charCodeAt(i);
+	      //String.fromCharCode(c & 0xff);
+	      var byte = c & 0xff;  // byte at offset i
+	    }
+  }
+};
+
+xhr.send();
+</script>
+</head>
+<body>
+
+</body>
+</html>

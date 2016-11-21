@@ -48,11 +48,15 @@ public class MessageDigestUtil {
     public static byte[] digest(String file, String algorithm) throws NoSuchAlgorithmException, IOException {
         MessageDigest digest = MessageDigest.getInstance(algorithm);
 
-        FileInputStream fis = new FileInputStream(file);
-        ByteBuffer buffer = fis.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-        digest.update(buffer);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            ByteBuffer buffer = fis.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+            digest.update(buffer);
 
-        return digest.digest();
-
+            return digest.digest();
+        } finally {
+            fis.close();
+        }
     }
 }

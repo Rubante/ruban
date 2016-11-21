@@ -1,37 +1,15 @@
 package com.ruban.framework.dao;
 
-import com.ruban.framework.dao.domain.PersistentObject;
+import com.ruban.framework.dao.helper.Condition;
+import com.ruban.framework.dao.helper.ResultInfo;
 
 public interface IRubanDao {
 
     /**
-     * 插入数据
+     * 分页查询
      * 
-     * @param domain
+     * @param pageDTO
      * @return
      */
-    public int insert(PersistentObject domain);
-    
-    /**
-     * 依据ID进行删除
-     * 
-     * @param id
-     * @return
-     */
-    public int deleteById(String id);
-    
-    /**
-     * 更新数据
-     * 
-     * @param domain
-     * @return
-     */
-    public int update(PersistentObject domain);
-    
-    
-    public void find();
-    
-    public void findById();
-    
-    public void query();
+    public <T> ResultInfo<T> findByPage(Condition<T> condition, IRubanMapper mapper);
 }

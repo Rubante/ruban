@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>全局对象属性</title>
+<script type="text/javascript">
+	// item in location
+	for(var item in window.location){
+		console.log(item+":"+window.location[item]);
+	}
+
+	console.log("-------------------------------------------------");
+	
+	// item in history
+	for(var item in window.history){
+		console.log(item+":"+window.history[item]);
+	}
+	
+	console.log("--------------------------------------------------");
+	
+	for(var item in window.navigator){
+		console.log(item+":"+window.navigator[item]);
+	}
+	
+	console.log("javaEnabled:"+window.navigator.javaEnabled());
+</script>
+</head>
+<body>
+
+</body>
+</html>

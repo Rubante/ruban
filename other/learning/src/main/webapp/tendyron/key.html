@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+<OBJECT id="Sign" name="Sign" classid="clsid:53719DD6-63CF-4AD0-965C-55F7C00C09F0" VIEWASTEXT></OBJECT>
+<script type="text/javascript">
+$(document).ready(function(){
+	var sign = document.getElementById("Sign");
+	
+	var test = sign.GetSignedData("yjwang","","");
+
+	console.log(test);
+	
+	try{
+		sign.GetSignedData("test","","");	
+	}catch (e) {
+		console.log(e);
+	}
+	
+});
+</script>
+</head>
+<body>
+</body>
+</html>
