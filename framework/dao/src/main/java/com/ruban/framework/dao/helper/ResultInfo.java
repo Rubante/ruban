@@ -18,7 +18,7 @@ public class ResultInfo<T> {
     private int startRow;
     // 当前页面最后一个元素在数据库中的行号
     private int endRow;
-    
+
     // 总记录数
     private long total;
     // 总页数

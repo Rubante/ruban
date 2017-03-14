@@ -8,23 +8,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<jdk.version>1.7</jdk.version>
-		<slf4j.version>1.7.7</slf4j.version>
-		<logback.version>1.1.3</logback.version>
-		<spring.version>4.2.4.RELEASE</spring.version>
+		<spring.boot.version>1.4.2.RELEASE</spring.boot.version>
+		<spring.version>4.3.4.RELEASE</spring.version>
 		<activemq.version>5.13.0</activemq.version>
 		<fastjson.version>1.2.7</fastjson.version>
-		<jackson.version>2.8.2</jackson.version>
-		<mybatis.version>3.3.0</mybatis.version>
-		<pagehelper.version>4.1.0</pagehelper.version>
 		<dbunit.version>2.5.1</dbunit.version>
 		<h2.version>1.4.190</h2.version>
-		<aspectj.version>1.8.2</aspectj.version>
 		<httpclient.version>4.5.1</httpclient.version>
 		<bouncycastle.version>1.46</bouncycastle.version>
-		<powermock.version>1.6.4</powermock.version>
 		<jetty.version>9.3.7.RC0</jetty.version>
-		<hibernate-validator.version>5.2.3.Final</hibernate-validator.version>
-		<ruban.version>0.0.1-SNAPSHOT</ruban.version>
 	</properties>
 
 	<groupId>com.ruban.framework</groupId>
@@ -32,46 +24,15 @@
 	<packaging>pom</packaging>
 	<version>0.0.2-SNAPSHOT</version>
 
+	<dependencies>
+	</dependencies>
 	<dependencyManagement>
 		<dependencies>
-			<!-- 日志 开始 -->
+			<!-- spring boot -->
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>log4j-over-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>jul-to-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logback.version}</version>
-			</dependency>
-			<!-- 日志 结束 -->
-
-			<!-- SPRING基础 开始 -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot</artifactId>
+				<version>${spring.boot.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>commons-logging</groupId>
@@ -79,45 +40,74 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
+			<!-- spring tx -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-tx</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<!--以下包用于 email/scheduler/freemarker等扩展场合 -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context-support</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<!-- SPRING基础 结束 -->
-
-			<!-- SPRING orm -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-orm</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
+			<!-- spring jdbc -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+			<!-- spring log -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-logging</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+
+			<!-- spring web -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring.boot.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-tomcat</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<!-- spring redis -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-redis</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+
+			<!-- spring jpa -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-jpa</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+
+			<!-- spring freemarker -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-freemarker</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+
+			<!-- spring aop -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-aop</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<!-- spring test -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${spring.boot.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- SPRING基础 结束 -->
+
 			<dependency>
 				<groupId>org.dbunit</groupId>
 				<artifactId>dbunit</artifactId>
@@ -131,16 +121,21 @@
 				</exclusions>
 			</dependency>
 
-			<!-- SPRING mvc -->
+			<!-- mybatis -->
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${spring.version}</version>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>3.3.0</version>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-webmvc</artifactId>
-				<version>${spring.version}</version>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>1.2.3</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper</artifactId>
+				<version>4.1.0</version>
 			</dependency>
 
 			<!-- JMS -->
@@ -169,12 +164,6 @@
 				</exclusions>
 			</dependency>
 
-			<dependency>
-				<groupId>jstl</groupId>
-				<artifactId>jstl</artifactId>
-				<version>1.2</version>
-			</dependency>
-
 			<!-- json -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
@@ -183,28 +172,13 @@
 			</dependency>
 			<!-- jackson json -->
 			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-annotations</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.fasterxml.jackson.module</groupId>
 				<artifactId>jackson-module-jaxb-annotations</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
-				<!-- commons -->
-				<dependency>
-					<groupId>commons-io</groupId>
+			<!-- commons -->
+			<dependency>
+				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>2.4</version>
 			</dependency>
@@ -291,35 +265,6 @@
 			</dependency>
 			<!-- 工具包结束 -->
 
-			<!-- AOP BEGIN -->
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjrt</artifactId>
-				<version>${aspectj.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjweaver</artifactId>
-				<version>${aspectj.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-			<!-- AOP END -->
-
-			<!-- JSR303 Bean Validator -->
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-validator</artifactId>
-				<version>${hibernate-validator.version}</version>
-			</dependency>
-
-			<!-- MEMCACHE BEGIN -->
-			<dependency>
-				<groupId>spy</groupId>
-				<artifactId>spymemcached</artifactId>
-				<version>2.12.0</version>
-			</dependency>
-			<!-- MEMCACHE END -->
-
 			<!-- JAVAX SERVLET BEGIN -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
@@ -334,12 +279,6 @@
 				<scope>provided</scope>
 			</dependency>
 			<!-- JAVAX SERVLET END -->
-
-			<dependency>
-				<groupId>javax.validation</groupId>
-				<artifactId>validation-api</artifactId>
-				<version>1.1.0.Final</version>
-			</dependency>
 
 			<!-- HTTPCLIENT BEGIN -->
 			<dependency>
@@ -405,22 +344,6 @@
 			<!-- MISCELLANEOUS END -->
 
 			<!-- JDBC DRIVER BEGIN -->
-			<!-- mybatis -->
-			<dependency>
-				<groupId>org.mybatis</groupId>
-				<artifactId>mybatis</artifactId>
-				<version>${mybatis.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.mybatis</groupId>
-				<artifactId>mybatis-spring</artifactId>
-				<version>1.2.3</version>
-			</dependency>
-			<dependency>
-				<groupId>com.github.pagehelper</groupId>
-				<artifactId>pagehelper</artifactId>
-				<version>${pagehelper.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
@@ -429,46 +352,6 @@
 			</dependency>
 			<!-- JDBC DRIVER END -->
 
-			<!-- 测试 结束 -->
-			<!-- junit -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.12</version>
-				<scope>test</scope>
-			</dependency>
-			<!-- mockito -->
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
-				<version>1.10.19</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.powermock</groupId>
-				<artifactId>powermock-module-junit4</artifactId>
-				<version>${powermock.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.powermock</groupId>
-				<artifactId>powermock-api-mockito</artifactId>
-				<version>${powermock.version}</version>
-				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.mockito</groupId>
-						<artifactId>mockito-all</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<!-- spring test -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${spring.version}</version>
-				<scope>test</scope>
-			</dependency>
 			<!-- jetty -->
 			<dependency>
 				<groupId>org.eclipse.jetty.aggregate</groupId>
@@ -482,13 +365,6 @@
 				<version>${jetty.version}</version>
 				<scope>test</scope>
 			</dependency>
-			<!-- memcached simulator -->
-			<dependency>
-				<groupId>com.thimbleware.jmemcached</groupId>
-				<artifactId>jmemcached-core</artifactId>
-				<version>1.0.0</version>
-				<scope>test</scope>
-			</dependency>
 			<!-- smtp server simulator -->
 			<dependency>
 				<groupId>com.icegreen</groupId>
@@ -497,23 +373,6 @@
 				<scope>test</scope>
 			</dependency>
 			<!-- TEST END -->
-			<!-- ruban framework -->
-			<dependency>
-				<groupId>com.ruban.framework</groupId>
-				<artifactId>ruban-core</artifactId>
-				<version>${ruban.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.ruban.framework</groupId>
-				<artifactId>ruban-dao</artifactId>
-				<version>${ruban.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.ruban.framework</groupId>
-				<artifactId>ruban-web</artifactId>
-				<version>${ruban.version}</version>
-			</dependency>
-			<!-- ruban framework -->
 		</dependencies>
 	</dependencyManagement>
 

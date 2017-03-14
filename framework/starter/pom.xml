@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<properties>
+		<ruban.version>0.0.2-SNAPSHOT</ruban.version>
+	</properties>
+
+	<groupId>com.ruban.framework</groupId>
+	<artifactId>ruban-starter</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.2-SNAPSHOT</version>
+	
+	<dependencyManagement>
+		<dependencies>
+			<!-- ruban framework -->
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-core</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-dao</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ruban.framework</groupId>
+				<artifactId>ruban-web</artifactId>
+				<version>${ruban.version}</version>
+			</dependency>
+			<!-- ruban framework -->
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- compiler插件, 设定JDK版本 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<source>${jdk.version}</source>
+						<target>${jdk.version}</target>
+						<showWarnings>true</showWarnings>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+
+				<!-- resource插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

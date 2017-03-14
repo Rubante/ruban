@@ -148,6 +148,26 @@ public abstract class FormatUtil {
     }
 
     /**
+     * 将number格式为固定长度的字符串，不足补0
+     * 
+     * @param number
+     * @param length
+     * @return
+     */
+    public static String fmtNumber(Object number, int length) {
+        if (number == null) {
+            number = BigDecimal.ZERO;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            sb.append("0");
+        }
+        DecimalFormat df = new DecimalFormat(sb.toString());
+        return df.format(number);
+    }
+
+    /**
      * 在正数前加上正号。
      * 
      * @param number

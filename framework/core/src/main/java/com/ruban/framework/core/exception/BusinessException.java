@@ -2,8 +2,6 @@ package com.ruban.framework.core.exception;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
 import org.springframework.validation.BindingResult;
 
 /**
@@ -34,19 +32,6 @@ public class BusinessException extends RuntimeException {
 
     public Map<String, String> getErrorMessages() {
         return this.errorMessages;
-    }
-
-    /**
-     * javax.validation校验异常
-     * 
-     * @param violations
-     */
-    public void setErrorMessages(Set<? extends ConstraintViolation<? extends Object>> violations) {
-        for (ConstraintViolation<?> violation : violations) {
-            String propertyPath = violation.getPropertyPath().toString();
-            String message = violation.getMessage();
-            this.errorMessages.put(propertyPath, message);
-        }
     }
 
     public void setErrorMessages(Map<String, String> errorMessages) {

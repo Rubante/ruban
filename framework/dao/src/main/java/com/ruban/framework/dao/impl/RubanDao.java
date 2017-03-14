@@ -17,7 +17,7 @@ public class RubanDao implements IRubanDao {
     @Override
     public <E> ResultInfo<E> findByPage(Condition<E> condition, IRubanMapper mapper) {
 
-        RowBounds rowBounds = new RowBounds(condition.getStartIndex(), condition.getRecordsPerPage());
+        RowBounds rowBounds = new RowBounds(condition.getPageNum(), condition.getPageSize());
 
         List<E> resultList = mapper.selectWithCondition(rowBounds, condition);
 

@@ -28,13 +28,13 @@ public class RandomUtil {
         for (int i = 0; i < length; i++) {
             /* 0 <= rand < 62 */
             int rand = random.nextInt(62);
-            if (rand < 26)/* 0 <= rand < 26 */{
+            if (rand < 26)/* 0 <= rand < 26 */ {
                 /* A - Z */
                 buffer.append((char) (rand + 'A'));
-            } else if (rand >= 26 && rand < 52)/* 26 <= rand < 52 */{
+            } else if (rand >= 26 && rand < 52)/* 26 <= rand < 52 */ {
                 /* a - z */
                 buffer.append((char) (rand - 26 + 'a'));
-            } else/* (52 <= rand < 62) */{
+            } else/* (52 <= rand < 62) */ {
                 /* 0 - 9 */
                 buffer.append((char) (rand - 52 + '0'));
             }
@@ -96,6 +96,17 @@ public class RandomUtil {
         for (int i = 0; i < array.length; i++) {
             array[i] = (Byte) list.get(i);
         }
+    }
+
+    /**
+     * 获取更新锁
+     * 
+     * @return
+     */
+    public static String getUpdateLock() {
+        String lock = System.currentTimeMillis() + RandomUtil.nextStringByDigit(6);
+
+        return lock;
     }
 
     /**

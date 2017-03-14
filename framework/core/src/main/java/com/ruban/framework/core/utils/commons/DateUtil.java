@@ -14,10 +14,10 @@ public class DateUtil {
      * 
      * @return
      */
-    static public Date getNow() throws ParseException {
+    static public Date getNowTime() {
         Date datetime = new Date();
         String now = getDateTimeStr(datetime);
-        java.sql.Timestamp time = new java.sql.Timestamp(parseDateTime(now).getTime());
+        Date time = parseDateTime(now);
         return time;
     }
 
@@ -32,7 +32,7 @@ public class DateUtil {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
-    
+
     /**
      * Format date with certain format.
      * 
@@ -40,11 +40,11 @@ public class DateUtil {
      * @param format
      * @return
      */
-    static public String format(Date date, String format){
-    	if(format == null || format.trim().length() == 0) 
-    		throw new IllegalArgumentException("Argument 'format' can not be null or empty!");
-    	
-    	SimpleDateFormat sdf = new SimpleDateFormat(format);
+    static public String format(Date date, String format) {
+        if (format == null || format.trim().length() == 0)
+            throw new IllegalArgumentException("Argument 'format' can not be null or empty!");
+
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(date);
     }
 

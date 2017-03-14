@@ -1,8 +1,8 @@
 package com.ruban.framework.core.context;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 公共上下文实现类
@@ -11,7 +11,7 @@ import java.util.Map;
  *
  */
 public abstract class CommonContext implements Context {
-    private Map<String, Object> map = new HashMap<String, Object>();
+    private Map<String, Object> map = new ConcurrentHashMap<String, Object>();
 
     public Object getAttribute(String key) {
         return this.map.get(key);

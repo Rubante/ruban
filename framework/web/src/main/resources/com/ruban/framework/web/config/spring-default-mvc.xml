@@ -67,10 +67,7 @@
 				class="org.springframework.http.converter.ResourceHttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-
-	<!-- 处理所有静态资源及未对应RequestMapping的URL -->
-	<mvc:default-servlet-handler />
-
+    
 	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
 	<bean
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">

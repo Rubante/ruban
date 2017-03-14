@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -186,16 +185,6 @@ public class JsonMapper extends ObjectMapper {
 	public JsonMapper enableEnumUseToString() {
 		this.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
 		this.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-		return this;
-	}
-
-	/**
-	 * 支持使用Jaxb的Annotation，使得POJO上的annotation不用与Jackson耦合。
-	 * 默认会先查找jaxb的annotation，如果找不到再找jackson的。
-	 */
-	public JsonMapper enableJaxbAnnotation() {
-		JaxbAnnotationModule module = new JaxbAnnotationModule();
-		this.registerModule(module);
 		return this;
 	}
 

@@ -9,19 +9,19 @@ import java.io.Serializable;
  * 
  * @param <T>
  */
-public class QueryPage<T> implements Serializable{
+public class QueryPage<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 当前页数
      */
-    protected String currentPage = "1";
+    protected int pageNum = 1;
 
     /**
      * 每页记录数
      */
-    protected int recordsPerPage = 10;
+    protected int pageSize = 10;
 
     /**
      * 查询起始数
@@ -38,24 +38,24 @@ public class QueryPage<T> implements Serializable{
      */
     protected String ascDesc = "asc";
 
-    public String getCurrentPage() {
-        return currentPage;
+    public int getPageNum() {
+        return pageNum;
     }
 
-    public void setCurrentPage(String currentPage) {
-        this.currentPage = currentPage;
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
     }
 
-    public int getRecordsPerPage() {
-        return recordsPerPage;
+    public int getPageSize() {
+        return pageSize;
     }
 
-    public void setRecordsPerPage(int recordsPerPage) {
-        this.recordsPerPage = recordsPerPage;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     public int getStartIndex() {
-        return (Integer.parseInt(getCurrentPage()) - 1) * getRecordsPerPage();
+        return (getPageNum() - 1) * getPageSize();
     }
 
     public void setStartIndex(int startIndex) {

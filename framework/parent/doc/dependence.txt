@@ -1,6 +1,7 @@
 1.所有的dependence都选取2016年1月初的最新版本。在发生不兼容，可适当调节依赖的版本
 2.JDK采用1.7，保守非激进的策略
 3.日志采用 slf4j,logback
-4.消息中间件采用activemq
-5.缓存采用memcache及redis
-6.持久层采用myBatis，适当引入orm
+4.消息中间件采用activemq，可以考虑kafka
+5.缓存采用redis
+6.持久层采用myBatis，适当引入全自动的orm
+7.0.0.2引入了spring boot
