@@ -1,138 +1,159 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<div id="sidebar" class="sidebar responsive">
-	<div class="sidebar-shortcuts" id="sidebar-shortcuts">
-		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-			<button class="btn btn-success">
-				<i class="ace-icon fa fa-signal"></i>
-			</button>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 
-			<button class="btn btn-info">
-				<i class="ace-icon fa fa-pencil"></i>
-			</button>
+<script type="text/javascript">
+var menu = {
+		'home': {
+			title: '首页',
+			menu: [{
+				title: '首页',
+				icon: '<s:url value="/static/imgs/main/l03.png" />',
+				href: 'index.html',
+				isCurrent: true
+			}]
+		},
 
-			<!-- #section:basics/sidebar.layout.shortcuts -->
-			<button class="btn btn-warning">
-				<i class="ace-icon fa fa-group"></i>
-			</button>
+		'project': {
+			title: '项目',
+			menu: [{
+				title: '个人信息',
+				icon: '<s:url value="/static/imgs/main/l01.png" />',
+				href: 'project/userinfo.html',
+				isCurrent: true
+			},{
+				title: '个人年度工作计划',
+				icon: '${app.basePath}/static/imgs/main/l02.png',
+				href: 'project/plan.html'
+			},{
+				title: '工作纪实',
+				icon: '${app.basePath}/static/imgs/main/l07.png',
+				href: 'project/work_record.html'
+			},{
+				title: '工作总结',
+				icon: '${app.basePath}/static/imgs/main/l04.png',
+				href: 'project/work_summary.html'
+			},{
+				title: '平时考核领导测评',
+				icon: '${app.basePath}/static/imgs/main/l05.png',
+				href: 'project/normal_exam.html'
+			},{
+				title: '工作总结评述',
+				icon: '${app.basePath}/static/imgs/main/l06.png',
+				href: 'project/work_comment.html'
+			},{
+				title: '年底民主测评',
+				icon: '${app.basePath}/static/imgs/main/l08.png',
+				href: 'project/democracy.html'
+			}]
+		},
 
-			<button class="btn btn-danger">
-				<i class="ace-icon fa fa-cogs"></i>
-			</button>
+		'query': {
+			title: '查询统计',
+			menu: [{
+				title: '工作纪实查询',
+				icon: '${app.basePath}/static/imgs/main/l09.png',
+				isCurrent: true,
+				href: 'query/work_situation_query.html'
+			},{
+				title: '工作总结查询',
+				icon: '${app.basePath}/static/imgs/main/l10.png',
+				href: 'query/work_summary.html'
+			},{
+				title: '个人年度工作计划查询',
+				icon: '${app.basePath}/static/imgs/main/l11.png',
+				href: 'query/personal_query.html'
+			},{
+				title: '公务员年度考核登记表导出',
+				icon: '${app.basePath}/static/imgs/main/l12.png',
+				href: 'query/year.html'
+			},{
+				title: '平时考核成绩查询',
+				icon: '${app.basePath}/static/imgs/main/l13.png',
+				href: 'query/normal_time.html'
+			},{
+				title: '领导评述查询',
+				icon: '${app.basePath}/static/imgs/main/l14.png',
+				href: 'query/leader.html'
+			},{
+				title: '加扣分查询',
+				icon: '${app.basePath}/static/imgs/main/l15.png',
+				href: 'query/grade_query.html'
+			},{
+				title: '辖区考核情况统计',
+				icon: '${app.basePath}/static/imgs/main/l16.png',
+				href: 'query/exam.html'
+			}]
+		},
 
-			<!-- /section:basics/sidebar.layout.shortcuts -->
-		</div>
-
-		<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-			<span class="btn btn-success"></span>
-
-			<span class="btn btn-info"></span>
-
-			<span class="btn btn-warning"></span>
-
-			<span class="btn btn-danger"></span>
-		</div>
-	</div><!-- /.sidebar-shortcuts -->
-
-	<ul class="nav nav-list">
-		<li class="active">
-			<a href="index.html">
-				<i class="menu-icon fa fa-tachometer"></i>
-				<span class="menu-text"> 管理菜单 </span>
-			</a>
-
-			<b class="arrow"></b>
-		</li>
-
-		<li class="">
-			<a href="#" class="dropdown-toggle">
-				<i class="menu-icon fa fa-desktop"></i>
-				<span class="menu-text">
-					组织及权限
-				</span>
-
-				<b class="arrow fa fa-angle-down"></b>
-			</a>
-
-			<b class="arrow"></b>
-
-			<ul class="submenu">
-
-				<li class="">
-					<a href="#" class="dropdown-toggle">
-						<i class="menu-icon fa fa-caret-right"></i>
-						组织机构
-						<b class="arrow fa fa-angle-down"></b>
-					</a>
-
-					<b class="arrow"></b>
-
-					<ul class="submenu">
-						<li class="">
-							<a href="javascript:ajax('../company/search')">
-								<i class="menu-icon fa fa-leaf green"></i>
-								组织
-							</a>
-							<b class="arrow"></b>
-						</li>
-						<li class="">
-							<a href="#">
-								<i class="menu-icon fa fa-leaf green"></i>
-								部门
-							</a>
-							<b class="arrow"></b>
-						</li>
-						<li class="">
-							<a href="#">
-								<i class="menu-icon fa fa-leaf green"></i>
-								员工
-							</a>
-							<b class="arrow"></b>
-						</li>
-						<li class="">
-							<a href="#">
-								<i class="menu-icon fa fa-leaf green"></i>
-								职务
-							</a>
-							<b class="arrow"></b>
-						</li>
-						<li class="">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-pencil orange"></i>
-									授权
-								<b class="arrow fa fa-angle-down"></b>
-							</a>
-
-							<b class="arrow"></b>
-
-							<ul class="submenu">
-								<li class="">
-									<a href="#">
-										<i class="menu-icon fa fa-plus purple"></i>
-										角色授权
-									</a>
-
-									<b class="arrow"></b>
-								</li>
-
-								<li class="">
-									<a href="#">
-										<i class="menu-icon fa fa-eye pink"></i>
-										组授权
-									</a>
-
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</li>
-	</ul><!-- /.nav-list -->
-
-	<!-- #section:basics/sidebar.layout.minimize -->
-	<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
-		<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
-	</div>
-</div>
+		'mange': {
+			title: '后台管理',
+			menu: [{
+				title: '组织机构管理',
+				icon: '<s:url value="/static/imgs/main/l17.png" />',
+				isCurrent: true,
+				href: '<s:url value="/rbac/backend/company/main" />'
+			},{
+				title: '部门管理',
+				icon: '<s:url value="/static/imgs/main/l31.png" />',
+				href: '<s:url value="/rbac/backend/department/main" />'
+			},{
+				title: '人员管理',
+				icon: '<s:url value="/static/imgs/main/l18.png" />',
+				href: '<s:url value="/rbac/backend/person/main" />'
+			},{
+				title: '人员关系设置',
+				icon: '${app.basePath}/static/imgs/main/l19.png',
+				href: 'backend/relationship.html'
+			},{
+				title: '年底民主测评关系设置',
+				icon: '${app.basePath}/static/imgs/main/l20.png',
+				href: 'backend/minzhu/relationship.html'
+			},{
+				title: '年底民主测评权重设置',
+				icon: '${app.basePath}/static/imgs/main/l21.png',
+				href: 'backend/minzhu/weight.html'
+			},{
+				title: '日常周期设置',
+				icon: '${app.basePath}/static/imgs/main/l22.png',
+				href: 'backend/cycle_setting.html'
+			},{
+				title: '考核开关设置',
+				icon: '${app.basePath}/static/imgs/main/l23.png',
+				href: 'backend/kaohe.html'
+			},{
+				title: '强制分布比例设置',
+				icon: '${app.basePath}/static/imgs/main/l24.png',
+				href: 'backend/ratio_setting.html'
+			},{
+				title: '拟定等次',
+				icon: '${app.basePath}/static/imgs/main/l25.png',
+				href: 'backend/grade.html'
+			},{
+				title: '计划纪实总结回退',
+				icon: '${app.basePath}/static/imgs/main/l26.png',
+				href: 'backend/plan/summarize.html'
+			},{
+				title: '考勤登记',
+				icon: '${app.basePath}/static/imgs/main/l27.png',
+				href: 'backend/attendance_record.html'
+			},{
+				title: '加扣分理由管理',
+				icon: '${app.basePath}/static/imgs/main/l28.png',
+				href: 'backend/score_manage/manage.html'
+			},{
+				title: '加扣分管理',
+				icon: '${app.basePath}/static/imgs/main/l29.png',
+				href: 'backend/score_manage/score_manage.html'
+			},{
+				title: '学习园地',
+				icon: '${app.basePath}/static/imgs/main/l30.png',
+				href: 'backend/study/list.html'
+			},{
+				title: '人员调动',
+				icon: '${app.basePath}/static/imgs/main/l31.png',
+				href: 'backend/person_transfer.html'
+			}]
+		}
+	};
+</script>

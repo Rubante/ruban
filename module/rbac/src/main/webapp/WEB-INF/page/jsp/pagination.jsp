@@ -1,331 +1,124 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<div id="navbar" class="navbar navbar-default">
-	<script type="text/javascript">
-		try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-	</script>
-
-	<div class="navbar-container" id="navbar-container">
-		<!-- #section:basics/sidebar.mobile.toggle -->
-		<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
-			<span class="icon-bar"></span>
-
-			<span class="icon-bar"></span>
-
-			<span class="icon-bar"></span>
-		</button>
-
-		<!-- /section:basics/sidebar.mobile.toggle -->
-		<div class="navbar-header pull-left">
-			<!-- #section:basics/navbar.layout.brand -->
-			<a href="#" class="navbar-brand">
-				<small>
-					<i class="fa fa-leaf"></i>
-					管理控制台
-				</small>
-			</a>
-		</div>
-
-		<!-- #section:basics/navbar.dropdown -->
-		<div class="navbar-buttons navbar-header pull-right" role="navigation">
-			<ul class="nav ace-nav">
-				<li class="grey">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<i class="ace-icon fa fa-tasks"></i>
-						<span class="badge badge-grey">4</span>
-					</a>
-
-					<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-						<li class="dropdown-header">
-							<i class="ace-icon fa fa-check"></i>
-							4 项任务需要完成
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<table style="width:100%;">
+	<tr style="color:#0088cc;border-bottom: 1px solid #dadada;border-left: 1px solid #dadada">
+		<td style="width:100px;padding:1px 3px 1px 5px;">
+			<span>每页:</span>
+			<select id="selectPages" onchange="pagination.changePageSize(event)" style="padding-left:3px; color:#0088cc; border:0; width: 60px; height:100%;margin:0; border-right:1px solid #dadada;border-left:1px solid #dadada">
+				<option value="10" <c:if test="${resultInfo.pageSize == 10}">selected</c:if> >10条</option>
+				<option value="20" <c:if test="${resultInfo.pageSize == 20}">selected</c:if> >20条</option>
+				<option value="30" <c:if test="${resultInfo.pageSize == 30}">selected</c:if> >30条</option>
+				<option value="40" <c:if test="${resultInfo.pageSize == 40}">selected</c:if> >40条</option>
+			</select>
+		</td>
+		<td style="padding:1px 3px 1px 5px; border-right:1px solid #dadada;text-align: right;">
+			<div style="display: inline-block;">总共:${resultInfo.total}条</div>
+			<input type="hidden" name="pageNum" id="pageNum" value="${resultInfo.pageNum}" />
+			<input type="hidden" name="pageSize" id="pageSize" value="${resultInfo.pageSize}" />
+			<input type="hidden" name="pages" id="pages" value="${resultInfo.pages}" />
+		</td>
+		<td style="text-align: right;">
+			<div class="pagination">
+				<ul>
+					<li><a href="javascript:pagination.homePage();${param.action}();">&lt;&lt;</a></li>
+					<li><a href="javascript:pagination.toPagePre(${param.action});">&lt;</a></li>
+					<c:forEach items="${pagination.list}" var="item">
+						<li <c:if test="${item.active == '1'}">class="active"</c:if>>
+							<a href="javascript:pagination.setPageNum('${item.value}');${param.action}();">${item.value}</a>
 						</li>
+					</c:forEach>
+					<li><a href="javascript:pagination.toPageNext(${param.action});">&gt;</a></li>
+					<li><a href="javascript:pagination.lastPage();${param.action}();">&gt;&gt;</a></li>
+					<li>
+						<a href="javascript:pagination.toPageGo(${param.action});">转</a>
+						<input type="text" id="goPageNum" value="${resultInfo.pageNum}" style="text-align:right; margin:0;padding:0 3px 0 0;height:34px;width:50px;" maxlength="6"/>
+					</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+(function(){
+	pagination = {};
+	
+	$(document).ready(function(){
+		// 设定每页条数
+		$("#selectPages").val($("#pageSize").val());
+	});
+	// 设置页码
+	pagination.setPageNum = function(pageNum){
+		$("#pageNum").val(pageNum);
+	};
+	
+	// 获取数据
+	pagination.getPageData = function(){
+		var data = {};
+		data.pageNum = $("#pageNum").val();
+		data.pageSize = $("#pageSize").val();
+		return data;
+	};
+	
+	// 更改每页记录数
+	pagination.changePageSize = function(event){
+		var pageSize = $(event.target).val();
+		$("#pageSize").val(pageSize);
+		$("#pageNum").val(1);
+	};
+	// 上一页
+	pagination.toPagePre = function(action) {
+		if ($("#pageNum").val() != 1) {
+			var pageNumber = parseInt($("#pageNum").val()) - 1;
+			if (pageNumber >= 0) {
+				$("#pageNum").val(pageNumber);
+			}
+			action();
+		} else {
+			parent.layer.alert("已到达第一页！");
+		}
+	};
+	// 下一页
+	pagination.toPageNext = function(action) {
+		if ($("#pageNum").val() != $("#pages").val()
+				&& $("pageNum").val() != 0) {
+			$("#pageNum").val(parseInt($("#pageNum").val()) + 1);
+			action();
+		} else {
+			parent.layer.alert("已到达最后一页！");
+		}
+	};
+	// 首页
+	pagination.homePage = function() {
+		$("#pageNum").val(1);
+	};
+	// 尾页
+	pagination.lastPage = function() {
+		var pages = parseInt($("#pages").val());
+		$("#pageNum").val(pages);
+	};
+	// 跳转
+	pagination.toPageGo = function(action) {
 
-						<li class="dropdown-content">
-							<ul class="dropdown-menu dropdown-navbar">
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">软件更新进度</span>
-											<span class="pull-right">65%</span>
-										</div>
+		var currentPage = parseInt($("#goPageNum").val());
+		var totalPages = parseInt($("#pages").val());
 
-										<div class="progress progress-mini">
-											<div style="width:65%" class="progress-bar"></div>
-										</div>
-									</a>
-								</li>
+		// 判断转向页为是否为空
+		if (isNaN(currentPage)) {
+			parent.layer.alert("请输入正确的页码！");
+			return false;
+		}
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">硬件更新进度</span>
-											<span class="pull-right">35%</span>
-										</div>
-
-										<div class="progress progress-mini">
-											<div style="width:35%" class="progress-bar progress-bar-danger"></div>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">单元测试</span>
-											<span class="pull-right">15%</span>
-										</div>
-
-										<div class="progress progress-mini">
-											<div style="width:15%" class="progress-bar progress-bar-warning"></div>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">BUG修复</span>
-											<span class="pull-right">90%</span>
-										</div>
-
-										<div class="progress progress-mini progress-striped active">
-											<div style="width:90%" class="progress-bar progress-bar-success"></div>
-										</div>
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li class="dropdown-footer">
-							<a href="#">
-								查看任务明细
-								<i class="ace-icon fa fa-arrow-right"></i>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="purple">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<i class="ace-icon fa fa-bell fa fa-animated-bell"></i>
-						<span class="badge badge-important">8</span>
-					</a>
-
-					<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
-						<li class="dropdown-header">
-							<i class="ace-icon fa fa-exclamation-triangle"></i>
-							8 条通知
-						</li>
-
-						<li class="dropdown-content">
-							<ul class="dropdown-menu dropdown-navbar navbar-pink">
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">
-												<i class="btn btn-xs no-hover btn-pink fa fa-comment"></i>
-												新的注释
-											</span>
-											<span class="pull-right badge badge-info">+12</span>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<i class="btn btn-xs btn-primary fa fa-user"></i>
-										他注册成为了编辑者 ...
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">
-												<i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
-												新订单
-											</span>
-											<span class="pull-right badge badge-success">+8</span>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">
-												<i class="btn btn-xs no-hover btn-info fa fa-twitter"></i>
-												关注者
-											</span>
-											<span class="pull-right badge badge-info">+11</span>
-										</div>
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li class="dropdown-footer">
-							<a href="#">
-								查看所有通知
-								<i class="ace-icon fa fa-arrow-right"></i>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<li class="green">
-					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<i class="ace-icon fa fa-envelope fa fa-animated-vertical"></i>
-						<span class="badge badge-success">5</span>
-					</a>
-
-					<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-						<li class="dropdown-header">
-							<i class="ace-icon fa fa-envelope-o"></i>
-							5条消息
-						</li>
-
-						<li class="dropdown-content">
-							<ul class="dropdown-menu dropdown-navbar">
-								<li>
-									<a href="#" class="clearfix">
-										<img src="../img/avatars/avatar.png" class="msg-photo" alt="王一进的头像" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">一进:</span>
-												你去哪里吃饭 ...
-											</span>
-
-											<span class="msg-time">
-												<i class="ace-icon fa fa-clock-o"></i>
-												<span>几分钟前</span>
-											</span>
-										</span>
-									</a>
-								</li>
-
-								<li>
-									<a href="#" class="clearfix">
-										<img src="../img/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">太阳:</span>
-												几点起床的 ...
-											</span>
-
-											<span class="msg-time">
-												<i class="ace-icon fa fa-clock-o"></i>
-												<span>20分钟前</span>
-											</span>
-										</span>
-									</a>
-								</li>
-
-								<li>
-									<a href="#" class="clearfix">
-										<img src="../img/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">水族:</span>
-												太平洋的水真多，够喝的 ...
-											</span>
-
-											<span class="msg-time">
-												<i class="ace-icon fa fa-clock-o"></i>
-												<span>3:15下午</span>
-											</span>
-										</span>
-									</a>
-								</li>
-
-								<li>
-									<a href="#" class="clearfix">
-										<img src="../img/avatars/avatar2.png" class="msg-photo" alt="Kate's Avatar" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">学族:</span>
-												图书馆的书不够看的 ...
-											</span>
-
-											<span class="msg-time">
-												<i class="ace-icon fa fa-clock-o"></i>
-												<span>1:33 下午</span>
-											</span>
-										</span>
-									</a>
-								</li>
-
-								<li>
-									<a href="#" class="clearfix">
-										<img src="../img/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">车座:</span>
-												山地车好久没骑了  ...
-											</span>
-
-											<span class="msg-time">
-												<i class="ace-icon fa fa-clock-o"></i>
-												<span>10:09上午</span>
-											</span>
-										</span>
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li class="dropdown-footer">
-							<a href="inbox.html">
-								查看所有消息
-								<i class="ace-icon fa fa-arrow-right"></i>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<!-- #section:basics/navbar.user_menu -->
-				<li class="light-blue">
-					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-						<img class="nav-user-photo" src="../img/avatars/user.jpg" alt="Jason's Photo" />
-						<span class="user-info">
-							<small>欢迎,</small>
-							王一进
-						</span>
-
-						<i class="ace-icon fa fa-caret-down"></i>
-					</a>
-
-					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-						<li>
-							<a href="#">
-								<i class="ace-icon fa fa-cog"></i>
-								设置
-							</a>
-						</li>
-
-						<li>
-							<a href="profile.html">
-								<i class="ace-icon fa fa-user"></i>
-								个人资料
-							</a>
-						</li>
-
-						<li class="divider"></li>
-
-						<li>
-							<a href="#">
-								<i class="ace-icon fa fa-power-off"></i>
-								退出
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<!-- /section:basics/navbar.user_menu -->
-			</ul>
-		</div>
-
-		<!-- /section:basics/navbar.dropdown -->
-	</div><!-- /.navbar-container -->
-</div>
+		// 转向页大于总页数
+		if (currentPage > totalPages || currentPage <= 0 && totalPages != 0) {
+			parent.layer.alert("页码不存在，请重新输入！");
+			return;
+		} else {
+			$("#pageNum").val(currentPage);
+		}
+		action();
+	};
+	
+	window['pagination'] = pagination;
+})();
+</script>
