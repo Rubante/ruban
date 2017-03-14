@@ -1,0 +1,70 @@
+@charset "utf-8";
+/* CSS Document */
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,table,th,td,button{padding:0;margin:0;}
+fieldset,img,button{border:0;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul{list-style:none;}
+caption,th,li,dt,dd,p{text-align:left;}
+h1,h2,h3,h4,h5,h6{font-size:100%;text-align:left;font-weight:normal;}
+q:before,q:after{content:'';}
+abbr,acronym{border:0;}
+a{text-decoration:none;outline:none;}
+a:hover{text-decoration:none;}
+.clear{height:0px;width:0px;line-height:0px;font-size:0px;margin:0px;padding:0px;clear:both;}
+button{cursor:pointer;}
+em{font-style:normal;}
+
+body{font:14px "微软雅黑";color:#000;background:#f5f5f5;}
+.left{float:left;display:inline;}
+.right{float:right;display:inline;}
+.w1200{width:1200px;position:relative;}
+.center{margin:0 auto;}
+.home_shadow{box-shadow:1px 1px 1px #e9e9e9}
+
+
+/*  页头   */
+
+.head_top{height:38px;border-bottom:2px solid #757575;background:#444;position:relative; z-index:9999}
+.head_top .head_top_left{color:#e1e1e1;padding:10px 0 0 0;}
+.head_top .head_top_left b{font-size:16px;font-style:italic;color:#f4a100;}
+.head_top .head_top_right{height:38px;background:#444;}
+.head_top .hdtop_login{width:57px;height:38px;line-height:38px;text-align:center;background:#f4a100;border-bottom:3px solid #d88e01;}
+.head_top .hdtop_login a ,.head_top .hdtop_regsiter a{color:#fff6ef;}
+.head_top .hdtop_regsiter{width:68px;height:38px;line-height:38px;text-align:center;}
+.head_top .hdtop_regsiter a{ display:block}
+.head_top .jf01_icon{background-image:url(../images/hdtop_icon.png);background-repeat:no-repeat;}
+.head_top .hdtop_weixin ,.head_top .hdtop_help{/*width:56px;*/height:38px;padding: 0 10px;}
+.head_top .hdtop_about:hover ,.head_top .hdtop_weixin:hover ,.head_top .hdtop_help:hover ,.head_top .hdtop_regsiter:hover{background:#373737}
+.head_top .trans{-webkit-transition:-webkit-transform .5s ease-out;-moz-transition: -moz-transform .5s ease-out;-o-transition: -o-transform .5s ease-out;-ms-transition:-ms-transform .5s ease-out;}
+.head_top .hdtop_about{position:relative;width:70px;height:38px;text-align:center;}
+.head_top .hdtop_about a{color:#FFF;display:block;line-height:38px;}
+.head_top .hdtop_weixin .jf_app{color:#FFF;display:block;line-height:38px;padding: 0 5px;}
+.head_top .hdtop_weixin img{display: block}
+.head_top .hdtop_about em{width:18px;height:18px;display:block;margin:0 auto;background-position:0px 0px;}
+.head_top .hdtop_about:hover em{background-position:0px -33px;-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);-o-transform:rotateZ(360deg);-ms-transform: rotateZ(360deg);transform:rotateZ(360deg);}
+.head_top .hdtop_weixin{ position:relative}
+.head_top .hdtop_weixin em{width:21px;height:19px;display:block;margin:12px auto 0;background-position:-38px 0px;}
+.head_top .hdtop_weixin:hover em{background-position:-38px -32px;-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);-o-transform:rotateZ(360deg);-ms-transform: rotateZ(360deg);transform:rotateZ(360deg);}
+.head_top .hdtop_weixin .wx{border:1px solid #d7d7d7;display:none;position:absolute;left:-1px;top:38px;z-index:1000;}
+.head_top .hdtop_help{position:relative}
+.head_top .hdtop_help a{width:56px;height:26px;padding:12px 0 0 0;display:block}
+.head_top .hdtop_help em{width:21px;height:19px;display:block;margin:0 auto;background-position:-78px 0px;}
+.head_top .hdtop_help:hover em{background-position:-78px -33px;-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);-o-transform:rotateZ(360deg);-ms-transform: rotateZ(360deg);transform:rotateZ(360deg);}
+.head_top .hdtop_help .hp{right:0px;}
+
+/*header*/
+#header{height:100px;background:#FFF;overflow:hidden}
+#header .hd_logo{padding:14px 0 0 0;}
+#header .hd_tit{padding:30px 0 0 13px;}
+#header .hd_phone{padding:25px 0 0 0;position:relative;z-index:1}
+
+/*  footer   */
+.footer{background:#3d3f4b;padding:0 0 54px 0;}
+.footer .ftnav{height:59px;background:#31343d;}
+.footer .ftnav p{text-align:center;color:#FFF;}
+.footer .ftnav p a{color:#FFF;padding:0 13px;line-height:59px;}
+.footer .ft_text{padding:45px 0 35px;}
+.footer .ft_text p{text-align:center;line-height:24px;color:#afafb1;}
+.footer .ft_dot{text-align:center;margin:0 auto;overflow:hidden}
+.footer .ft_dot img{/*margin:0 2px;*/}

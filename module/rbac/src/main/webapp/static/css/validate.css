@@ -1,6 +1,42 @@
 .ruban-error {
-	background-color: red;
-	color: white;
+	background-color: rgba(250, 0, 0, 0.5);
+	filter: alpha(opacity = 50);
+	color: #000000;
+	float: right;
+	margin-top: -34px;
+	margin-right: 10px;
+	height: 33px;
+	line-height: 33px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.ruban-error-space {
+	background-color: rgba(250, 0, 0, 0.5);
+	filter: alpha(opacity = 50);
+	color: #000000;
+	float: left;
+	margin-right: 10px;
+	height: 33px;
+	line-height: 33px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.ruban-error-select {
+	background-color: rgba(250, 0, 0, 0.5);
+	filter: alpha(opacity = 50);
+	color: #000000;
+	float: right;
+	margin-right: 10px;
+	height: 33px;
+	line-height: 33px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.ruban-error-hint {
+	height:25px;
+	line-height: 25px;
+	color: red;
+	font-size: 15px;
 }
 
 .ime-mode {

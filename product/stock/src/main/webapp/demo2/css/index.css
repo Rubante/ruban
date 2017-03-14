@@ -1,0 +1,177 @@
+/*重置*/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form,
+	fieldset, input, textarea, p, blockquote, table, th, td, button {
+	padding: 0;
+	margin: 0;
+}
+
+fieldset, img, button {
+	border: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+caption, th, li, dt, dd {
+	text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	text-align: left;
+}
+
+q:before, q:after {
+	content: '';
+}
+
+abbr, acronym {
+	border: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.clear {
+	height: 0px;
+	width: 0px;
+	line-height: 0px;
+	font-size: 0px;
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+}
+
+button {
+	cursor: pointer;
+}
+
+em {
+	font-style: normal;
+}
+
+.center {
+	margin: 0 auto;
+}
+
+/*金服极赢线*/
+.dw_yx .w1200 {
+	width: 1200px;
+	margin: 0 auto;
+	position: relative
+}
+
+.dw_yx .hei300 {
+	height: 300px;
+}
+
+.dw_yx .no1 {
+	background: url(../images/jyx_bg1.jpg) no-repeat center top;
+}
+
+.dw_yx .no2 {
+	background: url(../images/jyx_bg2.jpg) no-repeat center top;
+}
+
+.dw_yx .no2 p {
+	padding: 172px 0 0 723px;
+}
+
+.dw_yx .no2 p a {
+	width: 285px;
+	height: 70px;
+	display: block;
+	text-indent: -9999px;
+	cursor: pointer
+}
+
+.dw_yx .no2 span {
+	padding: 24px 0 0 668px;
+	display: block;
+	color: #909090
+}
+
+.dw_yx .no3 {
+	height: 600px;
+	background: url(../images/jyx_bg3.jpg) no-repeat center top;
+}
+
+.dw_yx .no3 .videos {
+	position: absolute;
+	left: 88px;
+	top: 196px;
+	width: 474px;
+	height: 279px;
+}
+
+.dw_yx .no4 {
+	background: url(../images/jyx_bg4.jpg) no-repeat center top;
+}
+
+.dw_yx .no5 {
+	background: url(../images/jyx_bg5.jpg) no-repeat center top;
+}
+
+.dw_yx .no6 {
+	height: 204px;
+	background: url(../images/jyx_bg6.jpg) no-repeat center top;
+}
+
+.dw_yx .no6 p {
+	padding: 97px 0 0 432px;
+}
+
+.dw_yx .no6 p a {
+	width: 336px;
+	height: 78px;
+	display: block;
+	text-indent: -9999px;
+	cursor: pointer
+}
+
+/*弹窗*/
+.drags {
+	width: 300px;
+	background: #fff;
+	border-radius: 15px;
+	display: none;
+	z-index: 99
+}
+
+.drags h5 {
+	padding: 8px 0;
+	background: #225b9e;
+	text-align: center;
+	font-size: 20px;
+	color: #fff;
+	margin: 30px 0;
+}
+
+.drags .dg_closed {
+	position: absolute;
+	right: 10px;
+	top: 5px;
+	cursor: pointer
+}
+
+.mask {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	filter: alpha(opacity = 60);
+	background-color: #000;
+	z-index: 88;
+	opacity: 0.5;
+	-moz-opacity: 0.5;
+}

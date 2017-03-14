@@ -1,42 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruban.rbac.dao.ICompanyMapper">
+<mapper namespace="com.ruban.rbac.dao.organization.ICompanyMapper">
 
 	<select id="selectAll" resultType="com.ruban.rbac.domain.organization.Company">
 		SELECT 
-			ID as id, CODE as code, NAME as name, ADDRESS as address,POST_CODE as postcode, TITLE as title, TEL as tel,
-			EMAIL as email, PARENT_ID as parentId, TYPE as type, MEMO as memo, UPDATETIME as updatetime
-		FROM ORG_T_COMPANY
+			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
+			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.HAS_CHILDREN as hasChildren, s.STATE as state,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as companyId, p.name as onwerName
+		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID
+		ORDER BY s.ORDER_CODE
 	</select>
 	
 	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.organization.Company">
 		SELECT 
-			ID as id, CODE as code, NAME as name, ADDRESS as address,POST_CODE as postcode, TITLE as title, TEL as tel,
-			EMAIL as email, PARENT_ID as parentId, TYPE as type, MEMO as memo, UPDATETIME as updatetime
-		FROM ORG_T_COMPANY where 1 = 1 
+			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
+			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.HAS_CHILDREN as hasChildren, s.STATE as state,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as companyId, p.name as companyName
+		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID WHERE 1 = 1 
 		<if test="code != null and code != ''">
-			and code = #{code}
+			and s.code = #{code}
 		</if>
+		<if test="name != null and name != ''">
+			and s.name like "%" + #{name} + "%"
+		</if>
+		<if test="type != null and type != ''">
+			and s.type = #{type}
+		</if>
+		<if test="companyId != null">
+			and s.PARENT_ID = #{companyId}
+		</if>
+		ORDER BY s.ORDER_CODE
+	</select>
+
+	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.organization.Company">
+		SELECT 
+			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
+			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.HAS_CHILDREN as hasChildren, s.STATE as state,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modeUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as companyId, p.name as companyName
+		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID
+		WHERE s.id = #{id}
+		ORDER BY s.ORDER_CODE
+	</select>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+		DELETE FROM ORG_T_COMPANY
+		WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		DELETE FROM ORG_T_COMPANY
+		WHERE id in 
+        <foreach item="ids" collection="array" open="(" separator="," close=")">  
+        	#{ids}  
+        </foreach> 
+	</delete>
+	
+	<select id="countByParentId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT 
+			count(*)
+		FROM ORG_T_COMPANY
+		WHERE PARENT_ID = #{id}
 	</select>
 	
 	<insert id="insert" parameterType="com.ruban.rbac.domain.organization.Company" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO ORG_T_COMPANY(
-			ID, CODE, NAME, ADDRESS, POST_CODE, TITLE, TEL, EMAIL, PARENT_ID, TYPE, MEMO, UPDATETIME
+			CODE, PATH_CODE, ORDER_CODE, NAME, SIMPLE_NAME, ADDRESS, POST_CODE, TITLE, TEL, EMAIL, PARENT_ID, TYPE, MEMO, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
 		)
 		VALUES(
-			#{id, jdbcType=INTEGER},
 			#{code, jdbcType=VARCHAR},
+			#{pathCode, jdbcType=VARCHAR},
+			#{orderCode, jdbcType=TINYINT},
 			#{name, jdbcType=VARCHAR},
+			#{simpleName, jdbcType=VARCHAR},
 			#{address, jdbcType=VARCHAR},
 			#{postCode, jdbcType=VARCHAR},
 			#{title, jdbcType=VARCHAR},
 			#{tel, jdbcType=VARCHAR},
 			#{email, jdbcType=VARCHAR},
-			#{parentId, jdbcType=INTEGER},
+			#{companyId, jdbcType=INTEGER},
 			#{type, jdbcType=TINYINT},
 			#{memo, jdbcType=VARCHAR},
-			#{updateTime, jdbcType=TIMESTAMP}
+			#{addTime, jdbcType=TIMESTAMP},
+			#{addUserId, jdbcType=INTEGER},
+			#{modTime, jdbcType=TIMESTAMP},
+			#{modUserId, jdbcType=INTEGER},
+			#{updateLock, jdbcType=VARCHAR}
 		)
-		
 	</insert>
+	
+	<update id="update" parameterType="com.ruban.rbac.domain.organization.Company">
+		UPDATE ORG_T_COMPANY
+		SET 
+			CODE = #{code, jdbcType=VARCHAR},
+			PATH_CODE = #{pathCode, jdbcType=VARCHAR},
+			NAME = #{name, jdbcType=VARCHAR},
+			SIMPLE_NAME = #{simpleName, jdbcType=VARCHAR},
+			ADDRESS = #{address, jdbcType=VARCHAR},
+			POST_CODE = #{postCode, jdbcType=VARCHAR},
+			TITLE = #{title, jdbcType=VARCHAR},
+			TEL = #{tel, jdbcType=VARCHAR},
+			EMAIL = #{email, jdbcType=VARCHAR},
+			PARENT_ID = #{companyId, jdbcType=INTEGER},
+			TYPE = #{type, jdbcType=TINYINT},
+			MEMO = #{memo, jdbcType=VARCHAR},
+			MOD_TIME = #{modTime, jdbcType=TIMESTAMP},
+			MOD_USER_ID = #{modUserId, jdbcType=INTEGER},
+			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateHasChildren" parameterType="com.ruban.rbac.domain.organization.Company">
+		UPDATE ORG_T_COMPANY
+		SET 
+			HAS_CHILDREN = #{hasChildren, jdbcType=TINYINT},
+			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+		WHERE ID = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateOrderCode" parameterType="com.ruban.rbac.domain.organization.Company">
+		UPDATE ORG_T_COMPANY
+		SET 
+			ORDER_CODE = #{1, jdbcType=TINYINT}
+		WHERE ID = #{0, jdbcType=INTEGER}
+	</update>
 </mapper>

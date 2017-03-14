@@ -1,0 +1,171 @@
+package com.tdr.mbs.bank.action.channelService;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import com.tdr.mbs.bank.action.JsonBaseActionPlus;
+import com.tdr.mbs.bank.clientreqans.channelService.ServiceMessageAns;
+import com.tdr.mbs.bank.utils.DateUtil;
+import com.tdr.mbs.dao.serviceMessage.IChannelServiceMsgConstants;
+import com.tdr.mbs.dfs.IDFSDownloader;
+import com.tdr.mbs.dfs.impl.DFSDownloaderImpl;
+import com.tdr.mbs.entity.channel.ChannelUser;
+import com.tdr.mbs.entity.serviceMessage.ChannelService;
+import com.tdr.mbs.entity.serviceMessage.ChannelUserServiceRelation;
+import com.tdr.mbs.entity.serviceMessage.ServiceMessage;
+import com.tdr.mbs.exception.core.MbsException;
+import com.tdr.mbs.exception.core.MbsRuntimeException;
+import com.tdr.mbs.service.bank.channeluser.ChannelUserService;
+import com.tdr.mbs.service.bank.serviceMessage.IChannelServiceService;
+import com.tdr.mbs.service.bank.serviceMessage.IChannelUserServiceRelationService;
+import com.tdr.mbs.service.bank.serviceMessage.IServiceMessageService;
+import com.tdr.mbs.utils.common.StringUtil;
+
+/**
+ * 
+ * @ClassName：LastMessageAction
+ * @Author：fcp
+ * @Creation：2014年11月27日 上午10:18:44
+ */
+public class LastMessageAction extends JsonBaseActionPlus implements IChannelServiceMsgConstants {
+
+    private static final long serialVersionUID = -9090108704599069970L;
+    /**
+     * 上送的服务标识
+     */
+    private String id;
+    /**
+     * 要返回的消息的数量
+     */
+    private String num;
+    /**
+     * 消息service
+     */
+    private IServiceMessageService serviceMessageService;
+    /**
+     * 服务service
+     */
+    private IChannelServiceService channelServiceService;
+    /**
+     * 渠道用户service
+     */
+    private ChannelUserService channelUserService;
+    /**
+     * service
+     */
+    private IChannelUserServiceRelationService channelUserServiceRelationService;
+    
+    private String downloadURL;
+
+    @Override
+    protected String doExecute(Map<String, Object> root) throws MbsException {
+        if (StringUtil.isNullOrEmpty(id)) {
+            throw new MbsRuntimeException("error.lastMsg.id.null");
+        }
+        if (!StringUtil.isDigit(id)) {
+            throw new MbsRuntimeException("error.lastMsg.id.illegal");
+        }
+        if (!StringUtil.isNullOrEmpty(num) && !StringUtil.isDigit(num)) {
+            throw new MbsRuntimeException("error.lastMsg.num.illegal");
+        }
+        if (StringUtil.isNullOrEmpty(num)) {
+            num = DEFAULT_MSG_NUM;
+        }
+        ChannelService channelService = channelServiceService.get(ChannelService.class, Long.parseLong(id));
+        if (channelService == null) {
+            throw new MbsRuntimeException("error.lastMsg.channelService.notExist");
+        }
+        if (channelService.getStatus() != CHANNELSERVICE_STATUS_PASS) {
+            throw new MbsRuntimeException("error.lastMsg.channelService.notPass");
+        }
+        List<ServiceMessage> list = serviceMessageService.findLastMsgListByUserAndService(getLoginUser(),
+                channelService, Integer.parseInt(num));
+        // 组装应答体
+        List<ServiceMessageAns> ansList = new ArrayList<ServiceMessageAns>();
+        for (ServiceMessage sm : list) {
+            ServiceMessageAns ans = new ServiceMessageAns();
+            ans.setId(sm.getId().toString());
+            ans.setName(sm.getName());
+            if (sm.getType() == SERVICEMESSAGE_TYPE_TEXT) {// 文本类型消息
+                ans.setContent(sm.getTextContent());
+                ans.setPhoto("");
+                ans.setPhotoHeight("");
+                ans.setPhotoWidth("");
+            } else if (sm.getType() == SERVICEMESSAGE_TYPE_PHOTO) {// 图片类型的消息
+                ans.setContent("");
+                
+                // 图片下载路径
+                IDFSDownloader downloader = new DFSDownloaderImpl();
+                String fileName = downloader.getDownloadURLWithGroup(sm.getPhotoPath());
+                ans.setPhoto(downloadURL+fileName);
+                
+                ans.setPhotoWidth(sm.getPhotoWidth().toString());
+                ans.setPhotoHeight(sm.getPhotoLength().toString());
+            }
+            if (sm.getDeliverType() == SERVICEMESSAGE_TRANSMIT_FOLLOW) {// 如果是关注已发送
+                ans.setDeliverTime(DateUtil.getDateTimeStr(getLoginUser().getOpenDate()));
+            } else {
+                ans.setDeliverTime(DateUtil.getDateTimeStr(sm.getActualDeliverTime()));
+            }
+            ans.setMsgType(sm.getBehaviorType().toString());
+            ans.setMsgParam(sm.getBehaviorParam());
+            ansList.add(ans);
+        }
+        root.put("msgList", ansList);
+        // 更新最后访问时间
+        ChannelUser loginUser = channelUserService.get(ChannelUser.class, getLoginUser().getId());
+        List<ChannelUserServiceRelation> set = channelUserServiceRelationService.queryChannelServiceByUser(loginUser);
+        for (ChannelUserServiceRelation r : set) {
+            if (channelService.getId().longValue() == r.getChannelService().getId().longValue()) {
+                r.setLastRequestTime(new Date());
+                channelUserServiceRelationService.update(r);
+                break;
+            }
+        }
+        return SUCCESS;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setChannelServiceService(IChannelServiceService channelServiceService) {
+        this.channelServiceService = channelServiceService;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public void setServiceMessageService(IServiceMessageService serviceMessageService) {
+        this.serviceMessageService = serviceMessageService;
+    }
+
+    public void setChannelUserService(ChannelUserService channelUserService) {
+        this.channelUserService = channelUserService;
+    }
+
+    public void setChannelUserServiceRelationService(
+            IChannelUserServiceRelationService channelUserServiceRelationService) {
+        this.channelUserServiceRelationService = channelUserServiceRelationService;
+    }
+
+    public String getDownloadURL() {
+        return downloadURL;
+    }
+
+    public void setDownloadURL(String downloadURL) {
+        this.downloadURL = downloadURL;
+    }
+
+}

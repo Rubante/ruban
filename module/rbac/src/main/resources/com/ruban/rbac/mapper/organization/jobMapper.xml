@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruban.rbac.dao.organization.IJobMapper">
+
+	<select id="selectAll" resultType="com.ruban.rbac.domain.organization.Department">
+		SELECT 
+			s.ID as id, s.CODE as code, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, 
+			s.SETUP_TIME as setupTime, s.MEMO as memo, s.STATE as state,
+			s.PERSON_ID as personId, p.name as personName, s.COMPANY_ID as companyId, c.NAME as ownerName,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as departmentId, p.name as ownerDptName, s.HAS_CHILDREN as hasChildren
+		FROM ORG_T_DEPARTMENT s 
+		LEFT JOIN ORG_T_COMPANY c on s.COMPANY_ID = c.ID
+		LEFT JOIN ORG_T_DEPARTMENT p on s.PARENT_ID = p.ID
+		ORDER BY s.ORDER_CODE
+	</select>
+	
+	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.organization.Department">
+		SELECT 
+			s.ID as id, s.CODE as code, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, 
+			s.SETUP_TIME as setupTime, s.MEMO as memo, s.STATE as state,
+			s.PERSON_ID as personId, p.name as personName, s.COMPANY_ID as companyId, c.NAME as ownerName,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as departmentId, p.name as ownerDptName, s.HAS_CHILDREN as hasChildren
+		FROM ORG_T_DEPARTMENT s 
+		LEFT JOIN ORG_T_COMPANY c on s.COMPANY_ID = c.ID
+		LEFT JOIN ORG_T_DEPARTMENT p on s.PARENT_ID = p.ID
+		WHERE 1 = 1 
+		<if test="code != null and code != ''">
+			and s.code = #{code}
+		</if>
+		<if test="name != null and name != ''">
+			and s.name like "%" + #{name} + "%"
+		</if>
+		<if test="companyId != null">
+			and s.COMPANY_ID = #{companyId}
+		</if>
+		<if test="departmentId != null">
+			and s.PARENT_ID = #{departmentId}
+		</if>
+		ORDER BY s.ORDER_CODE
+	</select>
+
+	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.organization.Department">
+		SELECT 
+			s.ID as id, s.CODE as code, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, 
+			s.SETUP_TIME as setupTime, s.MEMO as memo, s.STATE as state,
+			s.PERSON_ID as personId, p.name as personName, s.COMPANY_ID as companyId, c.NAME as ownerName,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as departmentId, p.name as ownerDptName, s.HAS_CHILDREN as hasChildren
+		FROM ORG_T_DEPARTMENT s 
+		LEFT JOIN ORG_T_COMPANY c on s.COMPANY_ID = c.ID
+		LEFT JOIN ORG_T_DEPARTMENT p on s.PARENT_ID = p.ID
+		WHERE s.id = #{id}
+		ORDER BY s.ORDER_CODE
+	</select>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+		DELETE FROM ORG_T_DEPARTMENT
+		WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		DELETE FROM ORG_T_DEPARTMENT
+		WHERE id in 
+        <foreach item="ids" collection="array" open="(" separator="," close=")">  
+        	#{ids}  
+        </foreach> 
+	</delete>
+	
+	<select id="countByParentId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT 
+			count(*)
+		FROM ORG_T_COMPANY
+		WHERE PARENT_ID = #{id}
+	</select>
+	
+	<insert id="insert" parameterType="com.ruban.rbac.domain.organization.Department" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ORG_T_DEPARTMENT(
+			CODE, NAME, SIMPLE_NAME, PERSON_ID, SETUP_TIME, STATE, MEMO, ORDER_CODE, HAS_CHILDREN, PARENT_ID, COMPANY_ID, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
+		)
+		VALUES(
+			#{code, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{simpleName, jdbcType=VARCHAR},
+			#{personId, jdbcType=INTEGER},
+			#{setupTime, jdbcType=TIMESTAMP},
+			#{state, jdbcType=TINYINT},
+			#{memo, jdbcType=VARCHAR},
+			#{orderCode, jdbcType=TINYINT},
+			#{hasChildren, jdbcType=TINYINT},
+			#{departmentId, jdbcType=INTEGER},
+			#{companyId, jdbcType=INTEGER},
+			#{addTime, jdbcType=TIMESTAMP},
+			#{addUserId, jdbcType=INTEGER},
+			#{modTime, jdbcType=TIMESTAMP},
+			#{modUserId, jdbcType=INTEGER},
+			#{updateLock, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.ruban.rbac.domain.organization.Department">
+		UPDATE ORG_T_DEPARTMENT
+		SET 
+			CODE = #{code, jdbcType=VARCHAR},
+			NAME = #{name, jdbcType=VARCHAR},
+			SIMPLE_NAME = #{simpleName, jdbcType=VARCHAR},
+			PERSON_ID = #{personId, jdbcType=INTEGER},
+			SETUP_TIME = #{setupTime, jdbcType=TIMESTAMP},
+			MEMO = #{memo, jdbcType=VARCHAR},
+			ORDER_CODE = #{orderCode, jdbcType=TINYINT},
+			PARENT_ID = #{departmentId, jdbcType=INTEGER},
+			COMPANY_ID = #{companyId, jdbcType=INTEGER},
+			MOD_TIME = #{modTime, jdbcType=TIMESTAMP},
+			MOD_USER_ID = #{modUserId, jdbcType=INTEGER},
+			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateHasChildren" parameterType="com.ruban.rbac.domain.organization.Department">
+		UPDATE ORG_T_DEPARTMENT
+		SET 
+			HAS_CHILDREN = #{hasChildren, jdbcType=TINYINT},
+			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+		WHERE ID = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateOrderCode">
+		UPDATE ORG_T_DEPARTMENT
+		SET 
+			ORDER_CODE = #{1, jdbcType=TINYINT}
+		WHERE ID = #{0, jdbcType=INTEGER}
+	</update>
+</mapper>

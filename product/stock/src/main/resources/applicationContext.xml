@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd4
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
+	default-lazy-init="true">
+
+	<!-- 系统属性配置 -->
+	<bean id="propertyPlaceHolder"
+		class="com.ruban.framework.core.spring.RubanPropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<!-- 设置编码格式 -->
+		<property name="fileEncoding" value="UTF-8"></property>
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+				<value>classpath:config.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 注解配置 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.ruban.rbac,com.ruban.framework.dao">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 数据库用户名密码 -->
+	<bean id="datasource1_username_password" class="com.ruban.framework.dao.datasource.DatabasePassword">
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<!-- 数据源1 -->
+	<bean id="dataSource1" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClass}" />
+		<property name="url" value="${jdbc.jdbcUrl}" />
+		<property name="username">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject" ref="datasource1_username_password"></property>
+				<property name="targetMethod" value="getUsername"></property>
+			</bean>
+		</property>
+		<property name="password">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject" ref="datasource1_username_password"></property>
+				<property name="targetMethod" value="getPassword"></property>
+			</bean>
+		</property>
+		<property name="initialSize" value="${dbConnection.min}" />
+		<property name="maxActive" value="${dbConnection.max}" />
+	</bean>
+
+	<!-- 多数据源 -->
+	<bean id="dataSources" class="com.ruban.framework.dao.datasource.MultipleDataSource">
+		<property name="defaultTargetDataSource" ref="dataSource1" />
+		<property name="TargetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="dataSource1" value-ref="dataSource1"></entry>
+				<entry key="dataSource2" value-ref="dataSource1"></entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- ibatis会话工厂 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSources" />
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations" value="classpath*:com/ruban/**/*Mapper.xml" />
+		<property name="configLocation"
+			value="classpath:com/ruban/framework/dao/mybatis.xml" />
+	</bean>
+
+	<bean id="sqlSessionTemplate" class="com.ruban.framework.dao.support.RubanSqlSessionTemplate">
+		<constructor-arg type="org.apache.ibatis.session.SqlSessionFactory"
+			ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 扫描basePackage下所有以@RubanDaoRepository标识的dao接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ruban.rbac.dao" />
+		<property name="annotationClass"
+			value="com.ruban.framework.dao.support.RubanDaoRepository" />
+		<property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate" />
+	</bean>
+
+	<!-- 数据库事务 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSources" />
+	</bean>
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- DAO扩展类 -->
+	<bean id="rubanSqlSessionDaoSupport"
+		class="com.ruban.framework.dao.support.RubanSqlSessionDaoSupport">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+	</bean>
+
+	<!-- springContext定位器 -->
+	<bean id="springContextLocator" class="com.ruban.framework.core.spring.SpringContextLocator"
+		lazy-init="false"></bean>
+
+</beans>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruban.common.dao.IResourceFieldMapper">
+
+	<select id="selectAll" resultType="com.ruban.common.domain.ResourceField">
+		SELECT 
+			s.ID as id, s.CODE as code, s.NAME as name, s.FLAG as flag, s.MEMO as memo,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.RESOURCE_ID as resourceId
+		FROM SYS_T_RESOURCE_FIELD s 
+		ORDER BY s.MOD_TIME DESC
+	</select>
+	
+	<select id="selectWithCondition" resultType="com.ruban.common.domain.ResourceField">
+		SELECT 
+			s.ID as id, s.CODE as code, s.NAME as name, s.FLAG as flag, s.MEMO as memo,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.RESOURCE_ID as resourceId
+		FROM SYS_T_RESOURCE_FIELD s 
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+			and s.name like "%" + #{name} + "%"
+		</if>
+		<if test="code != null and code != ''">
+			and s.CODE = #{code}
+		</if>
+		ORDER BY s.MOD_TIME DESC
+	</select>
+
+	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.common.domain.ResourceField">
+		SELECT 
+			s.ID as id, s.CODE as code, s.NAME as name, s.FLAG as flag, s.MEMO as memo,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.RESOURCE_ID as resourceId
+		FROM SYS_T_RESOURCE_FIELD s 
+		WHERE s.id = #{id}
+	</select>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+		DELETE FROM SYS_T_RESOURCE_FIELD
+		WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		DELETE FROM SYS_T_RESOURCE_FIELD
+		WHERE id in 
+        <foreach item="ids" collection="array" open="(" separator="," close=")">  
+        	#{ids}  
+        </foreach> 
+	</delete>
+	
+	<insert id="insert" parameterType="com.ruban.common.domain.ResourceField" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO SYS_T_RESOURCE_FIELD (
+			CODE, NAME, FLAG, MEMO, RESOURCE_ID, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
+		)
+		VALUES(
+			#{code, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{flag, jdbcType=TINYINT},
+			#{memo, jdbcType=VARCHAR},
+			#{resourceId, jdbcType=INTEGER},
+			#{addTime, jdbcType=TIMESTAMP},
+			#{addUserId, jdbcType=INTEGER},
+			#{modTime, jdbcType=TIMESTAMP},
+			#{modUserId, jdbcType=INTEGER},
+			#{updateLock, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.ruban.common.domain.ResourceField">
+		UPDATE SYS_T_RESOURCE_FIELD
+		SET 
+			CODE = #{code, jdbcType=VARCHAR},
+			NAME = #{name, jdbcType=VARCHAR},
+			FLAG = #{flag, jdbcType=VARCHAR},
+			MEMO = #{memo, jdbcType=VARCHAR},
+			RESOURCE_ID = #{resourceId, jdbcType=VARCHAR},
+			MOD_TIME = #{modTime, jdbcType=TIMESTAMP},
+			MOD_USER_ID = #{modUserId, jdbcType=INTEGER},
+			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruban.common.dao.IDictionaryMapper">
+
+	<select id="selectAll" resultType="com.ruban.common.domain.Dictionary">
+		SELECT 
+			ID as id, GROUP_KEY as groupKey, CODE as code, VALUE as value, MEMO as memo, 
+			ADD_TIME as addTime, MOD_TIME as modTime, UPDATE_LOCK as updateLock
+		FROM SYS_T_DICTIONARY
+	</select>
+	
+	<select id="selectWithCondition" resultType="com.ruban.common.domain.Dictionary">
+		SELECT 
+			ID as id, GROUP_KEY as groupKey, CODE as code, VALUE as value, MEMO as memo, 
+			ADD_TIME as addTime, MOD_TIME as modTime, UPDATE_LOCK as updateLock
+		FROM SYS_T_DICTIONARY where 1 = 1 
+		<if test="group != null and group != ''">
+			and GROUP_KEY = #{group}
+		</if>
+	</select>
+	
+	<select id="selectByGroup" parameterType="java.lang.String" resultType="com.ruban.common.domain.Dictionary">
+		SELECT 
+			ID as id, GROUP_KEY as groupKey, CODE as code, VALUE as value, MEMO as memo, 
+			ADD_TIME as addTime, MOD_TIME as modTime, UPDATE_LOCK as updateLock
+		FROM SYS_T_DICTIONARY 
+		WHERE GROUP_KEY = #{group}
+	</select>
+	
+	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.common.domain.Dictionary">
+		SELECT 
+			ID as id, GROUP_KEY as groupKey, CODE as code, VALUE as value, MEMO as memo, 
+			ADD_TIME as addTime, MOD_TIME as modTime, UPDATE_LOCK as updateLock
+		FROM SYS_T_DICTIONARY 
+		WHERE ID = #{id, jdbcType=INTEGER}
+	</select>
+	
+	<insert id="insert" parameterType="com.ruban.common.domain.Dictionary" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO SYS_T_DICTIONARY(
+			GROUP_KEY, CODE, VALUE, MEMO, ADD_TIME, MOD_TIME, UPDATE_LOCK
+		)
+		VALUES(
+			#{group, jdbcType=VARCHAR},
+			#{code, jdbcType=VARCHAR},
+			#{value, jdbcType=VARCHAR},
+			#{memo, jdbcType=VARCHAR},
+			#{addTime, jdbcType=TIMESTAMP},
+			#{modTime, jdbcType=TIMESTAMP},
+			#{updateLock, jdbcType=BIGINT}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.ruban.common.domain.Dictionary">
+		update SYS_T_DICTIONARY
+			set 
+				GROUP_KEY = #{group, jdbcType=VARCHAR},
+				CODE = #{code, jdbcType=VARCHAR},
+				VALUE = #{value, jdbcType=VARCHAR},
+				MEMO = #{memo, jdbcType=VARCHAR},
+				MOD_TIME = #{modTime, jdbcType=TIMESTAMP},
+				UPDATE_LOCK = #{updateLock, jdbcType=BIGINT}
+			WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=BIGINT}
+	</update>
+</mapper>
