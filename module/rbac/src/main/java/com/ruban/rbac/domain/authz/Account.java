@@ -2,50 +2,48 @@ package com.ruban.rbac.domain.authz;
 
 import java.util.Date;
 
+import com.ruban.framework.dao.domain.PersistentObject;
+
 /**
- * 系统可登录的账号，每个账号可以依据状态是否允许登录。<br />
- * 也可能是系统管理员，也可能不对应某个具体的人，只是一个用户而已
+ * 该表纪录系统可登录的账号。<br />
+ * 每个账号依据状态做出是否允许登录的判断。<br />
+ * 也可能是系统管理员，也可能不对应某个具体的人，只是一个用户而已,例如：admin
  * 
  * @author ruban
  *
  */
-public class User {
+public class Account extends PersistentObject {
 
-    /** 主键 **/
-    private int id;
+    /** 登录账号 **/
+    private String accountNo;
 
-    /** 用户名 **/
-    private String userNo;
-
-    /** 密码 **/
+    /** 登录密码 **/
     private String password;
 
     /** 显示名 **/
     private String name;
 
     /** 状态 **/
-    private int status;
+    private String state;
 
-    /** 所属员工 **/
-    private int employeeId;
+    /** 备注 **/
+    private String memo;
 
-    /** 更新时间 **/
-    private Date updatetime;
+    /** 最后登录时间 **/
+    private Date lastLoginTime;
 
-    public int getId() {
-        return id;
+    /** 所属人员 **/
+    private Long personId;
+
+    /** 所属人员名称 **/
+    private String personName;
+
+    public String getAccountNo() {
+        return accountNo;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUserNo() {
-        return userNo;
-    }
-
-    public void setUserNo(String userNo) {
-        this.userNo = userNo;
+    public void setAccountNo(String accountNo) {
+        this.accountNo = accountNo;
     }
 
     public String getPassword() {
@@ -64,28 +62,44 @@ public class User {
         this.name = name;
     }
 
-    public int getStatus() {
-        return status;
+    public String getState() {
+        return state;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
+    public String getMemo() {
+        return memo;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getLastLoginTime() {
+        return lastLoginTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public Long getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Long personId) {
+        this.personId = personId;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
 }

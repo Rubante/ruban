@@ -8,7 +8,7 @@ import java.util.Date;
  * @author ruban
  *
  */
-public class RoleGroup {
+public class AccountGroup {
 
     /** 主键 **/
     private int id;

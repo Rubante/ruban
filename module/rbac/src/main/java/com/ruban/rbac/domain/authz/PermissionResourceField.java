@@ -10,7 +10,7 @@ import java.util.Date;
  * @author tdr
  *
  */
-public class PermissionResourcesData {
+public class PermissionResourceField {
 
     /** 主键 **/
     private int id;

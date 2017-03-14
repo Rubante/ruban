@@ -1,37 +1,27 @@
 package com.ruban.rbac.domain.organization;
 
-import java.util.Date;
+import com.ruban.framework.dao.domain.PersistentObject;
 
 /**
- * 公司内的职务设置
+ * 公司内的职务设置,例如：<br />
+ * 经理<br />
+ * 总监<br />
+ * 董事<br />
+ * ...... <br />
  * 
  * @author ruban
  *
  */
-public class Title {
-
-    /** 主键 **/
-    private int id;
+public class Title extends PersistentObject {
 
     /** 职务名称 **/
     private String name;
 
-    /** 所属公司 **/
-    private int companyId;
-
-    /** 说明 **/
+    /** 职务说明 **/
     private String memo;
 
-    /** 更新时间 **/
-    private Date updatetime;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    /** 所属公司 **/
+    private Long companyId;
 
     public String getName() {
         return name;
@@ -39,14 +29,6 @@ public class Title {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
     }
 
     public String getMemo() {
@@ -57,12 +39,12 @@ public class Title {
         this.memo = memo;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
 }

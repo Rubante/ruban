@@ -8,7 +8,7 @@ import java.util.Date;
  * @author ruban
  *
  */
-public class PermissionResources {
+public class PermissionResource {
 
     /** 主键 **/
     private int id;

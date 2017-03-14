@@ -8,7 +8,7 @@ import java.util.Date;
  * @author ruban
  *
  */
-public class RoleExt {
+public class RoleExtend {
 
     /** 注解ID **/
     private int id;

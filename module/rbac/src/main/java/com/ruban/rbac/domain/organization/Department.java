@@ -1,47 +1,64 @@
 package com.ruban.rbac.domain.organization;
 
-import java.util.Date;
+import com.ruban.framework.dao.domain.PersistentObject;
 
 /**
- * 该表代表组织内部的部门，科室，委员会等行政设立的
+ * 该表代表组织内部的部门，科室，委员会等行政设立的<br />
+ * 部门经理（负责人）是非必须的，可以通过职务来设定部门负责人，此处仅为展示之用<br />
  * 
  * @author ruban
  *
  */
-public class Department {
+public class Department extends PersistentObject {
 
-    /** 主键 **/
-    private int id;
-
-    /** 公司 **/
-    private int companyId;
+    /** 部门编码 **/
+    private String code;
 
     /** 部门名称 **/
     private String name;
 
+    /** 部门简称 **/
+    private String simpleName;
+
     /** 成立时间 **/
-    private Date setupTime;
+    private String setupTime;
 
     /** 状态 **/
-    private int status;
+    private int state;
 
-    /** 更新时间 **/
-    private Date updatetime;
+    /** 备注 **/
+    private String memo;
 
-    public int getId() {
-        return id;
+    /** 排序序号 **/
+    private int orderCode;
+
+    /** 部门经理（负责人） **/
+    private int personId;
+
+    /** 部门经理（负责人） **/
+    private String personName;
+
+    /** 父节点 **/
+    private Long departmentId;
+
+    /** 父节点名称 **/
+    private String departmentName;
+
+    /** 所属组织机构 **/
+    private Long companyId;
+
+    /** 所属组织机构名称 **/
+    private String companyName;
+
+    /** 子节点数量 **/
+    private int hasChildren;
+
+    public String getCode() {
+        return code;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -52,28 +69,100 @@ public class Department {
         this.name = name;
     }
 
-    public Date getSetupTime() {
+    public String getSimpleName() {
+        return simpleName;
+    }
+
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
+    }
+
+    public String getSetupTime() {
         return setupTime;
     }
 
-    public void setSetupTime(Date setupTime) {
+    public void setSetupTime(String setupTime) {
         this.setupTime = setupTime;
     }
 
-    public int getStatus() {
-        return status;
+    public int getState() {
+        return state;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setState(int state) {
+        this.state = state;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public String getMemo() {
+        return memo;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public int getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(int orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public int getHasChildren() {
+        return hasChildren;
+    }
+
+    public void setHasChildren(int hasChildren) {
+        this.hasChildren = hasChildren;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
 }

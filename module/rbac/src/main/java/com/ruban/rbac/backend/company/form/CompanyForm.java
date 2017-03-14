@@ -1,27 +1,33 @@
-package com.ruban.rbac.organization.form;
+package com.ruban.rbac.backend.company.form;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 
+import com.ruban.rbac.backend.BackendForm;
+
 @Validated
-public class CompanyForm implements Serializable {
+public class CompanyForm extends BackendForm implements Serializable {
 
     private static final long serialVersionUID = -8068180251093563415L;
 
+    private Long id;
+
     @NotNull(message = "{company.code.notnull}")
-    @Length(min = 5, max = 10, message = "{company.code.length}")
+    @Length(min = 4, max = 10, message = "{company.code.length}")
     private String code;
 
+    @NotNull(message = "{company.name.notnull}")
     private String name;
+
+    private String simpleName;
 
     private String address;
 
-    private String postcode;
+    private String postCode;
 
     private String title;
 
@@ -31,11 +37,25 @@ public class CompanyForm implements Serializable {
 
     private String memo;
 
-    private int type;
+    @NotNull(message = "{company.type.notnull}")
+    private String type;
 
-    private int parentId;
+    /** 上级机构 **/
+    private Long companyId;
 
-    private Date updatetime;
+    private String holdLock;
+
+    private Long addUserId;
+
+    private Long modUserId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
@@ -53,6 +73,14 @@ public class CompanyForm implements Serializable {
         this.name = name;
     }
 
+    public String getSimpleName() {
+        return simpleName;
+    }
+
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -61,12 +89,12 @@ public class CompanyForm implements Serializable {
         this.address = address;
     }
 
-    public String getPostcode() {
-        return postcode;
+    public String getPostCode() {
+        return postCode;
     }
 
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
     }
 
     public String getTitle() {
@@ -101,28 +129,44 @@ public class CompanyForm implements Serializable {
         this.memo = memo;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public int getParentId() {
-        return parentId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public String getHoldLock() {
+        return holdLock;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setHoldLock(String holdLock) {
+        this.holdLock = holdLock;
+    }
+
+    public Long getAddUserId() {
+        return addUserId;
+    }
+
+    public void setAddUserId(Long addUserId) {
+        this.addUserId = addUserId;
+    }
+
+    public Long getModUserId() {
+        return modUserId;
+    }
+
+    public void setModUserId(Long modUserId) {
+        this.modUserId = modUserId;
     }
 
 }

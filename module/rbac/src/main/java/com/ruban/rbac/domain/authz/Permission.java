@@ -1,6 +1,6 @@
 package com.ruban.rbac.domain.authz;
 
-import java.util.Date;
+import com.ruban.framework.dao.domain.PersistentObject;
 
 /**
  * 系统中的权限
@@ -8,45 +8,40 @@ import java.util.Date;
  * @author ruban
  *
  */
-public class Permission {
-
-    /** 主键 **/
-    private int id;
+public class Permission extends PersistentObject {
 
     /** 操作方式 **/
-    private String operateType;
+    private String type;
 
-    /** 操作说明 **/
-    private String operateDescription;
+    /** 权限名 **/
+    private String name;
 
     /** 备注 **/
     private String memo;
 
-    /** 修改时间 **/
-    private Date updatetime;
+    /** 状态 **/
+    private int state;
 
-    public int getId() {
-        return id;
+    /** 所属公司 **/
+    private Long companyId;
+
+    /** 所属公司名称 **/
+    private String companyName;
+
+    public String getType() {
+        return type;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getOperateType() {
-        return operateType;
+    public String getName() {
+        return name;
     }
 
-    public void setOperateType(String operateType) {
-        this.operateType = operateType;
-    }
-
-    public String getOperateDescription() {
-        return operateDescription;
-    }
-
-    public void setOperateDescription(String operateDescription) {
-        this.operateDescription = operateDescription;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMemo() {
@@ -57,12 +52,28 @@ public class Permission {
         this.memo = memo;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public int getState() {
+        return state;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
 }

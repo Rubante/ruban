@@ -1,20 +1,20 @@
 package com.ruban.rbac.domain.organization;
 
-import java.util.Date;
+import com.ruban.framework.dao.domain.PersistentObject;
 
 /**
- * 组织内的各个实体的员工信息
+ * 组织机构内各个实体的人员信息
  * 
  * @author ruban
  *
  */
-public class Employee {
+public class Person extends PersistentObject {
 
-    /** 主键 **/
-    private int id;
-
-    /** 员工编码 **/
+    /** 编码 **/
     private String code;
+
+    /** 姓名 **/
+    private String name;
 
     /** 出生日期 **/
     private String birthday;
@@ -28,6 +28,9 @@ public class Employee {
     /** 身份证 **/
     private String cardid;
 
+    /** 照片 **/
+    private String photo;
+
     /** 住址 **/
     private String address;
 
@@ -40,25 +43,38 @@ public class Employee {
     /** 薪资 **/
     private String salary;
 
+    /** 岗位 **/
+    private Long jobId;
+
+    /** 岗位名称 **/
+    private String jobName;
+
     /** 职务 **/
-    private int titleId;
+    private Long titleId;
+
+    /** 职务名称 **/
+    private String titleName;
+
+    /** 备注 **/
+    private String memo;
+
+    /** 排序编码(部门内) **/
+    private int orderCode;
+
+    /** 所属部门 **/
+    private Long departmentId;
+
+    /** 部门名称 **/
+    private String departmentName;
 
     /** 所属公司 **/
-    private int companyId;
+    private Long companyId;
+
+    /** 所属公司组织 **/
+    private String companyName;
 
     /** 状态 **/
-    private String status;
-
-    /** 更新时间 **/
-    private Date updatetime;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int state;
 
     public String getCode() {
         return code;
@@ -66,6 +82,14 @@ public class Employee {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBirthday() {
@@ -100,6 +124,14 @@ public class Employee {
         this.cardid = cardid;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -132,36 +164,92 @@ public class Employee {
         this.salary = salary;
     }
 
-    public int getTitleId() {
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
+    }
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    public Long getTitleId() {
         return titleId;
     }
 
-    public void setTitleId(int titleId) {
+    public void setTitleId(Long titleId) {
         this.titleId = titleId;
     }
 
-    public int getCompanyId() {
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public int getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(int orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public int getState() {
+        return state;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setState(int state) {
+        this.state = state;
     }
 
 }

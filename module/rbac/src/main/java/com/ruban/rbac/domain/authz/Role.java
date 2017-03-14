@@ -1,17 +1,14 @@
 package com.ruban.rbac.domain.authz;
 
-import java.util.Date;
+import com.ruban.framework.dao.domain.PersistentObject;
 
 /**
  * 组织机构中的角色，角色可以继承
  * 
- * @author tdr
+ * @author ruban
  *
  */
-public class Role {
-
-    /** 主键 **/
-    private int id;
+public class Role extends PersistentObject {
 
     /** 角色名称 **/
     private String name;
@@ -20,21 +17,19 @@ public class Role {
     private String type;
 
     /** 状态 **/
-    private int status;
+    private int state;
+
+    /** 是否可代理 **/
+    private int delegated;
 
     /** 备注 **/
     private String memo;
 
-    /** 修改时间 **/
-    private Date updatetime;
+    /** 所属公司 **/
+    private Long companyId;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    /** 所属公司名称 **/
+    private String companyName;
 
     public String getName() {
         return name;
@@ -52,12 +47,20 @@ public class Role {
         this.type = type;
     }
 
-    public int getStatus() {
-        return status;
+    public int getState() {
+        return state;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getDelegated() {
+        return delegated;
+    }
+
+    public void setDelegated(int delegated) {
+        this.delegated = delegated;
     }
 
     public String getMemo() {
@@ -68,12 +71,20 @@ public class Role {
         this.memo = memo;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
 }
