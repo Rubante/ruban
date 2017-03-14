@@ -23,6 +23,21 @@ String.prototype.rtrim = function() {
 	return this.replace(/\s+$/, '');
 };
 /**
+ * 空值判断
+ */
+isNull = function(value){
+	if (value == '') {
+		return true;
+	}
+	return false;
+};
+/**
+ * 非空值判断
+ */
+isNotNull = function(value){
+	return !isNull(value);
+};
+/**
  * 是否为邮箱
  * 
  * @param email

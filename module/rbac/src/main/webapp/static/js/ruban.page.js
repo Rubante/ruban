@@ -1,185 +1,166 @@
-toPageFirst = function(action){
-	if($("#view\\.currentPage").val()!=1) {
-		$("#form")[0].reset();
-		if($("#view\\.totalPages").val()>=1){
-			$("#view\\.currentPage").val(1);
-		}
-		
-    	action();
-	}
-};
-toPagePre = function(action){
-	if($("#view\\.thisPage").val()!=1) {
-		$("#form")[0].reset();
-		var pageNumber = parseInt($("#view\\.thisPage").val())-1;
-		if(pageNumber>=0){
-			$("#view\\.currentPage").val(pageNumber);
-		}
-    	action();
-	}
-};
-toPageNext = function(action){  
-	if($("#view\\.thisPage").val()!=$("#view\\.totalPages").val()&&$("#view\\.currentPage").val()!=0) {
-		$("#form")[0].reset();
-		$("#view\\.currentPage").val(parseInt($("#view\\.thisPage").val())+1);
-    	action();
-    	
-   	}
-};
-toPageLast = function(action){
-	if($("#view\\.currentPage").val()!=$("#view\\.totalPages").val()) {
-		$("#form")[0].reset();
-		$("#view\\.currentPage").val($("#view\\.totalPages").val());
-    	action();
-	}
-};
-resetCurrentPage=function(){
-	$("#view\\.currentPage").val(1);
-};
-toPageGo=function(action){
-	
-	var currentPage = parseInt($("#view\\.currentPage").val());
-	var totalPages = parseInt($("#view\\.totalPages").val());
-
-	$("#form")[0].reset();
-
-	// 判断转向页为是否为空
-	if(isNaN(currentPage)){
-		jAlert("请输入页码！");
-		return false;
-	}
-
-	// 转向页大于总页数
-	if(currentPage > totalPages||currentPage<=0&&totalPages!=0) {
-		jAlert("页码不存在，请重新输入！");
-		return;	
-	} else {
-		$("#view\\.currentPage").val(currentPage);
-	}
-	action();
-};
-function checkedAll(event) {
-	var obj = event.srcElement?event.srcElement:event.target;
-	var nodeList = document.getElementsByName("checked");
-	if(nodeList.length==0){
-		jAlert("没有可选择的数据！");	
-		obj.checked=false;
-		return false;
-	}else{
-		for(var i=0; i < nodeList.length;i++) {
-			// checkbox可用时选中
-			if(!nodeList[i].disabled) {
-				nodeList[i].checked=obj.checked;	
-			}
-		}
-	}
-}
-
-function checkedByName(event,name) {
-	var obj = event.srcElement?event.srcElement:event.target;
+/**
+ * 根据名称批量选中checkBox
+ * 
+ * @param event
+ * @param name
+ * @returns
+ */
+function checkedByName(event, name) {
+	var obj = event.srcElement ? event.srcElement : event.target;
 	var nodeList = document.getElementsByName(name);
-	if(nodeList.length==0){
-		jAlert("没有可选择的数据！");	
-		obj.checked=false;
+	if (nodeList.length == 0) {
+		layer.alert("没有可选择的数据！",{
+			  zIndex: layer.zIndex,
+			  success: function(layero){
+			    layer.setTop(layero);
+			  }
+		});
+		obj.checked = false;
 		return false;
-	}else{
-		for(var i=0; i < nodeList.length;i++) {
-			// checkbox可用时选中
-			if(!nodeList[i].disabled) {
-				nodeList[i].checked=obj.checked;	
+	} else {
+		for (var i = 0; i < nodeList.length; i++) {
+			// checkBox可用时选中
+			if (!nodeList[i].disabled) {
+				nodeList[i].checked = obj.checked;
 			}
 		}
 	}
 }
-function clickCheckedData(event) {
-	var obj = event.srcElement?event.srcElement:event.target;
+/**
+ * 获取选中的checkBox及对应id值
+ * 
+ * @param checkedName
+ * @param idName
+ * @returns
+ */
+function getSelections(checkedName, idName) {
+	var ids = "";
+	var selecteds = document.getElementsByName(checkedName);
+	var id = document.getElementsByName(idName);
+	ids.value = "";
+	for (var i = 0; i < selecteds.length; i++) {
+		if (selecteds[i].checked == true) {
+			if (ids == "") {
+				ids = id[i].value;
+			} else {
+				ids += "," + id[i].value;
+			}
+		}
+	}
+	return ids;
+}
+/**
+ * 获取选中的radio
+ * 
+ * @param radioName
+ * @returns
+ */
+function getSelectedRadio(radioName) {
+	var selecteds = document.getElementsByName(radioName);
+
+	for (var i = 0; i < selecteds.length; i++) {
+		if (selecteds[i].checked == true) {
+			return selecteds[i];
+		}
+	}
+	return null;
+};
+// 排序
+sortByFlag = function(flag, id){
 	
-	if(obj.tagName=="INPUT") {
-		return false;
+	var option = {};
+	
+	// 取消之前选中的
+	var radioSelected = getSelectedRadio(id);
+	var tr = $(radioSelected).parent().parent();
+	if(radioSelected == null) {
+		layer.alert("请选中要排序的行！", option);
+		return;
 	}
-	obj = obj.parentNode.firstChild;
-	while (!obj.tagName) {
-		obj = obj.nextSibling;
-	}
-	obj=obj.firstChild;
-	while (!obj.tagName) {
-		obj = obj.nextSibling;
-	}
-	obj.checked=!obj.checked;
-}
-
-function dbClickCheckedData(event) {
-	var obj = event.srcElement?event.srcElement:event.target;
-
-	if(obj.tagName=="INPUT") {
-		return false;
-	}
-	obj = obj.parentNode.firstChild;
-	while (!obj.tagName) {
-		obj = obj.nextSibling;
-	}
-	obj=obj.firstChild;
-	while (!obj.tagName) {
-		obj = obj.nextSibling;
-	}
-	obj.checked=true;
-}
-function getSelections(checkedName,idName,ids){
-	var checkedNum = 0;
-	var selecteds = document.getElementsByName(checkedName);
-	var id = document.getElementsByName(idName);
-	ids.value="";
-	for(var i=0; i < selecteds.length;i++) {
-		if(selecteds[i].checked==true) {
-			checkedNum+=1;
-			if(ids.value=="") {
-				ids.value=id[i].value;
-			} else {
-				ids.value+=","+id[i].value;
-			}
+	// 上移
+	if(flag==0) {
+		var prev = tr.prev();
+		if(prev.length==1) {
+			prev.before(tr);
+		} else {
+			layer.alert("已到达最顶部，无法再移动！", option);
+		}
+	} else {
+		// 下移
+		var next = tr.next();
+		if(next.length==1) {
+			next.after(tr);
+		} else {
+			layer.alert("已到达最底部，无法再移动！", option);
 		}
 	}
-	return checkedNum;
+};
+// 选择日期
+selectDate = function(elem){
+    $.jeDate(elem,{
+    	skinCell:"jedategreen",
+        insTrigger:false,
+        zIndex: 200010000,
+        format: 'YYYY-MM-DD'
+    });
+};
+//选择日期
+selectTime = function(elem){
+    $.jeDate(elem,{
+    	skinCell:"jedategreen",
+    	insTrigger:false,
+        zIndex: 200010000,
+        format: 'YYYY-MM-DD hh:mm:ss'
+    });
+};
+getLayerConfirmOption = function(){
+	var option = {
+		btn: ['确定','关闭'],
+		zIndex: layer.zIndex,
+		success: function(layero){
+			layer.setTop(layero);
+		}
+	};
+	
+	return option;
 }
-
-function getSelectionsAndNames(checkedName,idName,nameList,ids){
-	var checkedNum = 0;
-	var selecteds = document.getElementsByName(checkedName);
-	var id = document.getElementsByName(idName);
-	var name = document.getElementsByName(nameList);
-	ids.value="";
-	for(var i=0; i < selecteds.length;i++) {
-		if(selecteds[i].checked==true) {
-			checkedNum+=1;
-			if(ids.value=="") {
-				ids.value=id[i].value+","+name[i].value;
-			} else {
-				ids.value+=","+id[i].value+","+name[i].value;
+function loadJs(url, callback) {
+	var done = false;
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.language = 'javascript';
+	script.src = url;
+	script.onload = script.onreadystatechange = function() {
+		if (!done
+				&& (!script.readyState || script.readyState == 'loaded' || script.readyState == 'complete')) {
+			done = true;
+			script.onload = script.onreadystatechange = null;
+			if (callback) {
+				callback.call(script);
 			}
 		}
-	}
-	return checkedNum;
-}
+	};
+	document.getElementsByTagName("head")[0].appendChild(script);
+};
 /*
  * 回车+CTRL换行
  * 
  */
 newline = function(event) {
-	 if(event.keyCode == 13 && event.ctrlKey){
-		 if (document.selection) {
-			 var selectText = document.selection.createRange();
-			 if(selectText){
-				 if(selectText.text.length > 0)
-					 selectText.text += "\r\n";
-				 else
-					 selectText.text = "\r\n";
-				 selectText.select();
-				 }
-		 }
-		 else{
-			 var obj = event.srcElement?event.srcElement:event.target;
-			 obj.value += "\r\n";
-			 }
+	if (event.keyCode == 13 && event.ctrlKey) {
+		if (document.selection) {
+			var selectText = document.selection.createRange();
+			if (selectText) {
+				if (selectText.text.length > 0)
+					selectText.text += "\r\n";
+				else
+					selectText.text = "\r\n";
+				selectText.select();
+			}
+		} else {
+			var obj = event.srcElement ? event.srcElement : event.target;
+			obj.value += "\r\n";
+		}
 	}
 };
 /**
@@ -187,50 +168,51 @@ newline = function(event) {
  * 
  * @param callBack
  */
-formChange=function(callBack, url, data, callback_s, callback_e) {
+formChange = function(callBack, url, data, callback_s, callback_e) {
 	var formId = $("#saveFormType").attr("relForm");
-	if(formId==undefined){
+	if (formId == undefined) {
 		callBack(url, data, callback_s, callback_e);
 		return;
 	}
-	
+
 	var isChange = false;
-	var inputs = $("#"+formId).find(":input");
-	
-	inputs.each(function(){
-		var type =$(this).attr("type");
+	var inputs = $("#" + formId).find(":input");
+
+	// 数据变化校验
+	var compare = function() {
+		var type = $(this).attr("type");
 		if (type == 'radio' || type == 'checkbox') {
 			if ($(this).attr("checked") != $(this).prop("defaultChecked")) {
 				isChange = true;
-		    	return;
-		   }
-		} else if(type=="text"||$(this).is("textarea")||type=="hidden") {
+				return;
+			}
+		} else if (type == "text" || $(this).is("textarea") || type == "hidden") {
 			if ($(this).val() != $(this).prop("defaultValue")) {
 				isChange = true;
 				return;
 			}
-		} else if($(this).is("select")){
+		} else if ($(this).is("select")) {
 			var v = $(this).val();
-			$(this).find("option").each(function(){
-				if($(this).prop("defaultSelected")&&$(this).val()!=v){
-				     isChange = true;
-				     return;
+			$(this).find("option").each(function() {
+				if ($(this).prop("defaultSelected") && $(this).val() != v) {
+					isChange = true;
+					return;
 				}
 			});
 		}
-	});
-	
-	if(isChange) {
-		var saveFormChange=function(result){
-			if(result){
-				callBack(url, data, callback_s, callback_e);
-			} else {
-				// 直接保存时，会出现两次提示，暂且屏蔽
-				// var relClick = $("#saveFormType").attr("relClick");
-				// $("#"+relClick).click();
-			}
-		};
-		jConfirm("数据已经修改，确定不需要保存？",null,saveFormChange);
+	};
+
+	inputs.each(compare);
+
+	if (isChange) {
+		layer.confirm("数据已经修改，确定不需要保存？", {
+		    btn: ['确定','取消'], //按钮
+		    shade: false //不显示遮罩
+		}, function(){
+		    layer.close();
+		}, function(){
+			layer.close();
+		});
 	} else {
 		callBack(url, data, callback_s, callback_e);
 	}
@@ -238,169 +220,296 @@ formChange=function(callBack, url, data, callback_s, callback_e) {
 /**
  * 显示遮罩
  */
-showLoadPanel = function(){
-	if(!$("#loadPanel").is(':visible')) {
+showLoadPanel = function() {
+	if (!$("#loadPanel").is(':visible')) {
 		$("#loadPanel").height($(document).height());
 		$("#loadPanel").show();
+		
 	}
 };
-hideLoadPanel = function(){
+/**
+ * 隐藏遮罩
+ */
+hideLoadPanel = function() {
 	$("#loadPanel").hide();
 };
 /**
- * 功能区变化
+ * 结果提示
  */
-contentChange=function(content, elementId){
-	/**
-	 * 判断是否返回的是登录页面，如果是登录页面则替换整个html页面，如果不是只改变function区域的内容
-	 */
-	var rex = /id=\"loginForm\"/gi;
-	if(rex.test(content)){
-		// 由于$("").find()方法中，不能识别出包含 body head html等标签的字符串，所以替换掉
-		content = content.replace("<body","<temBY");
-		content = content.replace("<head","<temHD");
-		content = content.replace("<html","<temHL");
-		content = content.replace("</body>","</temBY><JS>");
-		content = content.replace("</head>","</temHD>");
-		content = content.replace("</html>","</JS></temHL>");
-		$("body").empty();
-		$("head").html($(content).find("temHD").html());
-		$("body").html($(content).find("temBY").html());
-		// 在页面加载后， 会执行body后的一段js脚本，用after函数给加上
-		$("body").after($(content).find("JS").html());
-	}else{
-		if(elementId == undefined) {
-			$("#content").html(content);	
-		} else {
-			$("#"+elementId).html(content);
-		}
-		
-		hideLoadPanel();
+msgAlert = function(result, callback_s) {
+
+	if (result.flag == 1) {
+		layer.alert(result.msg, {
+			closeBtn : 0,
+			zIndex: layer.zIndex,
+			success: function(layero){
+				layer.setTop(layero);
+			}
+		}, function(index) {
+			layer.close(index);
+			if(callback_s) {
+				callback_s(result);
+			}
+		});
+	} else {
+		errorBind(result);
 	}
 };
-function loadJs(url, callback){
-    var done = false;
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.language = 'javascript';
-    script.src = url;
-    script.onload = script.onreadystatechange = function(){
-        if (!done && (!script.readyState || script.readyState == 'loaded' || script.readyState == 'complete')){
-            done = true;
-            script.onload = script.onreadystatechange = null;
-            if (callback){
-                callback.call(script);
-            }
-        }
-    };
-    document.getElementsByTagName("head")[0].appendChild(script);
+/**
+ * 将后台结果绑定到前端
+ */
+errorBind = function(data) {
+
+	if (data.result) {
+		var errors = data.result.error;
+
+		if (Array.isArray(errors)) {
+			for (index in errors) {
+				var objectName = errors[index].objectName;
+				var field = errors[index].field;
+				var msg = errors[index].defaultMessage;
+				var target = $("#" + objectName).find("[name='" + field + "']");
+
+				// 存在该元素，则在该元素处提示，不存在，则弹出框
+				if (target.length > 0) {
+					hitError(target, msg);
+				} else {
+					layer.alert(msg, {
+						closeBtn : 0,
+						zIndex: layer.zIndex,
+						success: function(layero){
+							layer.setTop(layero);
+						}
+					});
+				}
+			}
+		} else {
+			layer.alert(errors, {
+				closeBtn : 0,
+				zIndex: layer.zIndex,
+				success: function(layero){
+					layer.setTop(layero);
+				}
+			},function(index){
+				layer.close(index);
+			});
+		}
+	} else {
+		var msg = "";
+		if(data.msg) {
+			msg = data.msg;
+		} else {
+			msg = data;
+		}
+		layer.alert(msg, {
+			closeBtn : 0,
+			zIndex: layer.zIndex,
+			success: function(layero){
+				layer.setTop(layero);
+			}
+		},function(index){
+			layer.close(index);
+		});
+	}
+};
+/**
+ * 页面输入错误
+ */
+inputError = function() {
+	layer.alert("输入有错误，请修改后再提交！", {
+		closeBtn : 0,
+		zIndex: layer.zIndex,
+		success: function(layero){
+			layer.setTop(layero);
+		}
+	})
+};
+/**
+ * 根据document的id获取模板，渲染
+ */
+renderHtml = function(id, data) {
+
+	var html = "";
+	if (data) {
+		html = Mustache.to_html($("#" + id).html(), data);
+	} else {
+		html = Mustache.to_html($("#" + id).html(), data);
+	}
+
+	return html;
 };
 /**
  * jqueryAjax通用选项
  * 
  */
-ajaxOption=function(url,callback_s,callback_e,b_callback){
+ajaxOption = function(url, callback_s, callback_e, b_callback, dataType) {
 	var options = {
-			   url: url,
-			   type: "POST",
-			   dataType:'html',
-			   beforeSend: function(){
-			   		if(b_callback != undefined){
-			   			b_callback();
-			   		}
-			  },
-			   success:function(html) {
-				   hideLoadPanel();
-				   if(callback_s != undefined) {
-					   callback_s(html);
-				   } else {
-					   contentChange(html);   
-				   }
-			   },
-			   error:function(er){
-				   hideLoadPanel();
-				   if(callback_e != undefined) {
-					   callback_e(er.responseText);   
-				   } else {
-					   contentChange(er.responseText);   
-				   }
-			   }
+		url : url,
+		type : "POST",
+		beforeSend : function() {
+			showLoadPanel();
+			if (b_callback != undefined) {
+				b_callback();
+			}
+		},
+		success : function(data) {
+			hideLoadPanel();
+			if (callback_s != undefined) {
+				callback_s(data);
+			} else {
+				msgAlert(data, function() {
+					var iframe = $(window.parent.document).find("iframe");
+					var location = iframe[0].src;
+					iframe.attr("src", location);
+				});
+			}
+		},
+		error : function(er) {console.log(er);
+			hideLoadPanel();
+			if (callback_e != undefined) {
+				callback_e(er.responseText);
+			} else {
+				errorBind(er.responseText);
+			}
+		}
 	};
-	showLoadPanel();
+
+	if(dataType != null) {
+		options.dataType = dataType;
+	}
 	
 	return options;
+};
+ajaxOptionJson = function(url, callback_s, callback_e, b_callback) {
+	return ajaxOption(url, callback_s, callback_e, b_callback, "json");
+};
+ajaxOptionHtml = function(url, callback_s, callback_e, b_callback) {
+	return ajaxOption(url, callback_s, callback_e, b_callback, "html");
+};
+ajaxOptionText = function(url, callback_s, callback_e, b_callback) {
+	return ajaxOption(url, callback_s, callback_e, b_callback, "text");
+};
+ajaxOptionHybrid = function(url, callback_s, callback_e, b_callback) {
+	return ajaxOption(url, callback_s, callback_e, b_callback, null);
+};
+/**
+ * 添加数据
+ */
+addAjaxData = function(ajaxOption,data){
+	ajaxOption.data = data;
+};
+/**
+ * ajax调用默认结果
+ */
+ajaxCallback = function(data) {
+	layer.alert(data.msg,{
+		zIndex: layer.zIndex,
+		success: function(layero){
+			layer.setTop(layero);
+		}
+	});
+};
+/**
+ * 请求文本
+ */
+ajaxText = function(url, data, callback_s, callback_e) {
+	ajax(url, "text", data, callback_s, callback_e);
+};
+/**
+ * 请求json
+ */
+ajaxJson = function(url, data, callback_s, callback_e) {
+	ajax(url, "json", data, callback_s, callback_e);
+};
+/**
+ * 请求html
+ */
+ajaxHtml = function(url, data, callback_s, callback_e) {
+	ajax(url, "html", data, callback_s, callback_e);
+};
+/**
+ * 混合请求
+ */
+ajaxHybrid = function(url, data, callback_s, callback_e) {
+	ajax(url, null, data, callback_s, callback_e);
 };
 /**
  * jquery ajax 请求
  * 
  */
-ajax=function(url,data,callback_s,callback_e){
-	
-	var callBack = function(url, data, callback_s, callback_e){
+ajax = function(url, dataType, data, callback_s, callback_e) {
+
+	var callBack = function(url, data, callback_s, callback_e) {
 		showLoadPanel();
-		if(data){
-			$.ajax({
-				   url: url,
-				   type: "POST",
-				   timeout: 18000,
-				   data: data,
-				   dataType:'html',
-				   success:function(html) {
-					   if(callback_s!=null&&callback_s!=undefined) {
-						  callback_s(html);
-						  hideLoadPanel();
-					   } else {
-						   contentChange(html);   
-					   }
-				   },
-				   error:function(er){
-					   if(er.statusText=='timeout') {
-						   contentChange("<red>连接服务器超时！</red>");
-					   } else {
-						   if(callback_e!=null&&callback_e!=undefined) {
-							   callback_e(er);
-							   hideLoadPanel();
-						   } else {
-							   contentChange(er.responseText);   
-						   }
-					   }
-				   }
-				});
-		}else{
-			$.ajax({
-				   url: url,
-				   type: "POST",
-				   timeout: 18000,
-				   dataType:'html',
-				   success:function(html) {
-					   if(callback_s!=null&&callback_s!=undefined) {
-						   callback_s(html);
-						   hideLoadPanel();
-					   } else {
-						   contentChange(html);   
-					   }
-				   },
-				   error:function(er){
-					   if(er.statusText=='timeout') {
-						   contentChange("<red>连接服务器超时！</red>");
-					   } else {
-						   if(callback_e!=null&&callback_e!=undefined) {
-							   callback_e(er);
-							   hideLoadPanel();
-						   } else {
-							   contentChange(er.responseText);   
-						   }
-					   }
-				   }
-				});
+		if (data) {
+			var options = {
+					url : url,
+					type : "POST",
+					timeout : 6000,
+					data : data,
+					async : false,
+					success : function(data) {
+						if (callback_s != null && callback_s != undefined) {
+							callback_s(data);
+							hideLoadPanel();
+						} else {
+							ajaxCallback(data);
+						}
+					},
+					error : function(er) {
+						if (er.statusText == 'timeout') {
+							ajaxCallback("<red>连接服务器超时！</red>");
+						} else {
+							if (callback_e != null && callback_e != undefined) {
+								callback_e(er);
+								hideLoadPanel();
+							} else {
+								ajaxCallback(er.responseText);
+							}
+						}
+					}
+				};
+			if(dataType) {
+				options.dataType = dataType;
+			}
+			$.ajax(options);
+		} else {
+			var option = {
+					url : url,
+					type : "POST",
+					timeout : 6000,
+	
+					success : function(data) {
+						if (callback_s != null && callback_s != undefined) {
+							callback_s(data);
+						} else {
+							msgAlert(data);
+						}
+					},
+					error : function(er) {
+						if (er.statusText == 'timeout') {
+							msgAlert("<red>连接服务器超时！</red>");
+						} else {
+							if (callback_e != null && callback_e != undefined) {
+								callback_e(er);
+							} else {
+								errorBind(er);
+							}
+						}
+					}
+				};
+			if(dataType) {
+				options.dataType = dataType;
+			}
+			$.ajax(options);
 		}
 	};
-	
-	//避免调用ueditor时造成的输入框无法输入的bug
+
+	// 避免调用ueditor时造成的输入框无法输入的bug
 	$(":button:first").focus();
-	
+
 	// 有回调函数时，不做数据校验
-	if(callback_s==null) {
+	if (callback_s == null) {
 		formChange(callBack, url, data, callback_s, callback_e);
 	} else {
 		callBack(url, data, callback_s, callback_e);
