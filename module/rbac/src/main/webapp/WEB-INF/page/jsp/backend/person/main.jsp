@@ -5,11 +5,10 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 <head>
-	<jsp:include page="/WEB-INF/page/jsp/include.jsp"></jsp:include>
-	
 	<link href='<s:url value="/static/css/backend/person_manger.css" />' rel="stylesheet">
 	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
-
+	
+	<script type="text/javascript" src='<s:url value="/static/biz/js/company/select.js" />'></script>
 	<script type="text/javascript" src='<s:url value="/static/js/lib/ztree/js/jquery.ztree.core.min.js" />'></script>
 </head> 
 <body>
@@ -104,18 +103,11 @@
 		            <i class="iconfont">&#xe609;</i>
 		            <span class="button-label">删除</span>
 		        </div>
-				<div class="button sort">
-		            <i class="iconfont">&#xe61a;</i>
-		            <span class="button-label">人员排序</span>
-		        </div>
 		    </div>
 			
 			<table class="kv-table">
 				<tbody>
 					<tr>
-						<td class="kv-label" style="width:230px;vertical-align: top;">
-							<div id="dptTree" class="ztree"></div>
-						</td>
 						<td id="personListTd" class="kv-content" valign="top" style="padding: 10px;width:auto;vertical-align: top;">
 							<jsp:include page="/WEB-INF/page/jsp/backend/person/list.jsp"></jsp:include>
 						</td>
@@ -133,10 +125,6 @@
     </div>
     
     <jsp:include page="/WEB-INF/page/jsp/backend/person/person_js.jsp"></jsp:include>
-    <jsp:include page="/WEB-INF/page/jsp/backend/department/department_tree_js.jsp">
-    	<jsp:param value="person" name="module"/>
-    </jsp:include>
-	<jsp:include page="/WEB-INF/page/jsp/backend/company/select_js.jsp"></jsp:include>
 
 	<jsp:include page="/WEB-INF/page/jsp/footer.jsp"></jsp:include>
 </body>

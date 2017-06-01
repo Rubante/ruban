@@ -4,14 +4,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html> 
-<html lang="en"> 
+<html lang="zh_CN"> 
 <head>
-	<jsp:include page="/WEB-INF/page/jsp/include.jsp"></jsp:include>
-	
-	<link href='<s:url value="/static/css/backend/person_manger.css" />' rel="stylesheet">
 	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
 
 	<script type="text/javascript" src='<s:url value="/static/js/lib/ztree/js/jquery.ztree.core.min.js" />'></script>
+	
+	<script type="text/javascript" src='<s:url value="/static/biz/js/resource/main.js" />'></script>
+	<script type="text/javascript" src='<s:url value="/static/biz/js/resource/select.js" />'></script>
 </head> 
 <body>
     <div class="container">
@@ -46,17 +46,6 @@
 				                <div class="item-lt">名称：</div>
 				                <div class="item-rt">
 				                	<input type="text" name="name" />
-				                </div>
-				            </div>
-				            <div class="kv-item kv-col-3">
-				                <div class="item-lt">是否授权：</div>
-				                <div class="item-rt">
-									<select name="flag">
-										<option value="">请选择</option>
-										<c:forEach items="${yesnos}" var="yesno">
-											<option value="${yesno.code}">${yesno.value}</option>
-										</c:forEach>
-									</select>
 				                </div>
 				            </div>
 				            <div class="kv-item kv-col-4">
@@ -100,8 +89,6 @@
         </div>
     </div>
     
-    <jsp:include page="/WEB-INF/page/jsp/backend/resource/resource_js.jsp"></jsp:include>
-    <jsp:include page="/WEB-INF/page/jsp/backend/resourceField/resourceField_js.jsp"></jsp:include>
     <jsp:include page="/WEB-INF/page/jsp/footer.jsp"></jsp:include>
 </body>
 </html>

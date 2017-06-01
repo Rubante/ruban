@@ -6,13 +6,13 @@
 	<thead>
 		<tr>
 			<th class="grid-checkbox"><input type="checkbox" onclick="checkedByName(event,'person_checkbox')"></th>
-			<th>所属组织机构</th>
-			<th>所属部门</th>
-			<th>部门内序号</th>
 			<th>姓名</th>
 			<th>姓别</th>
 			<th>职务</th>
 			<th>岗位</th>
+			<th>所属组织机构</th>
+			<th>所属部门</th>
+			<th>部门内序号</th>
 			<th>操作</th>
 		</tr>
 	</thead>
@@ -24,13 +24,13 @@
 					<input type="checkbox" name="person_checkbox" />
 					<input type="hidden" name="person_id" value="${result.id}"/>
 				</td>
-				<td>${result.companyName}</td>
-				<td>${result.departmentName}</td>
-				<td>${result.orderCode}</td>
 				<td>${result.name}</td>
 				<td>${result.titleName}</td>
 				<td>${result.sex}</td>
 				<td>${result.jobName}</td>
+				<td>${result.companyName}</td>
+				<td>${result.departmentName}</td>
+				<td>${result.orderCode}</td>
 				<td>
 					<a href="javascript:person.detail('${result.id}');">查看</a>
 					<a href="javascript:person.update('${result.id}');">修改</a>

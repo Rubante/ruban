@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.ruban.framework.dao.helper.Condition;
 import com.ruban.framework.dao.helper.ResultInfo;
-import com.ruban.rbac.backend.account.form.AccountForm;
-import com.ruban.rbac.domain.authz.Account;
+import com.ruban.rbac.backend.user.form.UserForm;
+import com.ruban.rbac.domain.authz.User;
 
 /**
  * 账号
@@ -13,14 +13,14 @@ import com.ruban.rbac.domain.authz.Account;
  * @author ruban
  *
  */
-public interface IAccountService {
+public interface IUserService {
 
     /**
      * 查询所有的账号列表
      * 
      * @return
      */
-    public List<Account> selectAll();
+    public List<User> selectAll();
 
     /**
      * 根据条件分页查询
@@ -28,7 +28,7 @@ public interface IAccountService {
      * @param dto
      * @return
      */
-    public ResultInfo<Account> selectByPage(Condition<Account> condition);
+    public ResultInfo<User> selectByPage(Condition<User> condition);
 
     /**
      * 根据条件查询
@@ -36,21 +36,21 @@ public interface IAccountService {
      * @param condition
      * @return
      */
-    public List<Account> selectByCondition(Condition<Account> condition);
+    public List<User> selectByCondition(Condition<User> condition);
 
     /**
      * 新建账号
      * 
      * @param accountForm
      */
-    public void insert(AccountForm accountForm);
+    public void insert(UserForm accountForm);
 
     /**
      * 更新账号
      * 
      * @param ResourceForm
      */
-    public int update(AccountForm accountForm);
+    public int update(UserForm accountForm);
 
     /**
      * 根据ID删除账号
@@ -82,5 +82,5 @@ public interface IAccountService {
      * @param id
      * @return
      */
-    public Account findById(Long id);
+    public User findById(Long id);
 }

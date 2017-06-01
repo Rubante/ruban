@@ -5,11 +5,14 @@
 <!DOCTYPE html> 
 <html lang="zh-CN"> 
 <head>
-	<jsp:include page="/WEB-INF/page/jsp/include.jsp"></jsp:include>
 	<link href='<s:url value="/static/css/backend/organ_manger.css" />' rel="stylesheet">
 	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
-
+	
 	<script type="text/javascript" src='<s:url value="/static/js/lib/ztree/js/jquery.ztree.core.min.js" />'></script>
+	
+	<script type="text/javascript" src='<s:url value="/static/biz/js/company/tree.js" />'></script>
+	<script type="text/javascript" src='<s:url value="/static/biz/js/company/main.js" />'></script>
+	<script type="text/javascript" src='<s:url value="/static/biz/js/company/select.js" />'></script>
 </head> 
 <body>
     <div class="container">
@@ -45,15 +48,15 @@
 		    </div>
 
             <div class="button-group">
-		        <div class="button current add">
+		        <div class="button current add" onclick="company.add();">
 		            <i class="iconfont">&#xe620;</i>
 		            <span class="button-label">新增</span>
 		        </div>
-		        <div class="button delete">
+		        <div class="button delete" onclick="company.batchDelete();">
 		            <i class="iconfont">&#xe609;</i>
 		            <span class="button-label">删除</span>
 		        </div>
-				<div class="button sort">
+				<div class="button sort" onclick="company.sort();">
 		            <i class="iconfont">&#xe61a;</i>
 		            <span class="button-label">组织机构排序</span>
 		        </div>
@@ -77,12 +80,7 @@
             
         </div>
     </div>
-    
-    <jsp:include page="/WEB-INF/page/jsp/backend/company/company_js.jsp"></jsp:include>
-    <jsp:include page="/WEB-INF/page/jsp/backend/company/company_tree_self.jsp">
-    	<jsp:param value="company" name="module"/>
-    </jsp:include>
-	<jsp:include page="/WEB-INF/page/jsp/backend/company/select_js.jsp"></jsp:include>
+
 	<jsp:include page="/WEB-INF/page/jsp/footer.jsp"></jsp:include>
 </body> 
 </html>

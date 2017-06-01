@@ -5,28 +5,25 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 <head>
-	<jsp:include page="/WEB-INF/page/jsp/include.jsp"></jsp:include>
-	
-	<link href='<s:url value="/static/css/backend/person_manger.css" />' rel="stylesheet">
+	<script type="text/javascript" src='<s:url value="/static/biz/js/user/main.js" />'></script>
 	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
-	
 </head> 
 <body>
     <div class="container">
         <div id="inner-hd">
             <div class="crumbs">
 				<i class="crumbs-arrow"></i>
-				<a href="javascript:;" class="crumbs-label">人员管理</a>
+				<a href="javascript:;" class="crumbs-label">用户管理</a>
 			</div>
         </div>
 
         <div id="inner-bd">
         	<jsp:include page="/WEB-INF/page/jsp/backend/tabbar.jsp">
-        		<jsp:param name="page" value="account"></jsp:param>
+        		<jsp:param name="page" value="user"></jsp:param>
         	</jsp:include>
 
             <div class="kv-group-outer">
-            	<form id="searchForm" action=<s:url value="/rbac/backend/person/search" />'>
+            	<form id="searchForm" action=<s:url value="/rbac/backend/user/search" />'>
 			        <div class="kv-group clearfix">
 				        <div class="kv-item-wrap" style="max-width: 900px;">
 				        	<div class="kv-item kv-col-1">
@@ -82,7 +79,7 @@
 				            <div class="kv-item kv-col-1">
 				                <div class="item-rt">
 								    <div class="button-group">
-								        <div class="button current search">
+								        <div class="button current search" onclick="user.search();">
 								            <i class="iconfont">&#xe625;</i>
 								            <span class="button-label">查询</span>
 								        </div>
@@ -95,18 +92,18 @@
 		    </div>
 
             <div class="button-group">
-		        <div class="button current add">
+		        <div class="button current add" onclick="user.add(event)">
 		            <i class="iconfont">&#xe620;</i>
-		            <span class="button-label">新增帐号</span>
+		            <span class="button-label">新增用户</span>
 		        </div>
-		        <div class="button delete">
+		        <div class="button delete" onclick="user.batchDelete(event)">
 		            <i class="iconfont">&#xe609;</i>
 		            <span class="button-label">删除</span>
 		        </div>
 		    </div>
 			
-			<div id="accountListTd">
-				<jsp:include page="/WEB-INF/page/jsp/backend/account/list.jsp"></jsp:include>
+			<div id="userListTd">
+				<jsp:include page="/WEB-INF/page/jsp/backend/user/list.jsp"></jsp:include>
 			</div>
         </div>
 
@@ -114,8 +111,7 @@
             
         </div>
     </div>
-    
-    <jsp:include page="/WEB-INF/page/jsp/backend/account/account_js.jsp"></jsp:include>
+
     <jsp:include page="/WEB-INF/page/jsp/footer.jsp"></jsp:include>
 </body>
 </html>

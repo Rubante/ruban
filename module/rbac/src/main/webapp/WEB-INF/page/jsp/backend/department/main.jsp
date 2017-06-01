@@ -5,11 +5,16 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 <head>
-	<jsp:include page="/WEB-INF/page/jsp/include.jsp"></jsp:include>
 	<link href='<s:url value="/static/css/backend/organ_manger.css" />' rel="stylesheet">
 	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
-
+	
 	<script type="text/javascript" src='<s:url value="/static/js/lib/ztree/js/jquery.ztree.core.min.js" />'></script>
+	
+    <script type="text/javascript" src='<s:url value="/static/biz/js/department/tree.js" />'></script>
+    <script type="text/javascript" src='<s:url value="/static/biz/js/department/select.js" />'></script>
+    <script type="text/javascript" src='<s:url value="/static/biz/js/department/main.js" />'></script>
+
+	<script type="text/javascript" src='<s:url value="/static/biz/js/company/select.js" />'></script>
 </head> 
 <body>
     <div class="container">
@@ -45,15 +50,15 @@
 		    </div>
 
             <div class="button-group">
-		        <div class="button current add">
+		        <div class="button current add" onclick="department.add()">
 		            <i class="iconfont">&#xe620;</i>
 		            <span class="button-label">新增</span>
 		        </div>
-		        <div class="button delete">
+		        <div class="button delete" onclick="department.batchDelete()">
 		            <i class="iconfont">&#xe609;</i>
 		            <span class="button-label">删除</span>
 		        </div>
-				<div class="button sort">
+				<div class="button sort" onclick="department.sort()">
 		            <i class="iconfont">&#xe61a;</i>
 		            <span class="button-label">部门排序</span>
 		        </div>
@@ -76,13 +81,6 @@
             
         </div>
     </div>
-    
-    <jsp:include page="/WEB-INF/page/jsp/backend/department/department_js.jsp"></jsp:include>
-    <jsp:include page="/WEB-INF/page/jsp/backend/department/department_tree_js.jsp">
-    	<jsp:param value="department" name="module"/>
-    </jsp:include>
-	<jsp:include page="/WEB-INF/page/jsp/backend/company/select_js.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/page/jsp/backend/department/select_js.jsp"></jsp:include>
 	<jsp:include page="/WEB-INF/page/jsp/footer.jsp"></jsp:include>
 </body>
 </html>
