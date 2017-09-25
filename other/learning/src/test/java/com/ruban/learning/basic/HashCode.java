@@ -8,7 +8,7 @@ public class HashCode {
     public void testHashcode(){
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
-        for(int i = 1; i<=10000;i++){
+        for(int i = 1; i < 50000;i++){
             sb.append("ab");
             sb2.append("ba");
         }

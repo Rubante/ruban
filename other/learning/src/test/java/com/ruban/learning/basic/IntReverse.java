@@ -94,9 +94,9 @@ public class IntReverse {
 
         System.out.println(IntReverse.add("1111111111111111", "22222222222222222222"));
     }
-    
+
     @Test
-    public void integer(){
+    public void integer() {
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
     }

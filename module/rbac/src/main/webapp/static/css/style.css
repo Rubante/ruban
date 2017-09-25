@@ -1,22 +1,3 @@
-/**加载面板**/
-#loadPanel {
-	display: none;
-	overflow-y: auto;
-	overflow-x: auto;
-	width: 100%;
-	top: 0px;
-	left: 0px;
-	position: absolute;
-	background-color: gray;
-	filter: alpha(opacity =   30);
-	opacity: .3;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-	z-index: 99999;
-	background-image: url("images/loading.gif");
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
 /**定制layui**/
 .layui-layer-page {
 	min-width: 260px
@@ -33,11 +14,6 @@
 	overflow-y: auto
 }
 
-.layui-layer-dialog .layui-layer-padding {
-	padding: 20px 20px 20px 55px;
-	text-align: left
-}
-
 .layui-layer-page .layui-layer-content .layui-layer-ico {
 	position: absolute;
 	top: 16px;
@@ -45,6 +21,10 @@
 	_left: -40px;
 	width: 30px;
 	height: 30px
+}
+
+.layui-layer-dialog .layui-layer-content {
+	overflow-x: auto;
 }
 
 .layui-layer-btn a, .layui-layer-page .layui-layer-ico,
@@ -55,7 +35,13 @@
 	vertical-align: top
 }
 
-.layui-layer-content input[type="text"] {
+/**定制layui**/
+.layui-layer-content input[type="text"], .layui-layer-content input[type="password"] {
 	float: left;
 	margin-right: 10px;
+}
+
+/**定制弹出框样式page,type:1**/
+.layui-layer-page .layui-layer-content {
+	padding: 10px 10px 0px 10px;
 }

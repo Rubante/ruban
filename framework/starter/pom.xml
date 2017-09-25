@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<properties>
-		<ruban.version>0.0.2-SNAPSHOT</ruban.version>
+		<ruban.version>0.0.3-SNAPSHOT</ruban.version>
 	</properties>
 
 	<groupId>com.ruban.framework</groupId>
 	<artifactId>ruban-starter</artifactId>
 	<packaging>pom</packaging>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	
 	<dependencyManagement>
 		<dependencies>
@@ -37,28 +37,7 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!-- compiler插件, 设定JDK版本 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.3</version>
-					<configuration>
-						<source>${jdk.version}</source>
-						<target>${jdk.version}</target>
-						<showWarnings>true</showWarnings>
-						<encoding>${project.build.sourceEncoding}</encoding>
-					</configuration>
-				</plugin>
-
-				<!-- resource插件 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-					<configuration>
-						<encoding>${project.build.sourceEncoding}</encoding>
-					</configuration>
-				</plugin>
+				
 			</plugins>
 		</pluginManagement>
 	</build>

@@ -97,6 +97,15 @@
 	</bean>
 
 	<!-- springContext定位器 -->
-	<bean id="springContextLocator" class="com.ruban.framework.core.spring.SpringContextLocator" lazy-init="false"></bean>
+	<bean id="springContext" class="com.ruban.framework.core.spring.SpringContext" lazy-init="false"></bean>
 
+	<!-- 国际化 -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>error</value>
+				<value>messages</value>
+			</list>
+		</property>
+	</bean>
 </beans>

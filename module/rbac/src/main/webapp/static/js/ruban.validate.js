@@ -139,10 +139,10 @@ hitError = function(target, msg) {
 	if (target.attr("errorId")) {
 		$("#" + target.attr("errorId") + "_error").remove();
 	}
-	
+
 	var rand = randomInt(10);
 	target.attr("errorId", rand);
-
+	
 	if(target[0].type == "select-one") {
 		var span = "<span id='" + rand + "_error' class='ruban-error-select'>" + msg + "</span>";
 		target.after(span);	
@@ -364,6 +364,7 @@ validate = function(target,callback_s) {
 	target.find("[check]").each(function() {
 		var check = $(this).attr("check");
 		var cks = check.split(",");
+		
 		for (i in cks) {
 			var args = cks[i].split("=");
 			v = args[0].trim();

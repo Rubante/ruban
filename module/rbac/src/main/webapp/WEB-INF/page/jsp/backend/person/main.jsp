@@ -5,10 +5,11 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 <head>
-	<link href='<s:url value="/static/css/backend/person_manger.css" />' rel="stylesheet">
 	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
 	
 	<script type="text/javascript" src='<s:url value="/static/biz/js/company/select.js" />'></script>
+	<script type="text/javascript" src='<s:url value="/static/biz/js/department/select.js" />'></script>
+	<script type="text/javascript" src='<s:url value="/static/biz/js/person/main.js" />'></script>
 	<script type="text/javascript" src='<s:url value="/static/js/lib/ztree/js/jquery.ztree.core.min.js" />'></script>
 </head> 
 <body>
@@ -82,7 +83,7 @@
 				            <div class="kv-item kv-col-1">
 				                <div class="item-rt">
 								    <div class="button-group">
-								        <div class="button current search">
+								        <div class="button current search" onclick="person.search(event);">
 								            <i class="iconfont">&#xe625;</i>
 								            <span class="button-label">查询</span>
 								        </div>
@@ -95,11 +96,11 @@
 		    </div>
 
             <div class="button-group">
-		        <div class="button current add">
+		        <div class="button current add" onclick="person.add(event)">
 		            <i class="iconfont">&#xe620;</i>
 		            <span class="button-label">新增</span>
 		        </div>
-		        <div class="button delete">
+		        <div class="button delete" onclick="person.delete(event)">
 		            <i class="iconfont">&#xe609;</i>
 		            <span class="button-label">删除</span>
 		        </div>
@@ -108,23 +109,17 @@
 			<table class="kv-table">
 				<tbody>
 					<tr>
-						<td id="personListTd" class="kv-content" valign="top" style="padding: 10px;width:auto;vertical-align: top;">
+						<td id="personListTd">
 							<jsp:include page="/WEB-INF/page/jsp/backend/person/list.jsp"></jsp:include>
 						</td>
 					</tr>
 				</tbody>
-				
 			</table>
-			
-			
         </div>
 
         <div id="inner-ft">
-            
         </div>
     </div>
-    
-    <jsp:include page="/WEB-INF/page/jsp/backend/person/person_js.jsp"></jsp:include>
 
 	<jsp:include page="/WEB-INF/page/jsp/footer.jsp"></jsp:include>
 </body>

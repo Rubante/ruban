@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<form id="account_update_form" action='<s:url value="/rbac/person/updateForm" />' method="post" enctype="multipart/form-data">
+<form id="user_update_form" action='<s:url value="/rbac/user/updateSave" />' method="post" enctype="multipart/form-data">
 	<div class="add-manage">
 		<table class="kv-table">
 			<tbody>
@@ -12,16 +12,15 @@
 						账号：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="accountNo" value="${result.accountNo}" maxlength="10">
+						<input type="text" name="username" value="${result.username}" maxlength="10">
 						<input type="hidden" name="id" value="${result.id}">
 						<input type="hidden" name="holdLock" value="${result.updateLock}">
-						<input type="hidden" name="isForm" value="1" />
 					</td>
 					<td class="kv-label">
-						昵称：
+						显示名：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="name" value="${result.name}" maxlength="10">
+						<input type="text" name="nick" value="${result.nick}" maxlength="10">
 					</td>
 				</tr>
 	

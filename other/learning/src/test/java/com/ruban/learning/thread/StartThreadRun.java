@@ -10,6 +10,7 @@ public class StartThreadRun extends Thread {
         for (int i = 0; i < 4; i++) {
             str += "," + i;
         }
+        System.out.println(StartThreadRun.str);
     }
 
     public static void main(String[] args) {

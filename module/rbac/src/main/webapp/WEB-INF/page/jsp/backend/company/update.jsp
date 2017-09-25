@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <form id="updateForm" action='<s:url value="/rbac/company/update" />' method="post">
 	<table class="kv-table">
@@ -28,13 +29,8 @@
 					<i class="ruban-error-hint">类型</i>：
 				</td>
 				<td class="kv-content" style="padding: 10px; width:auto;">
-					
-					<select name="type" check="notNull">
-						<option value="">请选择</option>
-						<c:forEach items="${dicts}" var="item">
-							<option value="${item.code}" <c:if test="${result.type == item.code}">selected</c:if>>${item.value}</option>
-						</c:forEach>
-					</select>
+					${typeMap[fn:trim(result.type)].value}
+					<input type="hidden" value="${result.type}"  id="relType">
 				</td>
 				<td class="kv-label">
 					上级机构：

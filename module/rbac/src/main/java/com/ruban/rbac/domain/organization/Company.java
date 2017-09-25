@@ -1,5 +1,7 @@
 package com.ruban.rbac.domain.organization;
 
+import java.util.List;
+
 import com.ruban.framework.dao.domain.PersistentObject;
 
 /**
@@ -22,8 +24,8 @@ public class Company extends PersistentObject {
     /** 排序code **/
     private int orderCode;
 
-    /** 是否有字节点 **/
-    private int hasChildren;
+    /** 子节点数量 **/
+    private int childrenNum;
 
     /** 名称 **/
     private String name;
@@ -53,7 +55,7 @@ public class Company extends PersistentObject {
     private String companyName;
 
     /** 机构类型 **/
-    private String type = "0";
+    private int type;
 
     /** 机构类型名称 **/
     private String typeName;
@@ -63,6 +65,8 @@ public class Company extends PersistentObject {
 
     /** 状态 **/
     private int state;
+
+    private List<Company> children;
 
     public String getCode() {
         return code;
@@ -88,12 +92,12 @@ public class Company extends PersistentObject {
         this.orderCode = orderCode;
     }
 
-    public int getHasChildren() {
-        return hasChildren;
+    public int getChildrenNum() {
+        return childrenNum;
     }
 
-    public void setHasChildren(int hasChildren) {
-        this.hasChildren = hasChildren;
+    public void setChildrenNum(int childrenNum) {
+        this.childrenNum = childrenNum;
     }
 
     public String getName() {
@@ -168,11 +172,11 @@ public class Company extends PersistentObject {
         this.companyName = companyName;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -198,6 +202,14 @@ public class Company extends PersistentObject {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public List<Company> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Company> children) {
+        this.children = children;
     }
 
 }

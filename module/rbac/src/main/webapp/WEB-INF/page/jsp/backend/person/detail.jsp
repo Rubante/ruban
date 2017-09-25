@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <div class="add-manage">
 	<table class="kv-table">
@@ -97,7 +98,7 @@
 					性别：
 				</td>
 				<td class="kv-content">
-					${result.sex}
+					${sexMap[fn:trim(result.sex)].value}
 				</td>
 			</tr>
 			<tr>
@@ -111,7 +112,9 @@
 					照片：
 				</td>
 				<td class="kv-content" style="vertical-align:text-top;">
-					<img id="person_update_form_photo_img" style="max-width: 200px;max-height: 90px;" src="data:image/png;base64,${result.photo}" />
+					<c:if test="${result.photo != null && result.photo != ''}">
+						<img id="person_update_form_photo_img" style="max-width: 200px;max-height: 90px;" src="data:image/png;base64,${result.photo}" />
+					</c:if>
 				</td>
 			</tr>
 		</tbody>

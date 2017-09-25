@@ -37,7 +37,7 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public Long insert(Dictionary dictionary) {
+    public int insert(Dictionary dictionary) {
         return dictionaryMapper.insert(dictionary);
     }
 

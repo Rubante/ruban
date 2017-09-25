@@ -9,7 +9,7 @@ import com.ruban.rbac.domain.authz.Role;
  * @author yjwang
  *
  */
-public class SearchForm extends Condition<Role> {
+public class RoleCondition extends Condition<Role> {
 
     private static final long serialVersionUID = 6438864561965004773L;
 

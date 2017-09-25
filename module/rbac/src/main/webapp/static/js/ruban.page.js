@@ -34,20 +34,18 @@ function checkedByName(event, name) {
  * @returns
  */
 function getSelections(checkedName, idName) {
-	var ids = "";
+	
 	var selecteds = document.getElementsByName(checkedName);
-	var id = document.getElementsByName(idName);
-	ids.value = "";
+	var ids = document.getElementsByName(idName);
+
+	var idArr = new Array;
 	for (var i = 0; i < selecteds.length; i++) {
 		if (selecteds[i].checked == true) {
-			if (ids == "") {
-				ids = id[i].value;
-			} else {
-				ids += "," + id[i].value;
-			}
+			idArr.push(ids[i].value);
 		}
 	}
-	return ids;
+	
+	return idArr.join(",");
 }
 /**
  * 获取选中的radio
@@ -64,36 +62,6 @@ function getSelectedRadio(radioName) {
 		}
 	}
 	return null;
-};
-// 排序
-sortByFlag = function(flag, id){
-	
-	var option = {};
-	
-	// 取消之前选中的
-	var radioSelected = getSelectedRadio(id);
-	var tr = $(radioSelected).parent().parent();
-	if(radioSelected == null) {
-		layer.alert("请选中要排序的行！", option);
-		return;
-	}
-	// 上移
-	if(flag==0) {
-		var prev = tr.prev();
-		if(prev.length==1) {
-			prev.before(tr);
-		} else {
-			layer.alert("已到达最顶部，无法再移动！", option);
-		}
-	} else {
-		// 下移
-		var next = tr.next();
-		if(next.length==1) {
-			next.after(tr);
-		} else {
-			layer.alert("已到达最底部，无法再移动！", option);
-		}
-	}
 };
 // 选择日期
 selectDate = function(elem){
@@ -322,18 +290,52 @@ inputError = function() {
 		success: function(layero){
 			layer.setTop(layero);
 		}
-	})
+	});
+};
+/**
+ * 获取模板
+ */
+getTemplate = function(url){
+	var template = "";
+	$.ajax({
+		type : "get",
+		url : url,
+		dataType : "text",
+		async : false,
+		success : function(data) {
+			template = data;
+		},
+		error : function(data){
+			console.log(JSON.stringify(data));
+		}
+	});
+	
+	return template;
 };
 /**
  * 根据document的id获取模板，渲染
  */
-renderHtml = function(id, data) {
+renderHtmlById = function(template, data) {
 
 	var html = "";
 	if (data) {
-		html = Mustache.to_html($("#" + id).html(), data);
+		html = Mustache.to_html($("#" + template).html(), data);
 	} else {
-		html = Mustache.to_html($("#" + id).html(), data);
+		html = Mustache.to_html($("#" + template).html(), {});
+	}
+
+	return html;
+};
+/**
+ * 根据template直接渲染
+ */
+renderHtmlByTemplate = function(template, data) {
+
+	var html = "";
+	if (data) {
+		html = Mustache.to_html(template, data);
+	} else {
+		html = Mustache.to_html(template, {});
 	}
 
 	return html;
@@ -364,12 +366,17 @@ ajaxOption = function(url, callback_s, callback_e, b_callback, dataType) {
 				});
 			}
 		},
-		error : function(er) {console.log(er);
+		error : function(er) {
 			hideLoadPanel();
 			if (callback_e != undefined) {
 				callback_e(er.responseText);
 			} else {
-				errorBind(er.responseText);
+				if(er.responseText) {
+					errorBind(er.responseText);
+				} else {
+					errorBind({msg:er.statusText});
+				}
+				hideLoadPanel();
 			}
 		}
 	};
@@ -464,7 +471,13 @@ ajax = function(url, dataType, data, callback_s, callback_e) {
 								callback_e(er);
 								hideLoadPanel();
 							} else {
-								ajaxCallback(er.responseText);
+								if(er.responseText) {
+									console.log(JSON.stringify(er));
+									ajaxCallback(er.responseText);
+								} else {
+									ajaxCallback({msg:er.statusText});
+								}
+								hideLoadPanel();
 							}
 						}
 					}
@@ -474,7 +487,7 @@ ajax = function(url, dataType, data, callback_s, callback_e) {
 			}
 			$.ajax(options);
 		} else {
-			var option = {
+			var options = {
 					url : url,
 					type : "POST",
 					timeout : 6000,

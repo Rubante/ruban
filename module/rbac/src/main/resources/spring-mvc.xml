@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 	<mvc:resources location="/static/" mapping="/static/**" />
-	
+		
 	<!-- 引入ruban-web基础配置 -->
 	<import resource="classpath:com/ruban/framework/web/config/spring-default-mvc.xml" />
 

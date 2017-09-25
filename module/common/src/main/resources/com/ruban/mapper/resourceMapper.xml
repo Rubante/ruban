@@ -4,49 +4,49 @@
 
 	<select id="selectAll" resultType="com.ruban.common.domain.Resource">
 		SELECT 
-			s.ID as id, s.NAME as name, s.TYPE as type, s.LINK as link, s.ICON as icon, s.PARENT_ID as parentId, 
-			s.FLAG as flag, s.MEMO as memo, s.STATE as state,
+			s.ID as id, s.NAME as name, s.CODE as code, s.PATH as path, s.ORDER_CODE as orderCode, s.LEVEL as level, s.TYPE as type, s.LINK as link, s.ICON as icon,
+			s.PARENT_ID as parentId, p.NAME as parentName, s.CHILDREN_NUM as childrenNum, s.DISPLAY_FLAG as displayFlag, s.MEMO as memo, s.STATE as state,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
-		FROM SYS_T_RESOURCE s 
-		ORDER BY s.MOD_TIME DESC
+		FROM SYS_T_RESOURCE s left join SYS_T_RESOURCE p on s.PARENT_ID = p.ID
+		ORDER BY s.ORDER_CODE
 	</select>
 	
 	<select id="selectWithCondition" resultType="com.ruban.common.domain.Resource">
 		SELECT 
-			s.ID as id, s.NAME as name, s.TYPE as type, s.LINK as link, s.ICON as icon, s.PARENT_ID as parentId, 
-			s.FLAG as flag, s.MEMO as memo, s.STATE as state,
+			s.ID as id, s.NAME as name, s.CODE as code, s.PATH as path, s.ORDER_CODE as orderCode, s.LEVEL as level, s.TYPE as type, s.LINK as link, s.ICON as icon,
+			s.PARENT_ID as parentId, p.NAME as parentName, s.CHILDREN_NUM as childrenNum, s.DISPLAY_FLAG as displayFlag, s.MEMO as memo, s.STATE as state,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
-		FROM SYS_T_RESOURCE s 
+		FROM SYS_T_RESOURCE s left join SYS_T_RESOURCE p on s.PARENT_ID = p.ID 
 		WHERE 1 = 1
 		<if test="name != null and name != ''">
-			and s.name like "%" + #{name} + "%"
+			and s.NAME like "%" + #{name, jdbcType=VARCHAR} + "%"
 		</if>
-		<if test="flag != null and flag != ''">
-			and s.flag = #{flag}
+		<if test="displayFlag != null and displayFlag != ''">
+			and s.DISPLAY_FLAG = #{displayFlag, jdbcType=BIT}
 		</if>
 		<if test="type != null and type != ''">
-			and s.type = #{type}
+			and s.TYPE = #{type, jdbcType=TINYINT}
 		</if>
-		ORDER BY s.MOD_TIME DESC
+		ORDER BY s.ORDER_CODE
 	</select>
 
 	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.common.domain.Resource">
 		SELECT 
-			s.ID as id, s.NAME as name, s.TYPE as type, s.LINK as link, s.ICON as icon, s.PARENT_ID as parentId, 
-			s.FLAG as flag, s.MEMO as memo, s.STATE as state,
+			s.ID as id, s.NAME as name, s.CODE as code, s.PATH as path, s.LEVEL as level, s.ORDER_CODE as orderCode, s.TYPE as type, s.LINK as link, s.ICON as icon, 
+			s.PARENT_ID as parentId, p.NAME as parentName, s.CHILDREN_NUM as childrenNum, s.DISPLAY_FLAG as displayFlag, s.MEMO as memo, s.STATE as state,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
-		FROM SYS_T_RESOURCE s 
-		WHERE s.id = #{id}
+		FROM SYS_T_RESOURCE s left join SYS_T_RESOURCE p on s.PARENT_ID = p.ID
+		WHERE s.ID = #{id}
 	</select>
 	
 	<delete id="deleteById" parameterType="java.lang.Long">
 		DELETE FROM SYS_T_RESOURCE
-		WHERE id = #{id}
+		WHERE ID = #{id}
 	</delete>
 	
 	<delete id="deleteByIds" parameterType="java.lang.String">
 		DELETE FROM SYS_T_RESOURCE
-		WHERE id in 
+		WHERE ID in 
         <foreach item="ids" collection="array" open="(" separator="," close=")">  
         	#{ids}  
         </foreach> 
@@ -54,17 +54,22 @@
 	
 	<insert id="insert" parameterType="com.ruban.common.domain.Resource" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO SYS_T_RESOURCE (
-			NAME, TYPE, LINK, ICON, PARENT_ID, FLAG, MEMO, STATE, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
+			NAME, TYPE, CODE, PATH, ORDER_CODE, CHILDREN_NUM, LEVEL, LINK, ICON, PARENT_ID, DISPLAY_FLAG, MEMO, STATE, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
 		)
 		VALUES(
 			#{name, jdbcType=VARCHAR},
-			#{type, jdbcType=VARCHAR},
-			#{link, jdbcType=INTEGER},
-			#{icon, jdbcType=TINYINT},
+			#{type, jdbcType=TINYINT},
+			#{code, jdbcType=VARCHAR},
+			#{path, jdbcType=VARCHAR},
+			#{orderCode, jdbcType=TINYINT},
+			#{childrenNum, jdbcType=TINYINT},
+			#{level, jdbcType=TINYINT},
+			#{link, jdbcType=VARCHAR},
+			#{icon, jdbcType=CLOB},
 			#{parentId, jdbcType=INTEGER},
-			#{flag, jdbcType=VARCHAR},
+			#{displayFlag, jdbcType=BIT},
 			#{memo, jdbcType=VARCHAR},
-			#{state, jdbcType=VARCHAR},
+			#{state, jdbcType=TINYINT},
 			#{addTime, jdbcType=TIMESTAMP},
 			#{addUserId, jdbcType=INTEGER},
 			#{modTime, jdbcType=TIMESTAMP},
@@ -78,10 +83,14 @@
 		SET 
 			NAME = #{name, jdbcType=VARCHAR},
 			TYPE = #{type, jdbcType=VARCHAR},
+			CODE = #{code, jdbcType=VARCHAR},
+			PATH = #{path, jdbcType=VARCHAR},
+			ORDER_CODE = #{orderCode, jdbcType=TINYINT},
+			LEVEL = #{level, jdbcType=TINYINT},
 			LINK = #{link, jdbcType=VARCHAR},
-			ICON = #{icon, jdbcType=VARCHAR},
+			ICON = #{icon, jdbcType=CLOB},
 			PARENT_ID = #{parentId, jdbcType=INTEGER},
-			FLAG = #{flag, jdbcType=BIT},
+			DISPLAY_FLAG = #{displayFlag, jdbcType=BIT},
 			MEMO = #{memo, jdbcType=VARCHAR},
 			STATE = #{state, jdbcType=TINYINT},
 			MOD_TIME = #{modTime, jdbcType=TIMESTAMP},
@@ -89,4 +98,81 @@
 			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
 		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
 	</update>
+	
+	<!-- 更新子节点数量 -->
+	<update id="updateChildrenNum" parameterType="com.ruban.common.domain.Resource">
+		UPDATE SYS_T_RESOURCE
+		SET 
+			CHILDREN_NUM = #{childrenNum, jdbcType=TINYINT}
+		WHERE ID = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<!-- 增加子节点数量 -->
+	<update id="increaseChildrenNum" parameterType="com.ruban.common.domain.Resource">
+		UPDATE SYS_T_RESOURCE
+		SET 
+			CHILDREN_NUM = CHILDREN_NUM + 1
+		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 减少子节点数量 -->
+	<update id="decreaseChildrenNum" parameterType="com.ruban.common.domain.Resource">
+		UPDATE SYS_T_RESOURCE
+		SET 
+			CHILDREN_NUM = CHILDREN_NUM - 1
+		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 更新顺序 -->
+	<update id="updateOrder">
+		UPDATE SYS_T_RESOURCE
+		SET 
+			ORDER_CODE = #{orderCode, jdbcType=INTEGER},
+			PATH = #{path, jdbcType=INTEGER},
+			PARENT_ID = #{parentId, jdbcType=INTEGER}
+		WHERE ID = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<!-- 更新下级显示标识 -->
+	<update id="updateDisplayFlag" parameterType="com.ruban.common.domain.Resource">
+		UPDATE SYS_T_RESOURCE
+		SET 
+			DISPLAY_FLAG = #{displayFlag, jdbcType=BIT}
+		WHERE 
+		<if test="orderCode != null and orderCode != ''">
+			ORDER_CODE LIKE CONCAT(#{orderCode}, '%') 
+		</if>
+		<if test="id != null and id != ''">
+			ID = #{id, jdbcType=INTEGER} 
+		</if> 
+	</update>
+	
+	<!-- 查找子节点 -->
+	<select id="findChildren" parameterType="java.lang.Long" resultType="com.ruban.common.domain.Resource">
+		SELECT 
+			s.ID as id, s.NAME as name, s.CODE as code, s.PATH as path, s.LEVEL as level, s.ORDER_CODE as orderCode, s.TYPE as type, s.LINK as link, s.ICON as icon, 
+			s.PARENT_ID as parentId, p.NAME as parentName, s.CHILDREN_NUM as childrenNum, s.DISPLAY_FLAG as displayFlag, s.MEMO as memo, s.STATE as state,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
+		FROM SYS_T_RESOURCE s left join SYS_T_RESOURCE p on s.PARENT_ID = p.ID
+		WHERE s.PARENT_ID = #{resourceId}
+		ORDER BY s.ORDER_CODE
+	</select>
+	
+	<!-- 查找子节点个数 -->
+	<select id="findChildrenNum" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM SYS_T_RESOURCE s
+		WHERE s.PARENT_ID = #{resourceId}
+	</select>
+	
+	<select id="findLastSlibing" parameterType="java.lang.Long" resultType="com.ruban.common.domain.Resource">
+		SELECT 
+			s.ID as id, s.NAME as name, s.CODE as code, s.PATH as path, s.LEVEL as level, s.ORDER_CODE as orderCode, s.TYPE as type, s.LINK as link, s.ICON as icon, 
+			s.PARENT_ID as parentId, p.NAME as parentName, s.CHILDREN_NUM as childrenNum, s.DISPLAY_FLAG as displayFlag, s.MEMO as memo, s.STATE as state,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
+		FROM SYS_T_RESOURCE s left join SYS_T_RESOURCE p on s.PARENT_ID = p.ID
+		WHERE s.PARENT_ID = #{parentId}
+		ORDER BY s.ORDER_CODE DESC LIMIT 0,1
+	</select>
 </mapper>

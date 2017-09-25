@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <form id="person_update_form" action='<s:url value="/rbac/person/updateForm" />' method="post" enctype="multipart/form-data">
@@ -41,19 +42,19 @@
 						职务：
 					</td>
 					<td class="kv-content">
-						<select name="titleId" value="${result.titleId}">
+						<sf:select path="result.titleId">
 							<option value="0">经理</option>
 							<option value="1">主管</option>
-						</select>
+						</sf:select>
 					</td>
 					<td class="kv-label">
 						岗位：
 					</td>
 					<td class="kv-content">
-						<select name="jobId" value="${result.jobId}">
+						<sf:select name="jobId" path="result.jobId">
 							<option value="0">java开发者</option>
 							<option value="1">linux工程师</option>
-						</select>
+						</sf:select>
 					</td>
 				</tr>
 				<tr>
@@ -61,13 +62,13 @@
 						入职时间：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="entryDate" value="${result.entryDate}" readonly="readonly" onClick="WdatePicker({crossFrame:false})" />
+						<input type="text" name="entryDate" value="${result.entryDate}" readonly="readonly" onclick="selectDate(this)"  />
 					</td>
 					<td class="kv-label">
 						离职时间：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="departureDate" value="${result.departureDate}" readonly="readonly" onClick="WdatePicker({crossFrame:false})" />
+						<input type="text" name="departureDate" value="${result.departureDate}" readonly="readonly" onclick="selectDate(this)" />
 					</td>
 					<td class="kv-label">
 						薪资：
@@ -101,14 +102,14 @@
 						出生日期：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="birthday" value="${result.birthday}" readonly="readonly" onClick="WdatePicker({crossFrame:false})" />
+						<input type="text" name="birthday" value="${result.birthday}" readonly="readonly" onclick="selectDate(this)"  />
 					</td>
 					<td class="kv-label">
 						性别：
 					</td>
 					<td class="kv-content">
 						<select name="sex">
-							<c:forEach items="${dicts}" var="item">
+							<c:forEach items="${sexs}" var="item">
 								<option value="${item.code}" <c:if test="${result.sex == item.code}">selected</c:if>>${item.value}</option>
 							</c:forEach>
 						</select>

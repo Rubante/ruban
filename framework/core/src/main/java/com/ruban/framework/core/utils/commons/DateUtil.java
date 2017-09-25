@@ -7,22 +7,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DateUtil {
 
-    /**
-     * 获取当前时间
-     * 
-     * @return
-     */
-    static public Date getNowTime() {
-        Date datetime = new Date();
-        String now = getDateTimeStr(datetime);
-        Date time = parseDateTime(now);
-        return time;
-    }
+    private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     /**
-     * getDateStr get a string with format YYYY-MM-DD from a Date object
+     * getDateStr get a string with format
+     * YYYY-MM-DD from a Date object
      * 
      * @param date
      *            date
@@ -49,7 +43,8 @@ public class DateUtil {
     }
 
     /**
-     * getDateStr get a string with format YYYY-M-D from a Date object
+     * getDateStr get a string with format
+     * YYYY-M-D from a Date object
      * 
      * @param date
      *            date
@@ -86,14 +81,9 @@ public class DateUtil {
         return str;
     }
 
-    static public String getTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        return format.format(new Date());
-    }
-
     /**
-     * getDateStr get a string with format YYYY-MM-DD HH:mm:ss from a Date
-     * object
+     * getDateStr get a string with format
+     * YYYY-MM-DD HH:mm:ss from a Date object
      * 
      * @param date
      *            date
@@ -142,38 +132,53 @@ public class DateUtil {
         }
     }
 
-    /**
-     * Parses text in 'YYYY-MM-DD' format to produce a date.
-     * 
-     * @param s
-     *            the text
-     * @return Date
-     * @throws ParseException
-     */
-    static public Date parseDate(String s) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.parse(s);
+    static public Date parseDatePlainWithSecond(String s) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            return format.parse(s);
+        } catch (ParseException ex) {
+            logger.error("parse error", ex);
+        }
+
+        return null;
     }
 
-    static public Date parseDateC(String s) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-        return format.parse(s);
+    static public Date parseDateLine(String s) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            return format.parse(s);
+        } catch (ParseException ex) {
+            logger.error("parse error", ex);
+        }
+
+        return null;
+    }
+
+    static public Date parseDateChinese(String s) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
+            return format.parse(s);
+        } catch (ParseException ex) {
+            logger.error("parse error", ex);
+        }
+
+        return null;
+    }
+
+    static public Date parseDateSlash(String s) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            return format.parse(s);
+        } catch (ParseException ex) {
+            logger.error("parse error", ex);
+        }
+
+        return null;
     }
 
     /**
-     * Parses text in 'YYYY/MM/DD' format to produce a date.
-     * 
-     * @param String
-     * @return Date
-     * @throws ParseException
-     */
-    static public Date parseDateS(String s) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-        return format.parse(s);
-    }
-
-    /**
-     * Parses text in 'YYYY-MM-DD' format to produce a date.
+     * Parses text in 'YYYY-MM-DD' format to
+     * produce a date.
      * 
      * @param s
      *            the text
@@ -191,7 +196,8 @@ public class DateUtil {
     }
 
     /**
-     * Parses text in 'YYYY-MM-DD' format to produce a date.
+     * Parses text in 'YYYY-MM-DD' format to
+     * produce a date.
      * 
      * @param s
      *            the text
@@ -227,7 +233,8 @@ public class DateUtil {
     }
 
     /**
-     * Parses text in 'HH:mm:ss' format to produce a time.
+     * Parses text in 'HH:mm:ss' format to produce
+     * a time.
      * 
      * @param s
      *            the text
@@ -330,7 +337,8 @@ public class DateUtil {
     }
 
     /**
-     * getToday get todat string with format YYYY-MM-DD from a Date object
+     * getToday get todat string with format
+     * YYYY-MM-DD from a Date object
      * 
      * @param date
      *            date
@@ -348,7 +356,7 @@ public class DateUtil {
 
     static public Date getTodayYMD() {
         try {
-            return parseDate(getTodayStr());
+            return parseDateSlash(getTodayStr());
         } catch (Exception ex) {
 
         }
@@ -356,6 +364,42 @@ public class DateUtil {
         return null;
     }
 
+    /**
+     * 获取当前时间
+     * 
+     * @return
+     */
+    static public Date getNowTime() {
+        Date datetime = new Date();
+        String now = getDateTimeStr(datetime);
+        Date time = parseDateTime(now);
+        return time;
+    }
+
+    static public String getTime() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        return format.format(new Date());
+    }
+
+    /**
+     * 获取unix时间戳
+     * 
+     * @return
+     */
+    static public long getUnixTime() {
+        Date datetime = new Date();
+        return datetime.getTime();
+    }
+
+    /**
+     * 获取unix时间戳
+     * 
+     * @return
+     */
+    static public long getUnixTime(Date date) {
+        return date.getTime();
+    }
+    
     /**
      * 获取当前时间点，格式为yyyy-MM-dd HH:mm:ss
      * 

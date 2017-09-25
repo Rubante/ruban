@@ -4,11 +4,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
      <div class="button-group">
-        <div class="button" onclick="department.sortByFlag(0)">
+        <div class="button" onclick="sortByFlag(0, 'department_sort_radio')">
             <i class="iconfont">&#xe617;</i>
             <span class="button-label">上移</span>
         </div>
-        <div class="button" onclick="department.sortByFlag(1)">
+        <div class="button" onclick="sortByFlag(1, 'department_sort_radio')">
             <i class="iconfont">&#xe629;</i>
             <span class="button-label">下移</span>
         </div>

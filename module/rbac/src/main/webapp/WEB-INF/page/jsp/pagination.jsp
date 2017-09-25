@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<table style="width:100%;">
+<table style="width:100%;margin-bottom: 15px;">
 	<tr style="color:#0088cc;border-bottom: 1px solid #dadada;border-left: 1px solid #dadada">
 		<td style="width:100px;padding:1px 3px 1px 5px;">
 			<span>每页:</span>

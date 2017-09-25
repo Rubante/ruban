@@ -3,6 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <table class="grid">
 	<thead>
 		<tr>
@@ -38,12 +39,12 @@
 						</c:when>
 						<c:otherwise>
 							<img id="open_TR${result.path}" onclick="resource.closeFolder(event)" style="cursor:pointer;" src="/static/css/images/folderOpen.gif" />
-							<img id="close_TR${result.path}" onclick="resource.openFolder(event)" style="display:none;cursor:pointer;" src="/static/imgs/folderClose.gif" />
+							<img id="close_TR${result.path}" onclick="resource.openFolder(event)" style="display:none;cursor:pointer;" src="/static/css/images/folderClose.gif" />
 						</c:otherwise>
 					</c:choose>
 					${result.name}
 				</td>
-				<td>${typeMap[fn:trim(result.type)].value}</td>
+				<td>${typeMap[sex].value}</td>
 				<td>${result.code}</td>
 				<td>
 					<c:if test="${not empty result.icon}">

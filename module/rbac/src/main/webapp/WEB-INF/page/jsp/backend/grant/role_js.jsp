@@ -90,7 +90,7 @@
     });
     
     // 删除角色
-	$('body').on('click', '.delete', function(){
+	rubanRole.batchDelete = function(){
     	// 获取所有选中的ids
     	var ids = getSelections("role_checkbox","role_id");
 
@@ -111,11 +111,7 @@
     	} else {
     		layer.alert("请选择要删除的数据！");
     	}
-	 });
-    
-    $('body').on('click', '.search', function(){
-    	rubanRole.search();
-    });
+	 };
     
     // 查询
     rubanRole.search = function(){

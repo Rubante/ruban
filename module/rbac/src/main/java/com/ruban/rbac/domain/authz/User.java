@@ -5,26 +5,26 @@ import java.util.Date;
 import com.ruban.framework.dao.domain.PersistentObject;
 
 /**
- * 该表纪录系统可登录的账号。<br />
- * 每个账号依据状态做出是否允许登录的判断。<br />
+ * 该表纪录系统可登录的用户账号。<br />
+ * 每个用户账号依据状态做出是否允许登录的判断。<br />
  * 也可能是系统管理员，也可能不对应某个具体的人，只是一个用户而已,例如：admin
  * 
  * @author ruban
  *
  */
-public class Account extends PersistentObject {
+public class User extends PersistentObject {
 
-    /** 登录账号 **/
-    private String accountNo;
+    /** 用户名 **/
+    private String username;
 
-    /** 登录密码 **/
+    /** 密码 **/
     private String password;
 
-    /** 显示名 **/
-    private String name;
+    /** 昵称 **/
+    private String nick;
 
     /** 状态 **/
-    private String state;
+    private int state;
 
     /** 备注 **/
     private String memo;
@@ -38,12 +38,15 @@ public class Account extends PersistentObject {
     /** 所属人员名称 **/
     private String personName;
 
-    public String getAccountNo() {
-        return accountNo;
+    /** 所属用户组 **/
+    private Group group;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setAccountNo(String accountNo) {
-        this.accountNo = accountNo;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -54,19 +57,19 @@ public class Account extends PersistentObject {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getNick() {
+        return nick;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 
@@ -100,6 +103,14 @@ public class Account extends PersistentObject {
 
     public void setPersonName(String personName) {
         this.personName = personName;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
 }

@@ -99,14 +99,14 @@
 						出生日期：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="birthday" readonly="readonly" onClick="WdatePicker({crossFrame:false})" />
+						<input type="text" name="birthday" readonly="readonly" onclick="selectDate(this)" />
 					</td>
 					<td class="kv-label">
 						性别：
 					</td>
 					<td class="kv-content">
 						<select name="sex">
-							<c:forEach items="${dicts}" var="result">
+							<c:forEach items="${sexs}" var="result">
 								<option value="${result.code}">${result.value}</option>
 							</c:forEach>
 						</select>

@@ -30,6 +30,8 @@
 				title : '添加账号',
 				area : [ '750px' ],
 				content : html,
+				type : 1,
+				fixed : false,
 				btn : [ '添加', '关闭' ],
 				yes : function(index, layer) {
 					// 校验数据成功后提交
@@ -44,49 +46,6 @@
 
 		// 数据请求
 		ajaxHybrid(getRealPath("addPage"), {}, success);
-	};
-
-	// 用户账号排序
-	user.sort = function() {
-		// 成功回调
-		var success = function(html) {
-			layer.open({
-				title : '用户排序',
-				btn : [ '保存', '关闭' ],
-				area : [ "828px" ],
-				content : html,
-				yes : function() {
-					var ids = $("[name=user_sort_id]");
-
-					var data = "";
-					ids.each(function() {
-						if (data == "") {
-							data = $(this).val();
-						} else {
-							data += "," + $(this).val();
-						}
-					});
-
-					// 成功提示
-					var success = function(data) {
-						msgAlert(data);
-					};
-
-					// 数据提交
-					ajaxJson(getRealPath("sort"), {
-						"ids" : data
-					}, success);
-				}
-			});
-		};
-
-		// 查询条件
-		var searchData = {
-			"departmentId" : dptTree.getCurrentId()
-		};
-		
-		// 数据请求
-		ajaxHtml(getRealPath("sortList"), searchData, success);
 	};
 
 	// 删除用户
@@ -151,6 +110,8 @@
 				title : '修改账号',
 				area : [ "750px" ],
 				content : html,
+				type : 1,
+				fixed : false,
 				btn : [ '修改', '关闭' ],
 				yes : function(index, layer) {
 					validate($(target_id), submit);
@@ -216,5 +177,153 @@
 		});
 	};
 
+	// 禁用用户
+	user.disable = function(id, holdLock) {
+		var data = {
+			"id" : id,
+			"holdLock" : holdLock
+		};
+		// 成功回调
+		var success = function(data) {
+			msgAlert(data);
+			// 更新数据
+			user.search();
+		};
+
+		// 删除确认
+		layer.confirm('确定要禁用么？', {
+			btn : [ '确定', '关闭' ]
+		}, function() {
+			ajaxJson(getRealPath("disable"), data, success);
+		});
+	};
+	
+	// 停用用户
+	user.stop = function(id, holdLock) {
+		var data = {
+			"id" : id,
+			"holdLock" : holdLock
+		};
+		// 成功回调
+		var success = function(data) {
+			msgAlert(data);
+			// 更新数据
+			user.search();
+		};
+
+		// 删除确认
+		layer.confirm('确定要停用么？', {
+			btn : [ '确定', '关闭' ]
+		}, function() {
+			ajaxJson(getRealPath("stop"), data, success);
+		});
+	};
+	
+	// 启用用户
+	user.start = function(id, holdLock) {
+		var data = {
+			"id" : id,
+			"holdLock" : holdLock
+		};
+		// 成功回调
+		var success = function(data) {
+			msgAlert(data);
+			// 更新数据
+			user.search();
+		};
+
+		// 删除确认
+		layer.confirm('确定要启用么？', {
+			btn : [ '确定', '关闭' ]
+		}, function() {
+			ajaxJson(getRealPath("start"), data, success);
+		});
+	};
+	
+	// 解锁用户
+	user.unlock = function(id, holdLock) {
+		var data = {
+			"id" : id,
+			"holdLock" : holdLock
+		};
+		// 成功回调
+		var success = function(data) {
+			msgAlert(data);
+			// 更新数据
+			user.search();
+		};
+
+		// 删除确认
+		layer.confirm('确定要解锁么？', {
+			btn : [ '确定', '关闭' ]
+		}, function() {
+			ajaxJson(getRealPath("unlock"), data, success);
+		});
+	};
+	
+	// 用户授权
+	user.grant = function(id, holdLock) {
+
+		var success = function(html) {
+
+			var target_id = "#user_grant_form";
+
+			// 提交数据
+			var submit = function() {
+				var roleValues = $("[name='roles']");
+				
+				var roles = new Array();
+				var index = 0;
+				
+				$("[name='checkRole']").each(function(){
+					var checked = $(this).prop("checked");
+					
+					if(checked) {
+						roles.push(roleValues[index].value);
+					}
+					
+					index++;
+				});
+				
+				var param = {
+					"roles" : roles.join(","),
+					"userId" : $("#userId").val()
+				};
+				
+				// 数据提交
+				ajaxJson(getRealPath("grantSave"), param, function(data){
+					msgAlert(data);
+					// 更新数据
+					user.search();
+				});
+			};
+
+			layer.open({
+				title : '用户授权',
+				area : [ "750px" ],
+				content : html,
+				type : 1,
+				fixed : false,
+				btn : [ '授权', '关闭' ],
+				yes : function(index, layer) {
+					validate($(target_id), submit);
+				},
+				success : function() {
+					// 页面校验
+					bindValidate($(target_id));
+				}
+			});
+		};
+
+		// 请求明细数据
+		var data = {
+				"id" : id,
+				"holdLock" : holdLock
+		};
+
+		// 数据请求
+		ajaxHybrid(getRealPath("grantPage"), data, success);
+	};
+	
 	window['user'] = user;
 })();

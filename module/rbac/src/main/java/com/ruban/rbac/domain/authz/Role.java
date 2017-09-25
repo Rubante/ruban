@@ -13,9 +13,6 @@ public class Role extends PersistentObject {
     /** 角色名称 **/
     private String name;
 
-    /** 角色类型 **/
-    private String type;
-
     /** 状态 **/
     private int state;
 
@@ -37,14 +34,6 @@ public class Role extends PersistentObject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getState() {

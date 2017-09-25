@@ -27,28 +27,32 @@
 				</tr>
 				<tr>
 					<td class="kv-label">
-						访问路径：
+						编码：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="link" maxlength="100">
+						<input type="text" name="code" value="" maxlength="30">
 					</td>
 					<td class="kv-label">
 						图标：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="icon">
+						<input type="text" name="icon" value="">
 					</td>
 				</tr>
 				<tr>
 					<td class="kv-label">
-						是否授权：
+						访问路径：
 					</td>
-					<td class="kv-content">
-						<select name="type">
-							<c:forEach items="${yesnos}" var="yesno">
-								<option value="${yesno.code}">${yesno.value}</option>
-							</c:forEach>
-						</select>
+					<td colspan="3" class="kv-content">
+						<input type="text" name="link" value="" maxlength="200" style="width:95%;">
+					</td>
+				</tr>
+				<tr>
+					<td class="kv-label">
+						父节点：
+					</td>
+					<td class="kv-content" colspan="3">
+						<jsp:include page="/WEB-INF/page/jsp/backend/resource/select_tpl.jsp"></jsp:include>
 					</td>
 				</tr>
 				<tr>

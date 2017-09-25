@@ -275,21 +275,6 @@ function getSelectionsAndNames(checkedName,idName,nameList,ids){
 	return checkedNum;
 }
 /*
- * 将输入转成整数
- * 
- */
-String.prototype.trim = function() {
-	  return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-};
-/**
- * 邮箱校验
- * 
- */
-isEmail=function(email){
-	var emailPattern = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9])+\.[a-zA-Z]{2,3}$/;
-	return emailPattern.test(email);
-};
-/*
  * 验证输入是否是数字
  * 
  */
@@ -426,34 +411,6 @@ telRule=function(event){
 telRuleCheck=function(string){
 	var pattern = /[^\d\,]/g;
 	if(pattern.test(string)) {
-		return false;
-	}
-	return true;
-};
-/**
- * 校验上传图片格式
- * 
- */
-imgCheck=function(Sting){
-	var index = Sting.lastIndexOf(".");
-	var ext = Sting.substring(index + 1, Sting.length);
-	if (index < 0){
-		return false;
-	} else if (ext != "png" && ext != "PNG" && ext != "jpg" && ext!= "JPG"){
-		return false;
-	}
-	return true;
-};
-/**
- * excel文件前端校验
- * 
- */
-excelCheck=function(Sting){
-	var index = Sting.lastIndexOf(".");
-	var ext = Sting.substring(index + 1, Sting.length);
-	if (index < 0){
-		return false;
-	} else if (ext != "xls" && ext != "XLS" && ext != "xlsx" && ext != "XLSX"){
 		return false;
 	}
 	return true;

@@ -85,10 +85,30 @@ public interface ICompanyService {
     public Company findById(Long id);
 
     /**
-     * 获取组织机构json串
+     * 根据父级节点，获取组织机构json串
      * 
      * @param rootId
+     *            :父级节点
+     * @param type
+     *            :组织机构类型
      * @return
      */
-    public String getJsonTree(Long rootId);
+    public String getJsonTree(Long rootId, String type);
+
+    /**
+     * 根据组织机构类型，获取组织机构json串
+     * 
+     * @param type
+     *            :组织机构类型
+     * 
+     * @return
+     */
+    public String getJsonTreeByType(String type);
+
+    /**
+     * 获取组织机构json串
+     * 
+     * @return
+     */
+    public String getJsonTree();
 }

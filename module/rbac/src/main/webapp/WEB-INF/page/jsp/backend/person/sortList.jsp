@@ -4,11 +4,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <div class="button-group">
-   <div class="button" onclick="sortByFlag('person_sort_radio', 0)">
+   <div class="button" onclick="sortByFlag(0, 'person_sort_radio')">
        <i class="iconfont">&#xe617;</i>
        <span class="button-label">上移</span>
    </div>
-   <div class="button" onclick="sortByFlag('person_sort_radio', 1)">
+   <div class="button" onclick="sortByFlag(1, 'person_sort_radio')">
        <i class="iconfont">&#xe629;</i>
        <span class="button-label">下移</span>
     </div>
@@ -19,7 +19,6 @@
 			<th class="grid-checkbox"><input type="checkbox"></th>
 			<th>所属组织机构</th>
 			<th>所属部门</th>
-			<th>部门内序号</th>
 			<th>姓名</th>
 			<th>姓别</th>
 			<th>职务</th>
@@ -36,7 +35,6 @@
 					</td>
 				<td>${result.companyName}</td>
 				<td>${result.departmentName}</td>
-				<td>${result.orderCode}</td>
 				<td>${result.name}</td>
 				<td>${result.titleName}</td>
 				<td>${result.sex}</td>

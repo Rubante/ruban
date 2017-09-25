@@ -1,5 +1,6 @@
 package com.ruban.rbac.domain.authz;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,50 +10,63 @@ import java.util.Date;
  * @author ruban
  *
  */
-public class RoleMutex {
+public class RoleMutex implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** 主键 **/
-    private int id;
+    private Long id;
 
     /** 角色ID **/
-    private int roleId;
+    private Long roleId;
 
     /** 反角色 **/
-    private int mutexId;
+    private Long mutexId;
 
-    /** 更新时间 **/
-    private Date updatetime;
+    /** 修改时间 **/
+    private Date modTime;
 
-    public int getId() {
+    /** 修改者 **/
+    private Long modUserId;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
-    public int getMutexId() {
+    public Long getMutexId() {
         return mutexId;
     }
 
-    public void setMutexId(int mutexId) {
+    public void setMutexId(Long mutexId) {
         this.mutexId = mutexId;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getModTime() {
+        return modTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
+
+    public Long getModUserId() {
+        return modUserId;
+    }
+
+    public void setModUserId(Long modUserId) {
+        this.modUserId = modUserId;
     }
 
 }

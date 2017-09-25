@@ -128,7 +128,7 @@
 	<update id="updateOrderCode">
 		UPDATE ORG_T_DEPARTMENT
 		SET 
-			ORDER_CODE = #{1, jdbcType=TINYINT}
-		WHERE ID = #{0, jdbcType=INTEGER}
+			ORDER_CODE = #{orderCode, jdbcType=TINYINT}
+		WHERE ID = #{id, jdbcType=INTEGER}
 	</update>
 </mapper>

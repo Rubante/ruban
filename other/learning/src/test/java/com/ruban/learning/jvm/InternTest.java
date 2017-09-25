@@ -21,13 +21,18 @@ public class InternTest {
         String str = new StringBuilder().append("计算").append("机器").toString();
         Assert.assertTrue(str.intern() == str);
 
+        System.out.println(str.intern() == str);
+        
         // 【计算机】经过上步操作，已经加入，因此intern返回的是常量池中的那个，跟StringBuilder的这个新建的不是一个
         String str2 = new StringBuilder().append("计算").append("机器").toString();
         Assert.assertFalse(str2.intern() == str2);
 
+        System.out.println(str2.intern() == str2);
         // 该处校验，字符串是一个整体
         String str3 = new StringBuilder().append("计算").append("机").toString();
         Assert.assertTrue(str3.intern() == str3);
+        
+        System.out.println(str3.intern() == str3);
     }
 
     @Test
@@ -35,10 +40,14 @@ public class InternTest {
         // 基本类型，类，接口的限定符，常量值，放在常量池中
         String str1 = new StringBuilder().append("ja").append("va").toString();
         Assert.assertFalse(str1.intern() == str1);
-
+        
+        System.out.println(str1.intern() == str1);
+        
         // 该处模拟一些常见字符串，像方法的名称的描述已经在常量池中
         String str2 = new StringBuilder().append("test").append("Intern2").toString();
         Assert.assertFalse(str2.intern() == str2);
+        
+        System.out.println(str2.intern() == str2);
 
     }
 

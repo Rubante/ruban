@@ -12,15 +12,15 @@ import org.springframework.context.ApplicationContextAware;
  * @author ruban
  *
  */
-public class SpringContextLocator implements ApplicationContextAware {
+public class SpringContext implements ApplicationContextAware {
 
-    private static Logger logger = LoggerFactory.getLogger(SpringContextLocator.class);
+    private static Logger logger = LoggerFactory.getLogger(SpringContext.class);
 
     private static ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringContextLocator.applicationContext = applicationContext;
+        SpringContext.applicationContext = applicationContext;
     }
 
     /**
@@ -35,7 +35,7 @@ public class SpringContextLocator implements ApplicationContextAware {
             logger.error("springContextLocator not configured in spring!", ex);
         }
 
-        return SpringContextLocator.applicationContext;
+        return SpringContext.applicationContext;
     }
 
     /**
@@ -45,7 +45,18 @@ public class SpringContextLocator implements ApplicationContextAware {
      * @return
      */
     public static Object getBean(String beanName) {
-        return SpringContextLocator.applicationContext.getBean(beanName);
+        return SpringContext.applicationContext.getBean(beanName);
+    }
+
+    /**
+     * 根据beanName获取对象
+     * 
+     * @param beanName
+     * @param cls
+     * @return
+     */
+    public static <T> T getBean(String beanName, Class<T> cls) {
+        return SpringContext.applicationContext.getBean(beanName, cls);
     }
 
     /**
@@ -55,7 +66,7 @@ public class SpringContextLocator implements ApplicationContextAware {
      * @return
      */
     public static <T> T getBean(Class<T> className) {
-        return SpringContextLocator.applicationContext.getBean(className);
+        return SpringContext.applicationContext.getBean(className);
     }
 
     /**
@@ -64,8 +75,8 @@ public class SpringContextLocator implements ApplicationContextAware {
      * @param beanName
      * @return
      */
-    public Class<?> getType(String beanName) {
-        return SpringContextLocator.applicationContext.getType(beanName);
+    public static Class<?> getType(String beanName) {
+        return SpringContext.applicationContext.getType(beanName);
     }
 
     /**
@@ -74,8 +85,8 @@ public class SpringContextLocator implements ApplicationContextAware {
      * @param beanName
      * @return
      */
-    public boolean isSingleton(String beanName) {
-        return SpringContextLocator.applicationContext.isSingleton(beanName);
+    public static boolean isSingleton(String beanName) {
+        return SpringContext.applicationContext.isSingleton(beanName);
     }
 
     /**
@@ -84,7 +95,27 @@ public class SpringContextLocator implements ApplicationContextAware {
      * @param beanName
      * @return
      */
-    public boolean containsBean(String beanName) {
-        return SpringContextLocator.applicationContext.containsBean(beanName);
+    public static boolean containsBean(String beanName) {
+        return SpringContext.applicationContext.containsBean(beanName);
+    }
+
+    /**
+     * 获取国际化信息
+     * 
+     * @param key
+     * @return
+     */
+    public static String getText(String key) {
+        return SpringContext.applicationContext.getMessage(key, null, null);
+    }
+
+    /**
+     * 获取国际化信息
+     * 
+     * @param key
+     * @return
+     */
+    public static String getText(String key, String... params) {
+        return SpringContext.applicationContext.getMessage(key, params, null);
     }
 }

@@ -137,8 +137,9 @@
 		// 数据请求
 		ajaxHtml(getRealPath("sortList"),searchData,success);
     });
+    
     // 删除人员
-	$('body').on('click', '.delete', function(){
+	person.batchDelete = function(){
     	// 获取所有选中的ids
     	var ids = getSelections("person_checkbox","person_id");
 
@@ -158,11 +159,7 @@
     	} else {
     		layer.alert("请选择要删除的数据！");
     	}
-	 });
-    
-    $('body').on('click', '.search', function(){
-    	person.search();
-    });
+	 };
     
     // 查询
     person.search = function(){

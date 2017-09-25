@@ -7,7 +7,7 @@
 			s.ID as id, s.CODE as code, s.NAME as name, s.BIRTHDAY as birthday, s.EMAIL as email, s.SEX as sex, 
 			s.CARDID as cardId, s.PHOTO as photo, s.ADDRESS as address,
 			s.ENTRY_DATE as entryDate, s.DEPARTURE_DATE as departureDate, s.SALARY as salary, s.MEMO as memo, 
-			s.ADD_TIME as addTime, s.MOD_TIME as modTime, s.UPDATE_LOCK as updateLock, s.ORDER_CODE as orderCode,
+			s.ADD_TIME as addTime, s.MOD_TIME as modTime, s.UPDATE_LOCK as updateLock,
 			c.ID as companyId, c.name as companyName, j.ID as jobId, j.NAME as jobName, t.ID as titleId, t.NAME as titleName,
 			d.ID as departmentId, d.name as departmentName
 		FROM ORG_T_PERSON s 
@@ -15,7 +15,7 @@
 		LEFT JOIN ORG_T_DEPARTMENT d on s.DEPARTMENT_ID = d.ID
 		LEFT JOIN ORG_T_TITLE t on s.TITLE_ID = t.ID
 		LEFT JOIN ORG_T_JOB j on s.JOB_ID = j.ID
-		ORDER BY s.ORDER_CODE
+		ORDER BY s.MOD_TIME DESC
 	</select>
 	
 	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.organization.Person">
@@ -23,7 +23,7 @@
 			s.ID as id, s.CODE as code, s.NAME as name, s.BIRTHDAY as birthday, s.EMAIL as email, s.SEX as sex, 
 			s.CARDID as cardId, s.PHOTO as photo, s.ADDRESS as address,
 			s.ENTRY_DATE as entryDate, s.DEPARTURE_DATE as departureDate, s.SALARY as salary, s.MEMO as memo, 
-			s.ADD_TIME as addTime, s.MOD_TIME as modTime, s.UPDATE_LOCK as updateLock, s.ORDER_CODE as orderCode,
+			s.ADD_TIME as addTime, s.MOD_TIME as modTime, s.UPDATE_LOCK as updateLock,
 			c.ID as companyId, c.name as companyName, j.ID as jobId, j.NAME as jobName, t.ID as titleId, t.NAME as titleName,
 			d.ID as departmentId, d.name as departmentName
 		FROM ORG_T_PERSON s 
@@ -43,7 +43,7 @@
 		<if test="departmentId != null">
 			and s.DEPARTMENT_ID = #{departmentId}
 		</if>
-		ORDER BY s.ORDER_CODE
+		ORDER BY s.MOD_TIME DESC
 	</select>
 
 	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.organization.Person">
@@ -51,7 +51,7 @@
 			s.ID as id, s.CODE as code, s.NAME as name, s.BIRTHDAY as birthday, s.EMAIL as email, s.SEX as sex, 
 			s.CARDID as cardId, s.PHOTO as photo, s.ADDRESS as address,
 			s.ENTRY_DATE as entryDate, s.DEPARTURE_DATE as departureDate, s.SALARY as salary, s.MEMO as memo, 
-			s.ADD_TIME as addTime, s.MOD_TIME as modTime, s.UPDATE_LOCK as updateLock, s.ORDER_CODE as orderCode,
+			s.ADD_TIME as addTime, s.MOD_TIME as modTime, s.UPDATE_LOCK as updateLock,
 			c.ID as companyId, c.name as companyName, j.ID as jobId, j.NAME as jobName, t.ID as titleId, t.NAME as titleName,
 			d.ID as departmentId, d.name as departmentName
 		FROM ORG_T_PERSON s 
@@ -60,7 +60,7 @@
 		LEFT JOIN ORG_T_TITLE t on s.TITLE_ID = t.ID
 		LEFT JOIN ORG_T_JOB j on s.JOB_ID = j.ID
 		WHERE s.id = #{id}
-		ORDER BY s.ORDER_CODE
+		ORDER BY s.MOD_TIME DESC
 	</select>
 	
 	<delete id="deleteById" parameterType="java.lang.Long">
@@ -86,7 +86,7 @@
 	<insert id="insert" parameterType="com.ruban.rbac.domain.organization.Person" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO ORG_T_PERSON(
 			CODE, NAME, BIRTHDAY, EMAIL, ADDRESS, SEX, CARDID, PHOTO, ENTRY_DATE, DEPARTURE_DATE, SALARY, MEMO, 
-			ADD_TIME, ADD_USERID, MOD_TIME, MOD_USERID, UPDATE_LOCK, ORDER_CODE,
+			ADD_TIME, ADD_USERID, MOD_TIME, MOD_USERID, UPDATE_LOCK,
 			COMPANY_ID, JOB_ID, TITLE_ID, DEPARTMENT_ID
 		)
 		VALUES(
@@ -107,7 +107,6 @@
 			#{modTime, jdbcType=TIMESTAMP},
 			#{modUserId, jdbcType=INTEGER},
 			#{updateLock, jdbcType=VARCHAR},
-			#{orderCode, jdbcType=TINYINT},
 			#{companyId, jdbcType=INTEGER},
 			#{jobId, jdbcType=INTEGER},
 			#{titleId, jdbcType=INTEGER},
@@ -138,12 +137,5 @@
 			TITLE_ID = #{titleId, jdbcType=INTEGER},
 			DEPARTMENT_ID = #{departmentId, jdbcType=INTEGER}
 		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
-	</update>
-	
-	<update id="updateOrderCode" parameterType="com.ruban.rbac.domain.organization.Person">
-		UPDATE ORG_T_PERSON
-		SET 
-			ORDER_CODE = #{1, jdbcType=TINYINT}
-		WHERE ID = #{0, jdbcType=INTEGER}
 	</update>
 </mapper>

@@ -3,20 +3,20 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<form id="account_add_form" action='<s:url value="/rbac/person/add" />' method="post" enctype="multipart/form-data">
+<form id="user_add_form" action='<s:url value="/rbac/user/addSave" />' method="post" enctype="multipart/form-data">
 	<div class="add-manage">
 		<table class="kv-table">
 			<tbody>
 				<tr>
 					<td class="kv-label">
-						账号：
+						用户名：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="accountNo" maxlength="10">
+						<input type="text" name="username" maxlength="10">
 						<input type="hidden" name="isForm" value="1" />
 					</td>
 					<td class="kv-label">
-						昵称：
+						显示名：
 					</td>
 					<td class="kv-content">
 						<input type="text" name="name" maxlength="10">

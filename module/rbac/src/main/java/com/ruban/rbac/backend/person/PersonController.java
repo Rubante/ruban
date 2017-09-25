@@ -1,6 +1,7 @@
 package com.ruban.rbac.backend.person;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -18,17 +19,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ruban.common.dict.DictionaryGroupKey;
+import com.ruban.common.dict.Sex;
 import com.ruban.common.domain.Dictionary;
-import com.ruban.framework.core.utils.commons.StringUtil;
+import com.ruban.framework.core.spring.SpringContext;
 import com.ruban.framework.dao.helper.ResultInfo;
 import com.ruban.framework.web.page.JsonResult;
 import com.ruban.rbac.backend.BackendController;
 import com.ruban.rbac.backend.person.form.PersonForm;
+import com.ruban.rbac.backend.person.form.PersonMapping;
 import com.ruban.rbac.backend.person.form.SearchForm;
 import com.ruban.rbac.base.Pagination;
 import com.ruban.rbac.domain.organization.Person;
-import com.ruban.rbac.service.ServiceLocator;
+import com.ruban.rbac.service.IPersonService;
 
 /**
  * 人员管理
@@ -42,16 +44,15 @@ public class PersonController extends BackendController {
     Logger logger = LoggerFactory.getLogger(PersonController.class);
 
     @Autowired
-    private ServiceLocator serviceLocator;
+    private IPersonService personService;
 
-    @RequestMapping("/person/main")
+    @RequestMapping(PersonMapping.URI_MAIN)
     public String main(Model model) {
 
-        String companyTree = getCompanyTree();
-        model.addAttribute("companyTree", companyTree);
-        model.addAttribute("dptTree", getDepartmentTree());
+        SearchForm searchForm = new SearchForm();
+        search(model, searchForm);
 
-        return "backend/person/main";
+        return PersonMapping.PAGE_MAIN;
     }
 
     /**
@@ -66,10 +67,13 @@ public class PersonController extends BackendController {
         return super.getDepartmentTree();
     }
 
-    @RequestMapping(value = "/person/search", method = RequestMethod.POST)
+    @RequestMapping(value = PersonMapping.URI_SEARCH, method = RequestMethod.POST)
     public String search(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
 
-        ResultInfo<Person> resultInfo = serviceLocator.getPersonService().selectByPage(searchForm);
+        // 预置数据
+        prepareData(model);
+
+        ResultInfo<Person> resultInfo = personService.selectByPage(searchForm);
 
         Pagination<Person> pagination = new Pagination<>();
         pagination.gereate(resultInfo);
@@ -77,7 +81,22 @@ public class PersonController extends BackendController {
         model.addAttribute("pagination", pagination);
         model.addAttribute("resultInfo", resultInfo);
 
-        return "backend/person/list";
+        return PersonMapping.PAGE_LIST;
+    }
+
+    /**
+     * 跳转到添加人员
+     * 
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = PersonMapping.URI_ADD_PAGE, method = RequestMethod.POST)
+    public String addPage(Model model) {
+
+        prepareData(model);
+
+        return PersonMapping.PAGE_ADD;
+
     }
 
     /**
@@ -88,133 +107,134 @@ public class PersonController extends BackendController {
      * @param bindingResult
      * @return
      */
-    @RequestMapping(value = "/person/add", method = RequestMethod.POST)
-    public String add(@RequestPart(value = "photo", required = false) byte[] photo,
+    @RequestMapping(value = PersonMapping.URI_ADD_SAVE, method = RequestMethod.POST)
+    public JsonResult add(@RequestPart(value = "photo", required = false) byte[] photo,
             @Valid @ModelAttribute("personForm") PersonForm personForm, BindingResult bindingResult, Model model,
             HttpServletResponse response) {
 
-        // 展示页面
-        if (personForm.getIsForm() == 0) {
-            // 数据字典：性别
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.PERSON_SEX);
-            model.addAttribute("dicts", dicts);
-
-            return "backend/person/add";
-        }
-
         JsonResult result = new JsonResult();
 
-        if (bindingResult.hasErrors()) {
-            result.getResult().put("error", bindingResult.getAllErrors());
-
-            printJson(response, result);
-
-            return null;
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
+            return result;
         }
 
-        serviceLocator.getPersonService().insert(personForm);
+        // 检查照片是否上传
+        if (photo != null) {
+            String iconBase64 = Base64Utils.encodeToString(photo);
+            personForm.setPhoto(iconBase64);
+        }
 
-        result.setFlag(1);
-        result.setMsg("添加成功！");
+        personService.insert(personForm);
 
-        printJson(response, result);
+        wrapSuccess(result, "添加成功");
 
-        return null;
+        return result;
+    }
+
+    /**
+     * 跳转到更新页面
+     * 
+     * @param model
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = PersonMapping.URI_UPDATE_PAGE, method = RequestMethod.POST)
+    public String updatePage(Model model, Long id) {
+
+        // 预置数据
+        prepareData(model);
+
+        Person person = personService.findById(id);
+        model.addAttribute("result", person);
+
+        return PersonMapping.PAGE_UPDATE;
     }
 
     /**
      * 更新人员
      * 
+     * @param model
+     * @param id
      * @param photo
      * @param personForm
      * @param bindingResult
+     * @param response
      * @return
      */
-    @RequestMapping(value = "/person/update", method = RequestMethod.POST)
-    public String update(Model model, String id, @RequestPart(value = "photo", required = false) byte[] photo,
+    @ResponseBody
+    @RequestMapping(value = PersonMapping.URI_UPDATE_SAVE, method = RequestMethod.POST)
+    public JsonResult update(Model model, String id, @RequestPart(value = "photo", required = false) byte[] photo,
             @Valid @ModelAttribute("personForm") PersonForm personForm, BindingResult bindingResult,
             HttpServletResponse response) {
 
-        // 展示页面
-        if (personForm.getIsForm() == 0) {
-            // 数据字典：性别
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.PERSON_SEX);
-            model.addAttribute("dicts", dicts);
-
-            Person person = serviceLocator.getPersonService().findById(personForm.getId());
-            model.addAttribute("result", person);
-
-            return "backend/person/update";
-        }
-
         JsonResult result = new JsonResult();
 
-        if (bindingResult.hasErrors()) {
-            result.getResult().put("error", bindingResult.getAllErrors());
-
-            printJson(response, result);
-
-            return null;
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
+            return result;
         }
 
         // 乐观锁
         if (personForm.getHoldLock() == null) {
-            result.getResult().put("error", "未持有锁，无法更新！");
+            result.getResult().put("error", SpringContext.getText("holdLockNo"));
 
-            printJson(response, result);
-
-            return null;
+            return result;
         }
 
-        personForm.setPhoto(Base64Utils.encodeToString(photo));
+        // 检查照片是否上传
+        if (photo != null) {
+            String iconBase64 = Base64Utils.encodeToString(photo);
+            personForm.setPhoto(iconBase64);
+        }
 
-        int count = serviceLocator.getPersonService().update(personForm);
+        int count = personService.update(personForm);
 
         if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("修改成功！");
+            wrapSuccess(result, SpringContext.getText("updateOk"));
         } else {
-            result.setFlag(0);
-            result.setMsg("修改失败，数据已发生变化，无法保存！");
+            wrapError(result, SpringContext.getText("updateNoLock"));
         }
-        printJson(response, result);
 
-        return null;
+        return result;
     }
 
     /**
      * 根据ID获取人员
      * 
+     * @param model
      * @param id
+     * @param response
      * @return
      */
-    @RequestMapping(value = "/person/detail", method = RequestMethod.POST)
+    @RequestMapping(value = PersonMapping.URI_DETAIL, method = RequestMethod.POST)
     public String detail(Model model, String id, HttpServletResponse response) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
 
+        // 校验Id是否正确
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
             printJson(response, result);
 
             return null;
         }
 
-        Person person = serviceLocator.getPersonService().findById(Long.parseLong(id));
+        Person person = personService.findById(Long.parseLong(id));
 
         if (person != null) {
+            // 预置数据
+            prepareData(model);
+
             model.addAttribute("result", person);
         } else {
-            result.setFlag(0);
-            result.setMsg("未找到相应的记录！");
-
+            wrapError(result, SpringContext.getText("noResult"));
             printJson(response, result);
 
             return null;
         }
 
-        return "backend/person/detail";
+        return PersonMapping.PAGE_DETAIL;
     }
 
     /**
@@ -224,26 +244,22 @@ public class PersonController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/person/delete", method = RequestMethod.POST)
+    @RequestMapping(value = PersonMapping.URI_DELETE, method = RequestMethod.POST)
     public JsonResult delete(String id) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
+
+        // 校验Id是否正确
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             return result;
         }
 
-        int count = serviceLocator.getPersonService().deleteById(Long.parseLong(id));
+        int count = personService.deleteById(Long.parseLong(id));
 
-        if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
-        }
+        // 校验删除结果
+        checkDelete(result, count);
 
         return result;
     }
@@ -255,76 +271,42 @@ public class PersonController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/person/batchDelete", method = RequestMethod.POST)
+    @RequestMapping(value = PersonMapping.URI_BATCH_DELETE, method = RequestMethod.POST)
     public JsonResult deleteByIds(String ids) {
 
         JsonResult result = new JsonResult();
-        if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
+
+        // 校验ids是否正确
+        if (!checkId(ids)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             return result;
         }
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getPersonService().deleteByIds(idArr);
+        int count = personService.deleteByIds(idArr);
 
         if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
+            wrapSuccess(result, "成功删除");
         } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
+            wrapError(result, "删除失败");
         }
 
         return result;
     }
 
-    /**
-     * 排序查询数据
-     * 
-     * @return
-     */
-    @RequestMapping(value = "/person/sortList", method = RequestMethod.POST)
-    public String sortList(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
+    @Override
+    protected void prepareData(Model model) {
+        String companyTree = getCompanyTree();
+        model.addAttribute("companyTree", companyTree);
+        model.addAttribute("dptTree", getDepartmentTree());
 
-        List<Person> list = serviceLocator.getPersonService().selectByCondition(searchForm);
-        model.addAttribute("list", list);
+        List<Dictionary> sexs = getDictionarys(Sex.KEY);
+        model.addAttribute("sexs", sexs);
 
-        return "backend/person/sortList";
+        Map<String, Dictionary> sexMap = getDictionaryMap(Sex.KEY);
+        model.addAttribute("sexMap", sexMap);
     }
 
-    /**
-     * 结果排序
-     * 
-     * @param id
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/person/sort", method = RequestMethod.POST)
-    public JsonResult sort(String ids) {
-
-        JsonResult result = new JsonResult();
-        if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
-
-            return result;
-        }
-
-        String[] idArr = ids.split(",");
-
-        int count = serviceLocator.getPersonService().sortByIds(idArr);
-
-        if (count == idArr.length) {
-            result.setFlag(1);
-            result.setMsg("排序成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("排序失败！");
-        }
-
-        return result;
-    }
 }

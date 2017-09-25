@@ -26,9 +26,9 @@
 					<i class="ruban-error-hint">类型</i>：
 				</td>
 				<td class="kv-content">
-					<select name="type" check="notNull">
+					<select name="type" check="notNull" id="relType">
 						<option value="">请选择</option>
-						<c:forEach items="${items}" var="item">
+						<c:forEach items="${types}" var="item">
 							<option value="${item.code}">${item.value}</option>
 						</c:forEach>
 					</select>

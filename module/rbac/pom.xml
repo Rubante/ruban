@@ -5,18 +5,18 @@
 	<parent>
 		<groupId>com.ruban.module</groupId>
 		<artifactId>ruban-parent</artifactId>
-		<version>0.0.2-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 
 	<name>ruban-rbac</name>
 	<artifactId>ruban-rbac</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
 		<shiro.version>1.2.4</shiro.version>
-		<ruban.version>0.0.2-SNAPSHOT</ruban.version>
+		<ruban.version>0.0.3-SNAPSHOT</ruban.version>
 	</properties>
 
 	<dependencies>

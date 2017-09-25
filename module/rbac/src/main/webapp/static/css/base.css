@@ -1,60 +1,3 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
-	blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn,
-	em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
-	b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
-	table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas,
-	details, embed, figure, figcaption, footer, header, hgroup, menu, nav,
-	output, ruby, section, summary, time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font: inherit;
-	font-size: 100%;
-	vertical-align: baseline
-}
-
-html {
-	line-height: 1
-}
-
-ol, ul {
-	list-style: none
-}
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0
-}
-
-caption, th, td {
-	text-align: left;
-	font-weight: normal;
-	vertical-align: middle
-}
-
-q, blockquote {
-	quotes: none
-}
-
-q:before, q:after, blockquote:before, blockquote:after {
-	content: "";
-	content: none
-}
-
-a {
-	text-decoration: none;
-	color: blue;
-}
-
-a img {
-	border: none
-}
-
-article, aside, details, figcaption, figure, footer, header, hgroup,
-	main, menu, nav, section, summary {
-	display: block
-}
-
 @font-face {
 	font-family: 'iconfont';
 	src: url('../fonts/iconfont.eot?1459301973');
@@ -74,16 +17,16 @@ article, aside, details, figcaption, figure, footer, header, hgroup,
 	-moz-osx-font-smoothing: grayscale
 }
 
-html {
-	*overflow: auto
+/**按钮里图标的样式**/
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-stroke-width: 0.2px;
+	-moz-osx-font-smoothing: grayscale
 }
-
-body, button, input, select, textarea {
-	font-family: PingFang SC, Lantinghei SC, Microsoft Yahei,
-		Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;
-	font-size: 14px
-}
-
+/**清除浮动的方式**/
 .clearfix:after {
 	content: "";
 	display: block;
@@ -105,12 +48,28 @@ body, button, input, select, textarea {
 	overflow: hidden
 }
 
+.vline {
+	border-left: 1px solid #B7D0E4;
+	display: inline-block;
+	margin-left: -1px;
+	padding: 0px 0px 0px 2px;
+	margin-right: -9px;
+	height: 100%;
+	width: 1px;
+}
+.line {
+	border-bottom: 1px solid #B7D0E4;
+	display: inline-block;
+	padding: 0px 0px 0px 0px;
+}
+
+/**文本单行显示，超出部分添加省略号…来表示**/
 .ellipsis {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden
 }
-
+/**树结构，如机构树**/
 .ztree {
 	width: 220px
 }
@@ -118,669 +77,32 @@ body, button, input, select, textarea {
 .ztree li a {
 	display: inline !important
 }
-
+/**成功时文本的样式**/
 .text-success {
 	color: #309270
 }
-
+/**错误时文本的样式**/
 .text-error {
 	color: #fc0000
 }
-
+/**文本的样式**/
 .impInfo {
 	color: #fb5d48
 }
-
+/**内容容器的样式**/
 #inner-bd {
 	padding: 0 15px
 }
-
+/**提示文本的样式**/
 .text-tip {
 	font-size: 12px;
 	color: #b3b3b3
 }
-
+/**成功时提示文本的样式**/
 .success-tip {
 	color: #309270
 }
-
-.uew-table {
-	border: 1px solid #cfcfcf
-}
-
-.uew-table ::-webkit-scrollbar-button {
-	display: none
-}
-
-.uew-table-optBar {
-	z-index: 2;
-	overflow: hidden;
-	position: relative;
-	top: 4px;
-	float: left;
-	width: 100%;
-	padding-bottom: 7px;
-	background: url(img/hr.png) repeat-x left bottom
-}
-
-.uew-table-optBar button {
-	float: left;
-	margin-right: 8px
-}
-
-.uew-table-optBar .uew-table-setting {
-	float: right;
-	margin-right: -8px
-}
-
-.uew-table-optBar .uew-table-setting button {
-	float: right
-}
-
-.uew-table-optBar .uew-table-setting .uew-select {
-	float: right;
-	margin-right: 10px
-}
-
-.uew-table-panel {
-	overflow: hidden;
-	z-index: 1;
-	position: relative;
-	width: 100%;
-	margin-bottom: 3px;
-	padding-bottom: 1px
-}
-
-.uew-table-thead {
-	position: relative;
-	height: 33px;
-	border-right: 0;
-	border-left: 0;
-	background: #EDF4F9
-}
-
-.uew-table-main {
-	z-index: 3;
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-	overflow: hidden
-}
-
-.uew-table th {
-	height: 40px;
-	padding-left: 5px;
-	border-left: 1px solid #D4DFE7;
-	border-right: 0;
-	background: url(../img/skin_/thbg.png)
-}
-
-.uew-table th:first-child {
-	border-left: 0
-}
-
-.uew-table-th {
-	position: relative;
-	padding-right: 25px
-}
-
-.uew-table-thTitle {
-	white-space: nowrap;
-	color: #000
-}
-
-.uew-table-th a {
-	position: absolute;
-	right: 8px;
-	top: 1px;
-	*top: 3px
-}
-
-.uew-table-th .uew-icon2-sort, .uew-table-th .uew-icon2-sort-asc,
-	.uew-table-th .uew-icon2-sort-desc {
-	right: 5px;
-	top: 3px
-}
-
-.uew-table-drag {
-	position: absolute;
-	right: -1px;
-	top: -6px;
-	width: 2px;
-	height: 33px;
-	cursor: col-resize;
-	border-right: 1px solid transparent;
-	background: transparent
-}
-
-.uew-table-drag.uew-table-dragging {
-	border-right: 1px dashed #ff7200
-}
-
-.uew-table-scroll-patch {
-	display: none;
-	position: absolute;
-	right: 0;
-	top: 0;
-	width: 10px;
-	*width: 17px;
-	height: 33px;
-	border: 1px solid #E1E6EA;
-	border-right: 0;
-	border-left: 0;
-	background: #EDF4F9
-}
-
-.uew-table-hasScroll .uew-table-scroll-patch {
-	display: block
-}
-
-.uew-table-hasScroll .uew-table-thead .uew-table-main {
-	right: 10px;
-	*right: 17px
-}
-
-.uew-table-tbody {
-	position: relative;
-	overflow-y: auto;
-	overflow-x: hidden
-}
-
-.uew-table-tbody td {
-	height: 21px;
-	padding: 10px 10px 6px 6px;
-	word-wrap: break-word;
-	word-break: break-all;
-	overflow: hidden;
-	border-left: 1px dotted #bfbfbf;
-	background: #fff
-}
-
-.uew-table-tbody table {
-	margin-top: -35px;
-	*margin-top: -34px
-}
-
-.uew-table-tbody table tr.even {
-	background: #FCFCFC
-}
-
-.uew-table-blank {
-	border-left: none
-}
-
-.uew-table-division {
-	z-index: 5;
-	position: relative;
-	top: -1px;
-	height: 0;
-	border-top: 1px solid #e7e7e7;
-	border-bottom: 1px solid #f6f6f6
-}
-
-.uew-table-hScroll.uew-table-division {
-	border-top: 0
-}
-
-.uew-table-scroll-horizontal {
-	overflow-x: auto;
-	overflow-y: hidden;
-	*height: 17px
-}
-
-.uew-table-hasScroll .uew-table-scroll-horizontal {
-	margin-right: 10px;
-	*margin-right: 17px
-}
-
-.uew-table-scroll-horizontal div {
-	border-top: 1px solid transparent
-}
-
-.uew-table-fixed-checkbox .table-front-fixed {
-	z-index: 2;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 52px;
-	overflow: hidden
-}
-
-.uew-table-fixed-checkbox .uew-table-thead .table-front-fixed {
-	border-right: 1px solid #E1E6EA
-}
-
-.uew-table-fixed-checkbox .uew-table-checkbox {
-	width: 47px;
-	padding-right: 0
-}
-
-.uew-table-fixed-checkbox .uew-table-main {
-	left: 53px
-}
-
-.uew-table-fixed-checkbox .uew-table-tbody .table-front-fixed {
-	background: #fff
-}
-
-.uew-table-fixed-checkbox .uew-table-tbody .table-front-fixed td {
-	border-left: none
-}
-
-.uew-table-fixed-checkbox .uew-table-tbody .uew-table-checkbox {
-	padding-left: 5px
-}
-
-.uew-table-fixed-checkbox .uew-table-tbody .uew-table-main {
-	left: 53px;
-	right: 0;
-	background: #fff
-}
-
-.uew-table-hasScroll.uew-table-fixed-checkbox .uew-table-tbody .uew-table-main
-	{
-	*right: 17px
-}
-
-.uew-table-fixed-checkbox .uew-table-scroll-horizontal {
-	margin-left: 52px
-}
-
-.uew-table-fixed-opt .uew-table-thead .table-finale-fixed {
-	z-index: 2;
-	position: absolute;
-	right: 0;
-	top: 0;
-	border-left: 1px solid #E1E6EA
-}
-
-.uew-table-fixed-opt .uew-table-operation {
-	width: 47px;
-	padding-right: 0
-}
-
-.uew-table-fixed-opt .uew-table-operation>a {
-	margin-left: 8px
-}
-
-.uew-table-fixed-opt .uew-table-operation>a:first-child {
-	margin-left: 0px
-}
-
-.uew-table-fixed-opt .uew-table-operation .uew-table-thTitle {
-	padding-right: 0
-}
-
-.uew-table-fixed-opt .uew-table-thead .uew-table-main,
-	.uew-table-fixed-opt .uew-table-tbody .uew-table-main {
-	right: 53px
-}
-
-.uew-table-fixed-opt .uew-table-tbody .table-finale-fixed {
-	z-index: 4;
-	position: absolute;
-	right: 0;
-	top: 0;
-	width: 52px;
-	background: #fff
-}
-
-.uew-table-fixed-opt .uew-table-tbody .table-finale-fixed td {
-	border-left: none
-}
-
-.uew-table-fixed-opt.uew-table-hasScroll .uew-table-thead .uew-table-operation
-	{
-	width: 57px;
-	*width: 64px
-}
-
-.uew-table-fixed-opt.uew-table-hasScroll .uew-table-thead .uew-table-main
-	{
-	right: 63px;
-	*right: 70px
-}
-
-.uew-table-fixed-opt.uew-table-hasScroll .uew-table-tbody .uew-table-main
-	{
-	right: 53px;
-	*right: 0
-}
-
-.uew-table-fixed-opt.uew-table-hasScroll .uew-table-tbody .table-finale-fixed
-	{
-	right: 0;
-	*position: relative;
-	*float: right
-}
-
-.uew-table-fixed-opt .uew-table-scroll-horizontal {
-	margin-right: 52px
-}
-
-.uew-table-hasScroll.uew-table-fixed-opt .uew-table-scroll-horizontal {
-	margin-right: 62px;
-	*margin-right: 52px
-}
-
-.uew-table-nowrap.uew-table .uew-table-td {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis
-}
-
-.uew-table-tbody .uew-nodata-tip {
-	position: absolute;
-	top: 50px;
-	left: 50%;
-	margin: 35px 0 0 -130px;
-	width: 6em
-}
-
-.uew-table-loading {
-	position: absolute;
-	top: 60px;
-	left: 50%;
-	height: 64px;
-	margin: 35px 0 0 -130px;
-	padding-left: 74px;
-	line-height: 64px;
-	font-size: 24px;
-	color: #C7C7C7;
-	background: url(img/table/loading.gif) no-repeat left center
-}
-
-.uew-table-doubleTh .uew-table-thead {
-	height: 67px
-}
-
-.uew-table-doubleTh thead tr:first-child .uew-table-drag {
-	height: 67px
-}
-
-.uew-table-doubleTh .uew-table-secondHd th {
-	border-top: 1px solid #D4DFE7;
-	background: #F5F9FC
-}
-
-.uew-table-doubleTh th[colspan] {
-	text-align: center
-}
-
-.uew-table-doubleTh th[rowspan="2"] {
-	height: 67px;
-	text-align: left
-}
-
-.uew-table-doubleTh th[rowspan] .uew-table-drag {
-	top: -23px
-}
-
-.uew-table-doubleTh .uew-table-tbody table {
-	margin-top: -67px
-}
-
-.uew-table .uew-pagination {
-	height: 26px
-}
-
-.custom-built-table {
-	padding: 10px
-}
-
-.custom-built-table-tip {
-	height: 26px;
-	margin-bottom: 12px;
-	line-height: 28px;
-	border-bottom: 1px solid #EAEAEA
-}
-
-.custom-built-table-tip .uew-icon2-tip {
-	position: relative;
-	top: 3px;
-	*top: 0px;
-	margin-right: 5px
-}
-
-.custom-built-table-tip label {
-	color: #3c3c3c
-}
-
-.custom-built-table h6 {
-	position: relative;
-	top: -4px;
-	color: #5b5b5b
-}
-
-.custom-built-table h6 .impInfo {
-	margin: 0 3px
-}
-
-.custom-built-table h6 a {
-	position: absolute;
-	right: 0;
-	color: #3c3c3c
-}
-
-.custom-built-table h6 .uew-icon {
-	position: relative;
-	top: 3px;
-	*top: -1px;
-	margin-right: 3px
-}
-
-.custom-built-table h6 a:hover {
-	color: #2d9bde !important;
-	text-decoration: none
-}
-
-.built-table-col, .built-table-colSelected {
-	position: relative;
-	height: 349px;
-	padding: 0 29px 0px 5px;
-	border: 1px solid #DBDBDB;
-	background: #F9F9F9
-}
-
-.built-table-col ul {
-	overflow: auto;
-	width: 572px;
-	*width: 577px;
-	height: 344px;
-	padding-bottom: 5px
-}
-
-.built-table-col ul li {
-	cursor: pointer;
-	float: left;
-	width: 133px;
-	height: 26px;
-	margin: 5px 5px 0 0;
-	text-indent: 3px;
-	line-height: 26px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	border: 1px solid #E4E4E4;
-	background: #fff
-}
-
-.built-table-col ul li.ue-state-selected {
-	color: #fff;
-	border: 1px solid #3a7ab0;
-	background: url(img/selected_shadow.png) repeat-x left -1px #0B7DCA
-}
-
-.built-table-tshadow {
-	position: absolute;
-	left: 0;
-	right: 29px;
-	height: 4px;
-	background: url(img/table/custom_built_table/shadow_top.png) repeat-x
-}
-
-.built-table-lshadow {
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	width: 4px;
-	background: url(img/table/custom_built_table/shadow_left.png) repeat-x
-}
-
-a.built-table-switchBtn {
-	display: block;
-	position: absolute;
-	top: -1px;
-	bottom: -1px;
-	width: 14px;
-	padding: 65px 7px;
-	color: #5B5B5B !important;
-	text-decoration: none !important
-}
-
-.built-table-col .built-table-switchBtn {
-	right: -1px;
-	border: 1px solid #d6d6d6;
-	background: url(img/table/custom_built_table/switch_right.gif) no-repeat
-		left top
-}
-
-.built-table-col .built-table-switchBtn.ue-state-hover {
-	border: 1px solid #97c6e2;
-	background: url(img/table/custom_built_table/switch_right_hover.gif)
-		no-repeat
-}
-
-.built-table-colSelected {
-	padding: 0 0 0px 28px
-}
-
-.built-table-colSelected .built-table-tshadow {
-	left: 29px;
-	right: 0
-}
-
-.built-table-colSelected .built-table-lshadow {
-	left: 29px
-}
-
-.built-table-colSelected .built-table-switchBtn {
-	left: -1px;
-	border: 1px solid #d6d6d6;
-	background: url(img/table/custom_built_table/switch_left.gif) no-repeat
-		left top
-}
-
-.built-table-colSelected .built-table-switchBtn.ue-state-hover {
-	border: 1px solid #97c6e2;
-	background: url(img/table/custom_built_table/switch_left_hover.gif)
-		no-repeat
-}
-
-.built-table-colSelected ul {
-	overflow: hidden;
-	width: 584px;
-	height: 350px
-}
-
-.built-table-colSelected ul li {
-	float: left;
-	width: 145px;
-	height: 34px;
-	line-height: 34px;
-	border-bottom: 1px solid #E5EBEF;
-	border-left: 1px solid #E5EBEF
-}
-
-.built-table-colBg {
-	color: #E9E9E9;
-	font-size: 18px;
-	text-indent: 1px
-}
-
-.built-table-selected {
-	position: absolute;
-	left: 28px;
-	top: 0
-}
-
-.built-table-selected li a {
-	overflow: hidden;
-	display: block;
-	position: relative;
-	margin: 3px 0 0 22px;
-	width: 102px;
-	height: 26px;
-	padding-right: 16px;
-	color: #fff !important;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	text-indent: 5px;
-	line-height: 26px;
-	text-decoration: none;
-	border: 1px solid #4484B7;
-	background: url(img/selected_shadow.png) repeat-x left -1px #0F8EDB
-}
-
-.built-table-selected li .uew-icon-close {
-	position: absolute;
-	right: 0px;
-	top: 6px
-}
-
-.built-table-selected li a.ue-state-focus {
-	margin-top: 2px;
-	border: 2px solid #FFA200;
-	background-image: none
-}
-
-.uew-table th {
-	height: 38px;
-	padding-left: 15px;
-	border-left: 1px solid #dadada;
-	border-right: 0;
-	border-bottom: 1px solid #dadada;
-	background-color: #f1f1f1
-}
-
-.uew-table-thTitle {
-	color: #000;
-	font-size: 14px;
-	font-weight: bold
-}
-
-.uew-table-td {
-	font-size: 14px;
-	color: #292929
-}
-
-.uew-table-tbody td {
-	height: 14px;
-	padding: 10px 5px 10px 15px;
-	border-left: 1px solid #dadada;
-	border-bottom: 1px solid #dadada;
-	background: #fff
-}
-
-.uew-table-tbody tbody tr td:first-child {
-	border-left: 0
-}
-
-.uew-table-tbody tbody tr:nth-child(even) td {
-	background-color: #f3f3f3
-}
-
-.uew-table-panel {
-	margin-bottom: 0;
-	padding-bottom: 0
-}
-
-.uew-table {
-	border-bottom: 0
-}
-
+/**按钮的样式**/
 .button {
 	*float: left;
 	display: inline-block;
@@ -796,7 +118,7 @@ a.built-table-switchBtn {
 	margin-right: 6px;
 	margin-bottom: -10px;
 }
-
+/**按钮里图标的样式**/
 .button .iconfont {
 	float: left;
 	color: #1b1b1b;
@@ -804,48 +126,52 @@ a.built-table-switchBtn {
 	*margin-top: -2px;
 	font-size: 20px
 }
-
+/**current类型的按钮的样式**/
 .button.current {
-	background-color: #0c9d72;
-	border: 1px solid #008a61
+	background-color: #4169E1;
+	border: 1px solid #6495ED
 }
-
+/**current类型的按钮中图标的样式**/
 .button.current .iconfont {
 	color: #fff
 }
-
+/**current类型的按钮中文本的样式**/
 .button.current .button-label {
 	color: #fff
 }
-
-.button:hover {
-	background-color: #0c9d72;
-	border: 1px solid #008a61
+/**current类型的按钮中A标签的样式**/
+.button.current .button-label a {
+	color: #fff
 }
-
+/**当鼠标悬停在按钮时的样式**/
+.button:hover {
+	background-color: #0000CD;
+	border: 1px solid #6495ED
+}
+/**当鼠标悬停在按钮时，图标的样式**/
 .button:hover .iconfont {
 	color: #fff
 }
-
+/**当鼠标悬停在按钮时，文本的样式**/
 .button:hover .button-label {
 	color: #fff
 }
-
+/**按钮不可用时的样式**/
 .button.disable {
 	color: #b8b8b8;
 	border: 1px solid #dddddd;
 	cursor: not-allowed;
 	background-color: #f1f1f1
 }
-
+/**按钮不可用时，文本的样式**/
 .button.disable .button-label {
 	color: #b8b8b8
 }
-
+/**按钮不可用时，图标的样式**/
 .button.disable .iconfont {
 	color: #b8b8b8
 }
-
+/**按钮里文本的样式**/
 .button .button-label {
 	float: left;
 	height: 16px;
@@ -854,34 +180,35 @@ a.built-table-switchBtn {
 	color: #000;
 	line-height: 16px
 }
-
+/**按钮组合容器的样式**/
 .button-group {
 	*float: left;
 	*width: 100%;
 	margin-bottom: 15px
 }
-
+/**下拉框的样式**/
 select {
 	display: inline-block;
-	width: 160px;
+	width: 230px;
 	height: 33px;
 	font: 14px/20px "Microsoft YaHei";
 }
-
+/**类型为文本或密码的输入框的样式**/
 input[type="text"], input[type="password"] {
 	height: 33px;
+	line-height: 33px;
 	border: 1px solid #c2c2c2;
 	width: 220px;
 	padding: 0 5px;
 }
-
+/**多行文本的样式**/
 textarea {
 	border: 1px solid #c2c2c2;
 	padding: 5px;
 	resize: none;
 	height: 80px
 }
-
+/**上传时超链接容器的样式**/
 .a-upload {
 	font-size: 14px;
 	padding: 4px 10px;
@@ -899,7 +226,7 @@ textarea {
 	*zoom: 1;
 	text-decoration: none
 }
-
+/**上传时超链接容器里输入框的样式**/
 .a-upload input {
 	position: absolute;
 	font-size: 100px;
@@ -909,24 +236,24 @@ textarea {
 	filter: alpha(opacity = 0);
 	cursor: pointer
 }
-
+/**当鼠标悬停在上传时超链接容器时的样式**/
 .a-upload:hover {
 	color: #444;
 	background: #eee;
 	border-color: #ccc;
 	text-decoration: none
 }
-
+/**tab容器的样式**/
 .tab-wraper {
 	margin-bottom: 15px
 }
-
+/**tab容器中tab的样式**/
 .tab-wraper .tab {
 	height: 42px;
 	margin-bottom: 15px;
 	border-bottom: 1px solid #c2c2c2
 }
-
+/**tab容器中li的样式**/
 .tab-wraper .tab li {
 	position: relative;
 	top: 1px;
@@ -934,18 +261,18 @@ textarea {
 	margin-right: 5px;
 	height: 42px;
 	line-height: 42px;
-	background: #0c9d72;
+	background: #6495ED;
 	font-size: 14px;
 	font-weight: bold
 }
-
+/**tab容器中超链接的样式**/
 .tab-wraper .tab li a {
 	padding: 0 15px;
 	display: block;
 	color: #fff;
 	text-decoration: none
 }
-
+/**tab容器中current类型的li的样式**/
 .tab-wraper .tab li.current {
 	top: 0;
 	border: 1px solid #c2c2c2;
@@ -954,11 +281,11 @@ textarea {
 	background: #fff;
 	height: 40px
 }
-
+/**tab容器中current类型的li的超链接的样式**/
 .tab-wraper .tab li.current a {
 	color: #000
 }
-
+/**标题容器**/
 .crumbs {
 	margin-bottom: 15px;
 	height: 40px;
@@ -966,7 +293,7 @@ textarea {
 	border-bottom: 1px solid #d7d6d6;
 	border-top: 1px solid #fff
 }
-
+/**标题容器中箭头的样式**/
 .crumbs .crumbs-arrow {
 	float: left;
 	margin-left: 15px;
@@ -977,7 +304,7 @@ textarea {
 	display: inline-block;
 	margin-right: 9px
 }
-
+/**标题容器中文本的样式**/
 .crumbs .crumbs-label {
 	float: left;
 	display: inline-block;
@@ -989,24 +316,24 @@ textarea {
 	font-weight: bold;
 	text-decoration: none
 }
-
+/**当鼠标悬停在标题容器中文本的样式**/
 .crumbs .crumbs-label:hover {
 	text-decoration: underline
 }
-
+/**表格容器的样式**/
 .kv-table {
 	border-right: 1px solid #dadada \9;
 	*border-right: 1px solid #dadada
 }
-
+/**表格中行的样式**/
 .kv-table .kv-table-row {
 	border-bottom: 1px solid #dadada
 }
-
+/**表格里标题行的样式**/
 .kv-table .kv-table-row .kv-item {
 	padding-left: 134px
 }
-
+/**表格里标题行的label的样式**/
 .kv-table .kv-table-row .kv-item .kv-label {
 	float: left;
 	padding: 0 10px;
@@ -1017,30 +344,30 @@ textarea {
 	border-bottom: none;
 	border-top: none
 }
-
+/**表格里标题行内容容器的样式**/
 .kv-table .kv-table-row .kv-item .kv-content-wrap {
 	float: left;
 	width: 100%
 }
-
+/**表格里标题行内容的样式**/
 .kv-table .kv-table-row .kv-item .kv-content {
 	padding: 10px
 }
-
+/**表格，3等份行item容器**/
 .kv-table .kv-table-row.col-3 .kv-item-wrap {
 	float: left;
-	width: 33.33%
+	width: 33.33%;
 }
-
+/**表格，2等份行item容器**/
 .kv-table .kv-table-row.col-2 .kv-item-wrap {
 	float: left;
-	width: 33.33%
+	width: 50.0%;
 }
-
+/**表格容器的样式**/
 table.kv-table {
 	width: 100%
 }
-
+/**表格容器label的样式**/
 table.kv-table .kv-label {
 	padding: 0 10px;
 	width: 114px;
@@ -1049,7 +376,7 @@ table.kv-table .kv-label {
 	border-top: none;
 	text-align: center;
 }
-
+/**表格容器内容或label的样式**/
 table.kv-table td.kv-content, table.kv-table td.kv-label {
 	height: 34px;
 	padding: 10px 0;
@@ -1057,46 +384,72 @@ table.kv-table td.kv-content, table.kv-table td.kv-label {
 	font-size: 14px;
 	padding-left: 10px;
 }
-
+/**表格容器第1行内容或label的样式**/
 table.kv-table tr:first-child td.kv-content, table.kv-table tr:first-child td.kv-label
 	{
 	border-top: 3px solid #0c9d72
 }
-
+/**表格容器第1行第1列内容或label的样式**/
 table.kv-table tr:first-child td.kv-content:first-child, table.kv-table tr:first-child td.kv-label
 	{
 	border-top-color: #ffaa05
 }
-
+/**表格容器最后一列内容的样式**/
 table.kv-table tr td.kv-content:last-child {
 	border-right: 1px solid #dadada
 }
-
+/**表格容器按钮的样式**/
 table.kv-table tr .button {
 	text-align: center;
 	border-radius: 0;
 	text-indent: 0;
 	height: 32px
 }
-
+/**表格容器内容的样式**/
 table.kv-table .kv-content {
 	width: 260px;
 	padding: 5px 10px
 }
-
+/**表格容器多行文本的样式**/
 table.kv-table .textarea-wrap textarea {
 	width: 97%
 }
-
+/**条件查询外包裹容器的样式**/
 .kv-group-outer {
 	margin-bottom: 15px
 }
-
+/**条件查询包裹容器的样式**/
 .kv-group {
 	border-bottom: 1px solid #dadada;
 	padding-bottom: 7px
 }
+/**检索条件顶部栏**/
+.search-top {
+	border-bottom: 3px solid #0c9d72;
+}
+/**检索条件区域**/
+.search-condition {
+	padding-top: 14px;
+	padding-left: 15px;
+	padding-rigth: 15px;
+	background-color: #f1f1f1;
+}
 
+.search-title {
+	font-size: 16px;
+	background-color: #0c9d72;
+	width: 100px;
+	height: 35px;
+	color: white;
+	line-height: 35px;
+	text-align: center;
+}
+/**检索条件行**/
+.kv-group-row {
+	width: 100%;
+	float: left;
+}
+/**条件查询左条目容器的样式**/
 .kv-group .kv-item {
 	float: left;
 	height: 38px;
@@ -1104,27 +457,26 @@ table.kv-table .textarea-wrap textarea {
 	margin-right: 20px;
 	margin-bottom: 8px
 }
-
+/**条件查询右条目容器的样式**/
 .kv-group .kv-item.right {
 	float: right
 }
-
+/**条件查询左条目的样式**/
 .kv-group .kv-item .item-lt {
 	float: left;
 	color: #000;
 	height: 38px;
 	line-height: 38px;
 	font-size: 14px;
-	font-weight: bold;
 	width: auto
 }
-
+/**条件查询右条目的样式**/
 .kv-group .kv-item .item-rt {
 	float: left;
 	width: auto;
 	line-height: 38px
 }
-
+/**条件查询按钮的样式**/
 .kv-group .kv-item .item-rt .button {
 	float: left;
 	border-radius: 0;
@@ -1132,26 +484,26 @@ table.kv-table .textarea-wrap textarea {
 	padding: 0 20px;
 	margin-right: 10px
 }
-
+/**当鼠标悬停在条件查询按钮的样式**/
 .kv-group .kv-item .item-rt .button:hover {
 	color: #fff
 }
-
+/**条件查询文本类型的输入框的样式**/
 .kv-group .kv-item .item-rt input[type=text] {
 	float: left;
 	margin-right: 10px
 }
-
+/**条件查询日期容器的样式**/
 .kv-group .kv-item .item-rt .date {
 	float: left;
 	position: relative
 }
-
+/**条件查询日期容器中文本类型的输入框的样式**/
 .kv-group .kv-item .item-rt .date input[type=text] {
 	width: 190px;
 	padding-right: 30px
 }
-
+/**条件查询，日期容器中图标的样式**/
 .kv-group .kv-item .item-rt .date i {
 	position: absolute;
 	right: 16px;
@@ -1159,22 +511,22 @@ table.kv-table .textarea-wrap textarea {
 	font-size: 22px;
 	cursor: pointer
 }
-
+/**当鼠标悬停在条件查询日期容器中图标时的样式**/
 .kv-group .kv-item .item-rt .date i:hover {
 	color: #0c9d72
 }
-
+/**grid样式的表格容器**/
 .grid {
 	border: 1px solid #cfcfcf;
 	width: 100%
 }
-
+/**grid样式的表格容器，标题行的样式**/
 .grid thead {
 	color: #000;
 	font-size: 14px;
 	font-weight: bold
 }
-
+/**grid样式的表格容器，标题行里列的样式**/
 .grid thead th {
 	height: 38px;
 	padding-left: 15px;
@@ -1183,17 +535,17 @@ table.kv-table .textarea-wrap textarea {
 	border-bottom: 1px solid #dadada;
 	background-color: #f1f1f1
 }
-
+/**grid样式的表格容器，标题行里第1列的样式**/
 .grid thead th:first-child {
 	border-left: 0
 }
-
+/**grid样式的表格容器，复选框的样式**/
 .grid .grid-checkbox {
 	width: 50px;
 	padding-left: 0;
 	text-align: center
 }
-
+/**grid样式的表格容器，内容行里列的样式**/
 .grid tbody td {
 	height: 14px;
 	padding: 10px 5px 10px 15px;
@@ -1201,30 +553,30 @@ table.kv-table .textarea-wrap textarea {
 	border-bottom: 1px solid #dadada;
 	background: #fff
 }
-
+/**grid样式的表格容器，内容行里第1列的样式**/
 .grid tbody td:first-child {
 	border-left: 0
 }
-
+/**grid样式的表格容器，num的样式**/
 .grid .num {
 	width: 70px;
 	text-align: center
 }
-
+/**grid样式的表格容器，按钮的样式**/
 .grid .button {
 	line-height: 26px;
 	height: 26px
 }
-
+/**grid样式的表格容器，按钮里文字的样式**/
 .grid .button .button-label {
 	margin-top: 6px;
 	line-height: 1
 }
-
+/**当鼠标悬停在grid样式的表格容器内容行里某列的样式**/
 .grid tbody tr:hover td {
 	background-color: #edebeb;
 }
-
+/**添加file的包裹容器的样式**/
 .file {
 	display: block;
 	position: relative;
@@ -1238,13 +590,13 @@ table.kv-table .textarea-wrap textarea {
 	text-align: center;
 	cursor: pointer;
 }
-
+/**添加file的包裹容器中文字的样式**/
 .file span {
 	display: block;
 	line-height: 39px;
 	cursor: pointer;
 }
-
+/**添加file的包裹容器中图标的样式**/
 .file em {
 	background: url(../imgs/addPic.png) 0 0;
 	display: inline-block;
@@ -1256,12 +608,12 @@ table.kv-table .textarea-wrap textarea {
 	vertical-align: middle;
 	cursor: pointer;
 }
-
+/**当鼠标悬停在file的容器图标的样式**/
 .file:hover em {
 	background-position: -19px 0;
 	cursor: pointer;
 }
-
+/**file类型的输入框的样式**/
 .file input {
 	display: block;
 	position: absolute;
@@ -1275,81 +627,6 @@ table.kv-table .textarea-wrap textarea {
 	cursor: pointer;
 }
 
-.pagination {
-	height: 36px;
-	margin: 0;
-	width: 100%;
-	float: right;
-}
-
-.pagination ul {
-	display: inline-block;
-	*display: inline;
-	/* IE7 inline-block hack */
-	*zoom: 1;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-.pagination li {
-	display: inline;
-}
-
-.pagination a {
-	float: left;
-	padding: 0 14px;
-	line-height: 34px;
-	text-decoration: none;
-	border: 1px solid #ddd;
-	border-left-width: 0;
-	border-top-width: 0;
-	border-bottom-width: 0;
-  	color: #0088cc;
-}
-
-.pagination a:hover, .pagination .active a {
-	background-color: #f5f5f5;
-	color: #005580;
-	border-top: 1px solid #ddd;
-}
-
-.pagination .active a {
-	color: #999999;
-	cursor: default;
-}
-
-.pagination .disabled a, .pagination .disabled a:hover {
-	color: #999999;
-	background-color: transparent;
-	cursor: default;
-}
-
-.pagination li:first-child a {
-	border-left-width: 1px;
-	-webkit-border-radius: 3px 0 0 3px;
-	-moz-border-radius: 3px 0 0 3px;
-	border-radius: 3px 0 0 3px;
-}
-
-.pagination li:last-child a {
-	-webkit-border-radius: 0 3px 3px 0;
-	-moz-border-radius: 0 3px 3px 0;
-	border-radius: 0 3px 3px 0;
-}
-
-.pagination-centered {
-	text-align: center;
-}
-
-.pagination-right {
-	text-align: right;
-}
-
-/**定制layui**/
-.layui-layer-content input[type="text"] {
-	float: left;
-	margin-right: 10px;
+.footer {
+	margin-bottom: 15px;
 }

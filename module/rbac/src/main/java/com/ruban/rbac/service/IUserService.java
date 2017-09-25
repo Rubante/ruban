@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.ruban.framework.dao.helper.Condition;
 import com.ruban.framework.dao.helper.ResultInfo;
-import com.ruban.rbac.backend.user.form.UserForm;
 import com.ruban.rbac.domain.authz.User;
+import com.ruban.rbac.vo.user.UserVo;
 
 /**
  * 账号
@@ -20,7 +20,7 @@ public interface IUserService {
      * 
      * @return
      */
-    public List<User> selectAll();
+    List<User> selectAll();
 
     /**
      * 根据条件分页查询
@@ -28,7 +28,7 @@ public interface IUserService {
      * @param dto
      * @return
      */
-    public ResultInfo<User> selectByPage(Condition<User> condition);
+    ResultInfo<User> selectByPage(Condition<User> condition);
 
     /**
      * 根据条件查询
@@ -36,21 +36,21 @@ public interface IUserService {
      * @param condition
      * @return
      */
-    public List<User> selectByCondition(Condition<User> condition);
+    List<User> selectByCondition(Condition<User> condition);
 
     /**
      * 新建账号
      * 
-     * @param accountForm
+     * @param userVo
      */
-    public void insert(UserForm accountForm);
+    void insert(UserVo userVo);
 
     /**
      * 更新账号
      * 
-     * @param ResourceForm
+     * @param userVo
      */
-    public int update(UserForm accountForm);
+    int update(UserVo userVo);
 
     /**
      * 根据ID删除账号
@@ -58,7 +58,7 @@ public interface IUserService {
      * @param id
      * @return
      */
-    public int deleteById(Long id);
+    int deleteById(Long id);
 
     /**
      * 根据ID批量删除账号
@@ -66,15 +66,7 @@ public interface IUserService {
      * @param ids
      * @return
      */
-    public int deleteByIds(String[] ids);
-
-    /**
-     * 根据ID排序账号
-     * 
-     * @param ids
-     * @return
-     */
-    public int sortByIds(String[] ids);
+    int deleteByIds(String[] ids);
 
     /**
      * 根据ID获取账号
@@ -82,5 +74,37 @@ public interface IUserService {
      * @param id
      * @return
      */
-    public User findById(Long id);
+    User findById(Long id);
+
+    /**
+     * 根据ID停用账号
+     * 
+     * @param userVo
+     * @return
+     */
+    int stop(UserVo userVo);
+
+    /**
+     * 根据ID启用账号
+     * 
+     * @param userVo
+     * @return
+     */
+    int start(UserVo userVo);
+
+    /**
+     * 根据ID禁用账号
+     * 
+     * @param userVo
+     * @return
+     */
+    int disable(UserVo userVo);
+
+    /**
+     * 根据ID解锁账号
+     * 
+     * @param userVo
+     * @return
+     */
+    int unlock(UserVo userVo);
 }

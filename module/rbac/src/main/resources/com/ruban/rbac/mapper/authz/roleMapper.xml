@@ -4,8 +4,7 @@
 
 	<select id="selectAll" resultType="com.ruban.rbac.domain.authz.Role">
 		SELECT 
-			s.ID as id, s.NAME as name, s.TYPE as type, 
-			s.DELEGATED as delegated, s.MEMO as memo, s.STATE as state,
+			s.ID as id, s.NAME as name, s.DELEGATED as delegated, s.MEMO as memo, s.STATE as state,
 			s.COMPANY_ID as companyId, c.NAME as companyName,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
 		FROM AUTHZ_T_ROLE s 
@@ -15,8 +14,7 @@
 	
 	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.authz.Role">
 		SELECT 
-			s.ID as id, s.NAME as name, s.TYPE as type, 
-			s.DELEGATED as delegated, s.MEMO as memo, s.STATE as state,
+			s.ID as id, s.NAME as name, s.DELEGATED as delegated, s.MEMO as memo, s.STATE as state,
 			s.COMPANY_ID as companyId, c.NAME as companyName,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
 		FROM AUTHZ_T_ROLE s 
@@ -33,8 +31,7 @@
 
 	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.authz.Role">
 		SELECT 
-			s.ID as id, s.NAME as name, s.TYPE as type, 
-			s.DELEGATED as delegated, s.MEMO as memo, s.STATE as state,
+			s.ID as id, s.NAME as name, s.DELEGATED as delegated, s.MEMO as memo, s.STATE as state,
 			s.COMPANY_ID as companyId, c.NAME as companyName,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
 		FROM AUTHZ_T_ROLE s 
@@ -57,12 +54,11 @@
 	
 	<insert id="insert" parameterType="com.ruban.rbac.domain.authz.Role" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO AUTHZ_T_ROLE (
-			NAME, TYPE, DELEGATED, STATE, MEMO, COMPANY_ID, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
+			NAME, DELEGATED, STATE, MEMO, COMPANY_ID, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
 		)
 		VALUES(
 			#{name, jdbcType=VARCHAR},
-			#{type, jdbcType=VARCHAR},
-			#{delegated, jdbcType=INTEGER},
+			#{delegated, jdbcType=BIT},
 			#{state, jdbcType=TINYINT},
 			#{memo, jdbcType=VARCHAR},
 			#{companyId, jdbcType=INTEGER},
@@ -78,11 +74,19 @@
 		UPDATE AUTHZ_T_ROLE
 		SET 
 			NAME = #{name, jdbcType=VARCHAR},
-			TYPE = #{type, jdbcType=VARCHAR},
+			DELEGATED = #{delegated, jdbcType=BIT},
 			MEMO = #{memo, jdbcType=VARCHAR},
 			COMPANY_ID = #{companyId, jdbcType=INTEGER},
 			MOD_TIME = #{modTime, jdbcType=TIMESTAMP},
 			MOD_USER_ID = #{modUserId, jdbcType=INTEGER},
+			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateState" parameterType="com.ruban.rbac.domain.authz.Role">
+		UPDATE AUTHZ_T_ROLE
+		SET 
+			STATE = #{state, jdbcType=VARCHAR},
 			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
 		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
 	</update>

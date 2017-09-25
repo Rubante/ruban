@@ -1,16 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html> 
 <html lang="zh-CN"> 
 <head>
-	<link href='<s:url value="/static/css/backend/organ_manger.css" />' rel="stylesheet">
 	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
 	
 	<script type="text/javascript" src='<s:url value="/static/js/lib/ztree/js/jquery.ztree.core.min.js" />'></script>
-	
-	<script type="text/javascript" src='<s:url value="/static/biz/js/company/tree.js" />'></script>
 	<script type="text/javascript" src='<s:url value="/static/biz/js/company/main.js" />'></script>
 	<script type="text/javascript" src='<s:url value="/static/biz/js/company/select.js" />'></script>
 </head> 
@@ -26,25 +24,40 @@
         <div id="inner-bd">
         	
             <div class="kv-group-outer">
-		        <div class="kv-group clearfix">
-		            <div class="kv-item kv-col-1">
-		                <div class="item-lt">数据导入：</div>
-		                <div class="item-rt">
-		                    <a href="javascript:;" class="a-upload">
-								<input type="file" name="" id="">选择文件
-							</a>
-							<span class="text-tip">未选择任何文件</span>
-							<div class="button current">
-								<span class="button-label">导入全部</span>
-							</div>
-							
-							<div class="tip-area">
-								<a href="javascript:;">内设机构人员信息关系年底关系模板下载</a>
-							</div>
-		                </div>
-		            </div>
-		            
-		        </div>
+            	<form id="searchForm" action=<s:url value="/rbac/backend/company/search" />' onsubmit="company.search(); return false;">
+			        <div class="kv-group clearfix">
+					        <div class="kv-item-wrap" style="max-width: 900px;">
+					        	<div class="kv-item kv-col-1">
+					                <div class="item-lt">类型：</div>
+					                <div class="item-rt">
+										<select id="type" name="type">
+											<option value="">请选择</option>
+											<c:forEach items="${types}" var="item">
+												<option value="${item.code}">${item.value}</option>
+											</c:forEach>
+										</select>
+					                </div>
+					            </div>
+					            <div class="kv-item kv-col-2">
+					                <div class="item-lt">名称：</div>
+					                <div class="item-rt">
+					                   <input type="text" placeholder="名称" name="name" id="name" autocomplete="off"/>
+					                   <input type="hidden" name="childDisplay" id="childDisplay" value="0" />
+					                </div>
+					            </div>
+					            <div class="kv-item kv-col-3">
+					                <div class="item-rt">
+									    <div class="button-group">
+									        <div class="button current search" onclick="company.search();">
+									            <i class="iconfont">&#xe625;</i>
+									            <span class="button-label">查询</span>
+									        </div>
+									    </div>
+					                </div>
+					            </div>
+					        </div>
+			        </div>
+		        </form>
 		    </div>
 
             <div class="button-group">
@@ -65,9 +78,6 @@
 			<table class="kv-table" style="margin-bottom: 5px;">
 				<tbody>
 					<tr>
-						<td class="kv-label" style="width:20%;vertical-align: top;">
-							<div id="ztree1" class="ztree"></div>
-						</td>
 						<td id="companyListTd" class="kv-content" style="padding: 10px;vertical-align: top;">
 							<jsp:include page="/WEB-INF/page/jsp/backend/company/list.jsp"></jsp:include>
 						</td>

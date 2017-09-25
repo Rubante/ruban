@@ -1,5 +1,6 @@
 package com.ruban.rbac.domain.authz;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,50 +9,63 @@ import java.util.Date;
  * @author ruban
  *
  */
-public class RoleExtend {
+public class RoleExt  implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     /** 注解ID **/
-    private int id;
+    private Long id;
 
     /** 父角色 **/
-    private int parentId;
+    private Long roleId;
 
     /** 子角色 **/
-    private int childId;
+    private Long childId;
 
     /** 修改时间 **/
-    private Date updatetime;
+    private Date modTime;
 
-    public int getId() {
+    /** 修改者 **/
+    private Long modUserId;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getParentId() {
-        return parentId;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
-    public int getChildId() {
+    public Long getChildId() {
         return childId;
     }
 
-    public void setChildId(int childId) {
+    public void setChildId(Long childId) {
         this.childId = childId;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getModTime() {
+        return modTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
+
+    public Long getModUserId() {
+        return modUserId;
+    }
+
+    public void setModUserId(Long modUserId) {
+        this.modUserId = modUserId;
     }
 
 }

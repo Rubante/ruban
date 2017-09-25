@@ -7,7 +7,7 @@ package com.ruban.framework.dao.helper;
  * 
  * @param <T>
  */
-public class Condition<T> extends QueryPage<T>{
+public abstract class Condition<T> extends QueryPage<T>{
 
     private static final long serialVersionUID = 1L;
 }

@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class JsonResult {
 
-    /** 结果标识 **/
+    /** 结果标识:0标识成功，非0表示失败 **/
     private int flag;
 
     /** 消息 **/

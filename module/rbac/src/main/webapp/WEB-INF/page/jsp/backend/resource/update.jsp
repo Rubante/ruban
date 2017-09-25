@@ -30,28 +30,35 @@
 				</tr>
 				<tr>
 					<td class="kv-label">
-						访问路径：
+						编码：
 					</td>
 					<td class="kv-content">
-						<input type="text" name="link" value="${result.link}" maxlength="100">
+						<input type="text" name="code" value="${result.code}" maxlength="30">
 					</td>
 					<td class="kv-label">
 						图标：
 					</td>
-					<td class="kv-content">
-						<input type="text" name="icon" value="${result.icon}">
+					<td class="kv-content" style="white-space: nowrap;">
+						<c:if test="${not empty result.icon}">
+							<img alt="图标" src="${result.icon}">
+						</c:if>
+						<input type="file" name="icon" />
 					</td>
 				</tr>
 				<tr>
 					<td class="kv-label">
-						是否授权：
+						访问路径：
 					</td>
-					<td class="kv-content">
-						<select name="flag">
-							<c:forEach items="${yesnos}" var="yesno">
-								<option value="${yesno.code}" <c:if test="${yesno.code == fn:trim(result.flag) }">selected</c:if>>${yesno.value}</option>
-							</c:forEach>
-						</select>
+					<td colspan="3" class="kv-content">
+						<input type="text" name="link" value="${result.link}" maxlength="200" style="width:95%;">
+					</td>
+				</tr>
+				<tr>
+					<td class="kv-label">
+						父节点：
+					</td>
+					<td class="kv-content" colspan="3">
+						<jsp:include page="/WEB-INF/page/jsp/backend/resource/select_tpl.jsp"></jsp:include>
 					</td>
 				</tr>
 				<tr>

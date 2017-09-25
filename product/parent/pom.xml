@@ -6,19 +6,19 @@
 	<parent>
 		<groupId>com.ruban.framework</groupId>
 		<artifactId>ruban-parent</artifactId>
-		<version>0.0.2-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 
 	<properties>
 		<mysql.version>5.1.40</mysql.version>
-		<ruban.version>0.0.2-SNAPSHOT</ruban.version>
+		<ruban.version>0.0.3-SNAPSHOT</ruban.version>
 	</properties>
 
 	<groupId>com.ruban.product</groupId>
 	<artifactId>ruban-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 
 	<dependencyManagement>
 		<dependencies>

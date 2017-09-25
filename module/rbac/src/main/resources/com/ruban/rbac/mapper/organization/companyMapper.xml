@@ -2,47 +2,74 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruban.rbac.dao.organization.ICompanyMapper">
 
+	<!-- 顶层查询结果，children使用嵌套集合查询 -->
+	<resultMap id="company" type="com.ruban.rbac.domain.organization.Company">
+		<result property="id" column="id" />
+		<result property="pathCode" column="pathCode" />
+		<collection property="children" column="pathCode=pathCode,selfId=id" select="selectChildren" fetchType="eager" javaType="ArrayList">
+		</collection>
+	</resultMap>
 	<select id="selectAll" resultType="com.ruban.rbac.domain.organization.Company">
 		SELECT 
 			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
-			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.HAS_CHILDREN as hasChildren, s.STATE as state,
-			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
-			s.PARENT_ID as companyId, p.name as onwerName
-		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID
-		ORDER BY s.ORDER_CODE
-	</select>
-	
-	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.organization.Company">
-		SELECT 
-			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
-			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.HAS_CHILDREN as hasChildren, s.STATE as state,
+			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.CHILDREN_NUM as childrenNum, s.STATE as state,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
 			s.PARENT_ID as companyId, p.name as companyName
-		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID WHERE 1 = 1 
-		<if test="code != null and code != ''">
-			and s.code = #{code}
-		</if>
-		<if test="name != null and name != ''">
-			and s.name like "%" + #{name} + "%"
-		</if>
-		<if test="type != null and type != ''">
-			and s.type = #{type}
-		</if>
-		<if test="companyId != null">
-			and s.PARENT_ID = #{companyId}
-		</if>
-		ORDER BY s.ORDER_CODE
+		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID
+		ORDER BY s.PATH_CODE, s.ORDER_CODE
+	</select>
+	
+	<select id="selectChildren" resultType="com.ruban.rbac.domain.organization.Company">
+		SELECT 
+			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
+			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.CHILDREN_NUM as childrenNum, s.STATE as state,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as companyId, p.name as companyName
+		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID
+		<where>
+			<if test="pathCode != null and pathCode != ''">
+				and s.PATH_CODE like CONCAT(#{pathCode}, "%")
+			</if>
+			<if test="selfId != null and selfId != ''">
+				and s.ID != #{selfId}
+			</if>
+		</where>
+		ORDER BY s.PATH_CODE, s.ORDER_CODE
+	</select>
+	
+	<select id="selectWithCondition" resultMap="company">
+		SELECT 
+			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
+			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.CHILDREN_NUM as childrenNum, s.STATE as state,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock,
+			s.PARENT_ID as companyId, p.name as companyName
+		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID
+		<where>
+			<if test="code != null and code != ''">
+				and s.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and s.name LIKE CONCAT("%", #{name}, "%")
+			</if>
+			<if test="type != null and type != ''">
+				and s.type = #{type}
+			</if>
+			<if test="companyId != null">
+				and s.PARENT_ID = #{companyId}
+			</if>
+		</where>
+		ORDER BY s.PATH_CODE, s.ORDER_CODE
 	</select>
 
 	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.organization.Company">
 		SELECT 
 			s.ID as id, s.CODE as code, s.PATH_CODE as pathCode, s.ORDER_CODE as orderCode, s.NAME as name, s.SIMPLE_NAME as simpleName, s.ADDRESS as address,
-			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.HAS_CHILDREN as hasChildren, s.STATE as state,
+			s.POST_CODE as postCode, s.TITLE as title,s.TEL as tel, s.EMAIL as email, s.TYPE as type, s.MEMO as memo, s.CHILDREN_NUM as childrenNum, s.STATE as state,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modeUserId, s.UPDATE_LOCK as updateLock,
 			s.PARENT_ID as companyId, p.name as companyName
 		FROM ORG_T_COMPANY s LEFT JOIN ORG_T_COMPANY p on s.PARENT_ID = p.ID
 		WHERE s.id = #{id}
-		ORDER BY s.ORDER_CODE
+		ORDER BY s.PATH_CODE, s.ORDER_CODE
 	</select>
 	
 	<delete id="deleteById" parameterType="java.lang.Long">
@@ -112,18 +139,24 @@
 		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
 	</update>
 	
-	<update id="updateHasChildren" parameterType="com.ruban.rbac.domain.organization.Company">
+	<update id="updateChildrenNum" parameterType="com.ruban.rbac.domain.organization.Company">
 		UPDATE ORG_T_COMPANY
 		SET 
-			HAS_CHILDREN = #{hasChildren, jdbcType=TINYINT},
-			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+			CHILDREN_NUM = (SELECT num FROM (SELECT count(1) as num FROM ORG_T_COMPANY WHERE PARENT_ID = #{id, jdbcType=INTEGER}) parent)
 		WHERE ID = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<update id="updatePathCode" parameterType="com.ruban.rbac.domain.organization.Company">
+		UPDATE ORG_T_COMPANY
+		SET 
+			PATH_CODE = CONCAT(#{newPathCode, jdbcType=VARCHAR}, SUBSTR(PATH_CODE, LENGTH(#{pathCode, jdbcType=VARCHAR}) + 1))
+		WHERE PATH_CODE = #{pathCode, jdbcType=VARCHAR}
 	</update>
 	
 	<update id="updateOrderCode" parameterType="com.ruban.rbac.domain.organization.Company">
 		UPDATE ORG_T_COMPANY
 		SET 
-			ORDER_CODE = #{1, jdbcType=TINYINT}
-		WHERE ID = #{0, jdbcType=INTEGER}
+			ORDER_CODE = #{orderCode, jdbcType=TINYINT}
+		WHERE ID = #{id, jdbcType=INTEGER}
 	</update>
 </mapper>

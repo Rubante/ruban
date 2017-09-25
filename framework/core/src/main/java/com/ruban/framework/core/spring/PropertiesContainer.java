@@ -18,7 +18,7 @@ public class PropertiesContainer {
      */
     public static String getPropertyValue(String key) {
         if (configurer == null) {
-            configurer = SpringContextLocator.getApplicationContext().getBean(RubanPropertyPlaceholderConfigurer.class);
+            configurer = SpringContext.getApplicationContext().getBean(RubanPropertyPlaceholderConfigurer.class);
         }
 
         return configurer.getValue(key);

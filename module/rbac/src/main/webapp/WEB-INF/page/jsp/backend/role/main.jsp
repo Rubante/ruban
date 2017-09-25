@@ -60,7 +60,7 @@
 		            <i class="iconfont">&#xe620;</i>
 		            <span class="button-label">新增角色</span>
 		        </div>
-		        <div class="button delete"  onclick="rubanRole.delete(event)">
+		        <div class="button delete"  onclick="rubanRole.batchDelete(event)">
 		            <i class="iconfont">&#xe609;</i>
 		            <span class="button-label">删除</span>
 		        </div>

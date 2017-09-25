@@ -1,5 +1,7 @@
 package com.ruban.rbac.dao.organization;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ruban.framework.dao.IRubanMapper;
 import com.ruban.framework.dao.support.RubanDaoRepository;
 import com.ruban.rbac.domain.organization.Company;
@@ -13,12 +15,29 @@ public interface ICompanyMapper extends IRubanMapper {
      * @param parentId
      * @return
      */
-    public int countByParentId(Long parentId);
+    int countByParentId(Long parentId);
 
     /**
      * 更新节点数量
      * 
-     * @param company
+     * @param id
      */
-    public void updateHasChildren(Company company);
+    void updateChildrenNum(Long id);
+
+    /**
+     * 根据父节点查询最大编码的数据记录
+     * 
+     * @param parentId
+     * @return
+     */
+    Company getMaxCodeChild(Long parentId);
+
+    /**
+     * 更新子节点的pathCode
+     * 
+     * @param newPathCode
+     * @param pathCode
+     * @return
+     */
+    int updatePathCode(@Param("newPathCode") String newPathCode, @Param("pathCode") String pathCode);
 }

@@ -13,6 +13,12 @@ public class Resource extends PersistentObject {
     /** 资源名称 **/
     private String name;
 
+    /** 资源编码 **/
+    private String code;
+
+    /** 全路径 **/
+    private String path = "";
+
     /** 资源类型 **/
     private int type;
 
@@ -23,13 +29,22 @@ public class Resource extends PersistentObject {
     private String icon;
 
     /** 是否父节点 **/
-    private int parentId;
+    private Long parentId = 0L;
 
-    /** 是否可授权 **/
-    private int flag;
+    /** 父节点名称 **/
+    private String parentName;
+
+    /** 是否显示 **/
+    private int displayFlag = 0;
 
     /** 状态 **/
     private int state;
+
+    /** 排序字段* */
+    private String orderCode;
+
+    /** 层次等级 **/
+    private int level;
 
     /** 所属公司 **/
     private Long companyId;
@@ -37,12 +52,31 @@ public class Resource extends PersistentObject {
     /** 备注 **/
     private String memo;
 
+    /** 是否有字节点 **/
+    private int childrenNum;
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public int getType() {
@@ -69,20 +103,28 @@ public class Resource extends PersistentObject {
         this.icon = icon;
     }
 
-    public int getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
-    public int getFlag() {
-        return flag;
+    public String getParentName() {
+        return parentName;
     }
 
-    public void setFlag(int flag) {
-        this.flag = flag;
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public int getDisplayFlag() {
+        return displayFlag;
+    }
+
+    public void setDisplayFlag(int displayFlag) {
+        this.displayFlag = displayFlag;
     }
 
     public int getState() {
@@ -91,6 +133,22 @@ public class Resource extends PersistentObject {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public Long getCompanyId() {
@@ -107,6 +165,14 @@ public class Resource extends PersistentObject {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public int getChildrenNum() {
+        return childrenNum;
+    }
+
+    public void setChildrenNum(int childrenNum) {
+        this.childrenNum = childrenNum;
     }
 
 }

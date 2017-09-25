@@ -5,20 +5,15 @@
 	<parent>
 		<groupId>com.ruban.module</groupId>
 		<artifactId>ruban-parent</artifactId>
-		<version>0.0.2-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 
 	<name>ruban-common</name>
 	<artifactId>ruban-common</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.ruban.framework</groupId>
-			<artifactId>ruban-core</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.ruban.framework</groupId>
 			<artifactId>ruban-dao</artifactId>
@@ -27,7 +22,7 @@
 
 	<build>
 
-		<finalName>common</finalName>
+		<finalName>ruban-common</finalName>
 		<directory>target</directory>
 		<outputDirectory>target/classes</outputDirectory>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
@@ -35,36 +30,6 @@
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 
 		<plugins>
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.2.10.v20150310</version>
-				<configuration>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<stopKey>foo</stopKey>
-					<stopPort>9999</stopPort>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-jetty</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<scanIntervalSeconds>0</scanIntervalSeconds>
-							<daemon>true</daemon>
-						</configuration>
-					</execution>
-					<execution>
-						<id>stop-jetty</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 </project>

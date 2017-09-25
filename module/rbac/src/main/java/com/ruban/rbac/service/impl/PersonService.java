@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ruban.framework.core.utils.commons.DateUtil;
 import com.ruban.framework.core.utils.commons.RandomUtil;
+import com.ruban.framework.core.utils.commons.StringUtil;
 import com.ruban.framework.dao.IRubanDao;
 import com.ruban.framework.dao.helper.Condition;
 import com.ruban.framework.dao.helper.ResultInfo;
@@ -43,7 +44,7 @@ public class PersonService implements IPersonService {
     }
 
     @Override
-    public void insert(PersonForm personForm) {
+    public int insert(PersonForm personForm) {
 
         Person person = new Person();
 
@@ -72,7 +73,7 @@ public class PersonService implements IPersonService {
         person.setDepartmentId(personForm.getDepartmentId());
         person.setCompanyId(personForm.getCompanyId());
 
-        personMapper.insert(person);
+        return personMapper.insert(person);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class PersonService implements IPersonService {
         if (PersonContant.DEL_FLAG.equals(personForm.getDelPhoto())) {
             person.setPhoto(null);
         } else {
-            if (personForm.getPhoto() != null) {
+            if (StringUtil.isNotNullOrEmpty(personForm.getPhoto())) {
                 person.setPhoto(personForm.getPhoto());
             }
         }

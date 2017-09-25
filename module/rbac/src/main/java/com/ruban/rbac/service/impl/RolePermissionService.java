@@ -5,76 +5,53 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ruban.framework.core.utils.commons.DateUtil;
-import com.ruban.framework.core.utils.commons.RandomUtil;
+import com.ruban.framework.core.utils.commons.StringUtil;
 import com.ruban.framework.dao.IRubanDao;
 import com.ruban.framework.dao.helper.Condition;
 import com.ruban.framework.dao.helper.ResultInfo;
-import com.ruban.rbac.backend.permission.form.PermissionForm;
-import com.ruban.rbac.dao.authz.IPermissionMapper;
-import com.ruban.rbac.domain.authz.Permission;
-import com.ruban.rbac.service.IPermissionService;
+import com.ruban.rbac.dao.authz.IRolePermissionMapper;
+import com.ruban.rbac.domain.authz.RolePermission;
+import com.ruban.rbac.service.IRolePermissionService;
+import com.ruban.rbac.vo.permission.PermissionVo;
 
 @Service
-public class PermissionService implements IPermissionService {
+public class RolePermissionService implements IRolePermissionService {
 
     @Autowired
-    private IPermissionMapper permissionMapper;
+    private IRolePermissionMapper permissionMapper;
 
     @Autowired
     private IRubanDao rubanDao;
 
     @Override
-    public List<Permission> selectAll() {
+    public List<RolePermission> selectAll() {
         return permissionMapper.selectAll();
     }
 
     @Override
-    public ResultInfo<Permission> selectByPage(Condition<Permission> condition) {
+    public ResultInfo<RolePermission> selectByPage(Condition<RolePermission> condition) {
 
-        ResultInfo<Permission> result = rubanDao.findByPage(condition, permissionMapper);
+        ResultInfo<RolePermission> result = rubanDao.findByPage(condition, permissionMapper);
         return result;
     }
 
     @Override
-    public List<Permission> selectByCondition(Condition<Permission> condition) {
+    public List<RolePermission> selectByCondition(Condition<RolePermission> condition) {
         return permissionMapper.selectWithCondition(condition);
     }
 
     @Override
-    public void insert(PermissionForm permissionForm) {
+    public void insert(PermissionVo permissionVo) {
 
-        Permission permission = new Permission();
-
-        permission.setType(permissionForm.getType());
-        permission.setName(permissionForm.getName());
-        permission.setCompanyId(permissionForm.getCompanyId());
-        permission.setMemo(permissionForm.getMemo());
-
-        permission.setAddTime(DateUtil.getToday());
-        permission.setModTime(DateUtil.getToday());
-        permission.setAddUserId(0L);
-        permission.setModUserId(0L);
-        permission.setUpdateLock(RandomUtil.getUpdateLock());
+        RolePermission permission = new RolePermission();
 
         permissionMapper.insert(permission);
     }
 
     @Override
-    public int update(PermissionForm permissionForm) {
+    public int update(PermissionVo permissionVo) {
 
-        Permission permission = findById(permissionForm.getId());
-
-        permission.setType(permissionForm.getType());
-        permission.setName(permissionForm.getName());
-        permission.setMemo(permissionForm.getMemo());
-        permission.setCompanyId(permissionForm.getCompanyId());
-
-        permission.setModTime(DateUtil.getToday());
-        permission.setModUserId(0L);
-        permission.setUpdateLock(RandomUtil.getUpdateLock());
-
-        permission.setHoldLock(permissionForm.getHoldLock());
+        RolePermission permission = findById(permissionVo.getId());
 
         int result = permissionMapper.update(permission);
 
@@ -101,6 +78,11 @@ public class PermissionService implements IPermissionService {
         return permissionMapper.deleteByIds(ids);
     }
 
+    @Override
+    public int deleteByRoleId(Long roleId) {
+        return permissionMapper.deleteByRoleId(roleId);
+    }
+
     /**
      * 排序权限
      * 
@@ -118,7 +100,46 @@ public class PermissionService implements IPermissionService {
     }
 
     @Override
-    public Permission findById(Long id) {
+    public RolePermission findById(Long id) {
         return permissionMapper.findById(id);
     }
+
+    @Override
+    public int grant(PermissionVo vo) {
+        int count = 0;
+
+        if (vo.getResources() != null) {
+            for (int i = 0; i < vo.getResources().size(); i++) {
+                RolePermission rolePermission = new RolePermission();
+                boolean valid = true;
+                String resourceId = vo.getResources().get(i);
+                if (StringUtil.isDigit(resourceId)) {
+                    rolePermission.setRoleId(vo.getRoleId());
+                    rolePermission.setResourceId(Long.parseLong(resourceId));
+                } else {
+                    valid = false;
+                }
+
+                if (vo.getFlags() != null) {
+                    String flag = vo.getFlags().get(i);
+                    if (valid && StringUtil.isDigit(flag)) {
+                        rolePermission.setFlag(Integer.parseInt(flag));
+                    } else {
+                        valid = false;
+                    }
+                }
+
+                if (valid) {
+                    // 常规属性
+                    rolePermission.setModTime(vo.getModTime());
+                    rolePermission.setModUserId(vo.getModUserId());
+
+                    count += permissionMapper.insert(rolePermission);
+                }
+            }
+        }
+
+        return count;
+    }
+
 }

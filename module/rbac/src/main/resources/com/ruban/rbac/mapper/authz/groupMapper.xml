@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruban.rbac.dao.authz.IGroupMapper">
 
-	<select id="selectAll" resultType="com.ruban.rbac.domain.authz.AccountGroup">
+	<select id="selectAll" resultType="com.ruban.rbac.domain.authz.Group">
 		SELECT 
 			s.ID as id, s.NAME as name, s.TYPE as type, s.LINK as link, s.ICON as icon, s.PARENT_ID as parentId, 
 			s.FLAG as flag, s.MEMO as memo, s.STATE as state,
@@ -13,7 +13,7 @@
 		ORDER BY s.MOD_TIME DESC
 	</select>
 	
-	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.authz.AccountGroup">
+	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.authz.Group">
 		SELECT 
 			s.ID as id, s.NAME as name, s.TYPE as type, s.LINK as link, s.ICON as icon, s.PARENT_ID as parentId, 
 			s.FLAG as flag, s.MEMO as memo, s.STATE as state,
@@ -31,7 +31,7 @@
 		ORDER BY s.MOD_TIME DESC
 	</select>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.authz.AccountGroup">
+	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.authz.Group">
 		SELECT 
 			s.ID as id, s.NAME as name, s.TYPE as type, s.LINK as link, s.ICON as icon, s.PARENT_ID as parentId, 
 			s.FLAG as flag, s.MEMO as memo, s.STATE as state,
@@ -55,7 +55,7 @@
         </foreach> 
 	</delete>
 	
-	<insert id="insert" parameterType="com.ruban.rbac.domain.authz.AccountGroup" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" parameterType="com.ruban.rbac.domain.authz.Group" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO AUTHZ_T_RESOURCE (
 			NAME, TYPE, LINK, ICON, PARENT_ID, FLAG, MEMO, STATE, COMPANY_ID, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
 		)
@@ -77,7 +77,7 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="com.ruban.rbac.domain.authz.AccountGroup">
+	<update id="update" parameterType="com.ruban.rbac.domain.authz.Group">
 		UPDATE AUTHZ_T_RESOURCE
 		SET 
 			NAME = #{name, jdbcType=VARCHAR},

@@ -52,7 +52,7 @@ public interface IRubanMapper {
      * 
      * @param obj
      */
-    <T> Long insert(T obj);
+    <T> int insert(T obj);
 
     /**
      * 更新数据

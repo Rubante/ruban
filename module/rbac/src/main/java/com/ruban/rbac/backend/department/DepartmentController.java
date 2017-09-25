@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ruban.common.dict.DictionaryGroupKey;
+import com.ruban.common.dict.CompanyType;
 import com.ruban.common.domain.Dictionary;
 import com.ruban.framework.core.utils.commons.StringUtil;
 import com.ruban.framework.web.page.JsonResult;
@@ -22,7 +22,7 @@ import com.ruban.rbac.backend.BackendController;
 import com.ruban.rbac.backend.department.form.DepartmentForm;
 import com.ruban.rbac.backend.department.form.SearchForm;
 import com.ruban.rbac.domain.organization.Department;
-import com.ruban.rbac.service.ServiceLocator;
+import com.ruban.rbac.service.IDepartmentService;
 
 /**
  * 部门管理
@@ -34,7 +34,7 @@ import com.ruban.rbac.service.ServiceLocator;
 public class DepartmentController extends BackendController {
 
     @Autowired
-    private ServiceLocator serviceLocator;
+    private IDepartmentService departmentService;
 
     @RequestMapping("/department/main")
     public String main(Model model) {
@@ -65,7 +65,7 @@ public class DepartmentController extends BackendController {
     @RequestMapping(value = "/department/list", method = RequestMethod.POST)
     public String list(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
 
-        List<Department> list = serviceLocator.getDepartmentService().selectByCondition(searchForm);
+        List<Department> list = departmentService.selectByCondition(searchForm);
 
         model.addAttribute("list", list);
 
@@ -89,7 +89,7 @@ public class DepartmentController extends BackendController {
         // 展示页面
         if (departmentForm.getIsForm() == 0) {
             // 数据字典：机构类型
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.COMPANY_TYPE);
+            List<Dictionary> dicts = getDictionarys(CompanyType.KEY);
             model.addAttribute("items", dicts);
 
             return "backend/department/add";
@@ -109,7 +109,7 @@ public class DepartmentController extends BackendController {
 
         } else {
 
-            serviceLocator.getDepartmentService().insert(departmentForm);
+            departmentService.insert(departmentForm);
 
             result.setFlag(1);
             result.setMsg("添加成功！");
@@ -146,7 +146,7 @@ public class DepartmentController extends BackendController {
                 return null;
             }
 
-            Department department = serviceLocator.getDepartmentService().findById(Long.parseLong(id));
+            Department department = departmentService.findById(Long.parseLong(id));
 
             if (department != null) {
                 model.addAttribute("result", department);
@@ -181,7 +181,7 @@ public class DepartmentController extends BackendController {
             return null;
         }
 
-        int count = serviceLocator.getDepartmentService().update(departmentForm);
+        int count = departmentService.update(departmentForm);
 
         if (count > 0) {
             result.setFlag(1);
@@ -215,7 +215,7 @@ public class DepartmentController extends BackendController {
             return null;
         }
 
-        Department department = serviceLocator.getDepartmentService().findById(Long.parseLong(id));
+        Department department = departmentService.findById(Long.parseLong(id));
 
         if (department != null) {
             model.addAttribute("result", department);
@@ -247,7 +247,7 @@ public class DepartmentController extends BackendController {
             return result;
         }
 
-        int count = serviceLocator.getDepartmentService().deleteById(Long.parseLong(id));
+        int count = departmentService.deleteById(Long.parseLong(id));
 
         if (count > 0) {
             result.setFlag(1);
@@ -280,7 +280,7 @@ public class DepartmentController extends BackendController {
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getDepartmentService().deleteByIds(idArr);
+        int count = departmentService.deleteByIds(idArr);
 
         if (count > 0) {
             result.setFlag(1);
@@ -301,7 +301,7 @@ public class DepartmentController extends BackendController {
     @RequestMapping(value = "/department/sortList", method = RequestMethod.POST)
     public String sortList(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
 
-        List<Department> list = serviceLocator.getDepartmentService().selectByCondition(searchForm);
+        List<Department> list = departmentService.selectByCondition(searchForm);
         model.addAttribute("list", list);
 
         return "backend/department/sortList";
@@ -327,7 +327,7 @@ public class DepartmentController extends BackendController {
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getDepartmentService().sortByIds(idArr);
+        int count = departmentService.sortByIds(idArr);
 
         if (count == idArr.length) {
             result.setFlag(1);

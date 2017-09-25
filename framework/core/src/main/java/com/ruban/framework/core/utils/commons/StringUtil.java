@@ -538,8 +538,7 @@ public class StringUtil {
         return tokenizeToStringArray(str, delimiters, true, true);
     }
 
-    public static String[] tokenizeToStringArray(String str, String delimiters, boolean trimTokens,
-            boolean ignoreEmptyTokens) {
+    public static String[] tokenizeToStringArray(String str, String delimiters, boolean trimTokens, boolean ignoreEmptyTokens) {
 
         if (str == null) {
             return null;
@@ -570,9 +569,11 @@ public class StringUtil {
             return inString;
         }
         StringBuilder sb = new StringBuilder();
-        int pos = 0; // our position in the old string
+        int pos = 0; // our position in the old
+                     // string
         int index = inString.indexOf(oldPattern);
-        // the index of an occurrence we've found, or -1
+        // the index of an occurrence we've found,
+        // or -1
         int patLen = oldPattern.length();
         while (index >= 0) {
             sb.append(inString.substring(pos, index));
@@ -581,7 +582,8 @@ public class StringUtil {
             index = inString.indexOf(oldPattern, pos);
         }
         sb.append(inString.substring(pos));
-        // remember to append any characters to the right of a match
+        // remember to append any characters to
+        // the right of a match
         return sb.toString();
     }
 
@@ -616,7 +618,8 @@ public class StringUtil {
     }
 
     /**
-     * 判断对象或对象数组中每一个对象是否为空: 对象为null，字符序列长度为0，集合类、Map为empty
+     * 判断对象或对象数组中每一个对象是否为空:
+     * 对象为null，字符序列长度为0，集合类、Map为empty
      * 
      * @param obj
      * @return
@@ -658,7 +661,8 @@ public class StringUtil {
     }
 
     /**
-     * 将用separator分隔的String转化为List，如果str中没有separator则返回的List中只有 str一项
+     * 将用separator分隔的String转化为List，如果str中没有separator则返回的List中只有
+     * str一项
      * 
      * @param str
      * @param separator
@@ -703,6 +707,11 @@ public class StringUtil {
      * @return
      */
     public static boolean isDigit(String str) {
+
+        if (isNullOrEmpty(str)) {
+            return false;
+        }
+
         char c;
         for (int i = 0; i < str.length(); i++) {
             c = str.charAt(i);
@@ -988,13 +997,14 @@ public class StringUtil {
             return "null";
         }
     }
-    
+
     /**
      * 返回srcStr字符串的前truncByteLen字节长度的子串。<br>
      * <p/>
      * 如果截取的末字节是半个汉字，则略去该字节，要求返回完整的汉字。<br>
      * <p/>
-     * (1)srcStr == null || truncByteLen < 0 返回""<br>
+     * (1)srcStr == null || truncByteLen < 0
+     * 返回""<br>
      * (2)truncByteLen > srcStr的实际字节长度，则原样返回srcStr
      * 
      * @param srcStr
@@ -1005,8 +1015,8 @@ public class StringUtil {
      *            截取字节数
      * @return 截取后的字符串
      *         <p/>
-     *         e.g. srcStr="ab你好", truncByteLen=3, 返回"ab"; truncByteLen=4,
-     *         返回"ab你"
+     *         e.g. srcStr="ab你好", truncByteLen=3,
+     *         返回"ab"; truncByteLen=4, 返回"ab你"
      *         <p/>
      *         Written Date: 2008-9－17
      * @author chenyx
@@ -1061,7 +1071,8 @@ public class StringUtil {
     /**
      * 使用“,”对原有描述进行分隔，对所有为空的内容替换为“-”，重新组合后返回
      * <p/>
-     * 特殊注意：当传入值为null时，返回”“ 当传入值为”“时，返回”-“ 当传入值只包含”,“时，返回”-,-“
+     * 特殊注意：当传入值为null时，返回”“ 当传入值为”“时，返回”-“
+     * 当传入值只包含”,“时，返回”-,-“
      * 
      * @param args
      * @return fillStr
@@ -1087,8 +1098,7 @@ public class StringUtil {
         }
 
         // 去掉最后的”,“
-        if (!StringUtil.isNullOrEmpty(fillStr)
-                && (fillStr.substring(fillStr.length() - 1, fillStr.length()).equals(","))) {
+        if (!StringUtil.isNullOrEmpty(fillStr) && (fillStr.substring(fillStr.length() - 1, fillStr.length()).equals(","))) {
             fillStr = fillStr.substring(0, fillStr.length() - 1);
         }
 

@@ -1,5 +1,6 @@
 package com.ruban.rbac.domain.authz;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,22 +9,30 @@ import java.util.Date;
  * @author ruban
  *
  */
-public class UserRole {
+public class UserRole implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** 主键 **/
-    private int id;
+    private Long id;
 
     /** 用户ID **/
-    private int userId;
+    private Long userId;
+
+    /** 所属用户 **/
+    private User user;
 
     /** 角色ID **/
-    private int roleId;
+    private Long roleId;
 
-    /** 是否可委托 **/
+    /** 所设角色 **/
+    private Role role;
+
+    /** 是否是被委托的 **/
     private int delegated;
 
     /** 委托人 **/
-    private int delegatedId;
+    private Long delegateId;
 
     /** 委托时间 **/
     private Date delegateTime;
@@ -32,30 +41,49 @@ public class UserRole {
     private Date endTime;
 
     /** 修改时间 **/
-    private Date updatetime;
+    private Date modTime;
 
-    public int getId() {
+    /** 修改者 **/
+    private Long modUserId;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public int getRoleId() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public int getDelegated() {
@@ -66,12 +94,12 @@ public class UserRole {
         this.delegated = delegated;
     }
 
-    public int getDelegatedId() {
-        return delegatedId;
+    public Long getDelegateId() {
+        return delegateId;
     }
 
-    public void setDelegatedId(int delegatedId) {
-        this.delegatedId = delegatedId;
+    public void setDelegateId(Long delegateId) {
+        this.delegateId = delegateId;
     }
 
     public Date getDelegateTime() {
@@ -90,12 +118,20 @@ public class UserRole {
         this.endTime = endTime;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getModTime() {
+        return modTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
+
+    public Long getModUserId() {
+        return modUserId;
+    }
+
+    public void setModUserId(Long modUserId) {
+        this.modUserId = modUserId;
     }
 
 }

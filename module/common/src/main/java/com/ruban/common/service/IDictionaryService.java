@@ -42,5 +42,5 @@ public interface IDictionaryService {
      * 
      * @param dictionary
      */
-    public Long insert(Dictionary dictionary);
+    public int insert(Dictionary dictionary);
 }

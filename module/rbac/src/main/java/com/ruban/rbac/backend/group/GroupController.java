@@ -14,15 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ruban.common.dict.DictionaryGroupKey;
+import com.ruban.common.dict.CompanyType;
 import com.ruban.common.domain.Dictionary;
 import com.ruban.framework.core.utils.commons.StringUtil;
 import com.ruban.framework.web.page.JsonResult;
 import com.ruban.rbac.backend.BackendController;
 import com.ruban.rbac.backend.department.form.DepartmentForm;
 import com.ruban.rbac.backend.department.form.SearchForm;
+import com.ruban.rbac.backend.group.form.GroupMapping;
 import com.ruban.rbac.domain.organization.Department;
-import com.ruban.rbac.service.ServiceLocator;
+import com.ruban.rbac.service.IDepartmentService;
 
 /**
  * 账号组管理
@@ -34,15 +35,15 @@ import com.ruban.rbac.service.ServiceLocator;
 public class GroupController extends BackendController {
 
     @Autowired
-    private ServiceLocator serviceLocator;
+    private IDepartmentService departmentService;
 
-    @RequestMapping("/group/main")
+    @RequestMapping(GroupMapping.URI_MAIN)
     public String main(Model model) {
 
         model.addAttribute("companyTree", getCompanyTree());
         model.addAttribute("ztree", getDepartmentTree());
 
-        return "backend/group/main";
+        return GroupMapping.PAGE_MAIN;
     }
 
     /**
@@ -65,7 +66,7 @@ public class GroupController extends BackendController {
     @RequestMapping(value = "/group/list", method = RequestMethod.POST)
     public String list(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
 
-        List<Department> list = serviceLocator.getDepartmentService().selectByCondition(searchForm);
+        List<Department> list = departmentService.selectByCondition(searchForm);
 
         model.addAttribute("list", list);
 
@@ -89,7 +90,7 @@ public class GroupController extends BackendController {
         // 展示页面
         if (departmentForm.getIsForm() == 0) {
             // 数据字典：机构类型
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.COMPANY_TYPE);
+            List<Dictionary> dicts = getDictionarys(CompanyType.KEY);
             model.addAttribute("items", dicts);
 
             return "backend/group/add";
@@ -109,7 +110,7 @@ public class GroupController extends BackendController {
 
         } else {
 
-            serviceLocator.getDepartmentService().insert(departmentForm);
+            departmentService.insert(departmentForm);
 
             result.setFlag(1);
             result.setMsg("添加成功！");
@@ -146,7 +147,7 @@ public class GroupController extends BackendController {
                 return null;
             }
 
-            Department department = serviceLocator.getDepartmentService().findById(Long.parseLong(id));
+            Department department = departmentService.findById(Long.parseLong(id));
 
             if (department != null) {
                 model.addAttribute("result", department);
@@ -181,7 +182,7 @@ public class GroupController extends BackendController {
             return null;
         }
 
-        int count = serviceLocator.getDepartmentService().update(departmentForm);
+        int count = departmentService.update(departmentForm);
 
         if (count > 0) {
             result.setFlag(1);
@@ -215,7 +216,7 @@ public class GroupController extends BackendController {
             return null;
         }
 
-        Department department = serviceLocator.getDepartmentService().findById(Long.parseLong(id));
+        Department department = departmentService.findById(Long.parseLong(id));
 
         if (department != null) {
             model.addAttribute("result", department);
@@ -247,7 +248,7 @@ public class GroupController extends BackendController {
             return result;
         }
 
-        int count = serviceLocator.getDepartmentService().deleteById(Long.parseLong(id));
+        int count = departmentService.deleteById(Long.parseLong(id));
 
         if (count > 0) {
             result.setFlag(1);
@@ -280,7 +281,7 @@ public class GroupController extends BackendController {
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getDepartmentService().deleteByIds(idArr);
+        int count = departmentService.deleteByIds(idArr);
 
         if (count > 0) {
             result.setFlag(1);
@@ -301,7 +302,7 @@ public class GroupController extends BackendController {
     @RequestMapping(value = "/group/sortList", method = RequestMethod.POST)
     public String sortList(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
 
-        List<Department> list = serviceLocator.getDepartmentService().selectByCondition(searchForm);
+        List<Department> list = departmentService.selectByCondition(searchForm);
         model.addAttribute("list", list);
 
         return "backend/group/sortList";
@@ -327,7 +328,7 @@ public class GroupController extends BackendController {
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getDepartmentService().sortByIds(idArr);
+        int count = departmentService.sortByIds(idArr);
 
         if (count == idArr.length) {
             result.setFlag(1);

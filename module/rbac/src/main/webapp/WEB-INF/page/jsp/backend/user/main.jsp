@@ -6,7 +6,6 @@
 <html lang="en"> 
 <head>
 	<script type="text/javascript" src='<s:url value="/static/biz/js/user/main.js" />'></script>
-	<link href='<s:url value="/static/js/lib/ztree/css/metroStyle/metroStyle.css" />' rel="stylesheet">
 </head> 
 <body>
     <div class="container">
@@ -35,45 +34,15 @@
 				                </div>
 				            </div>
 				            <div class="kv-item kv-col-2">
-				                <div class="item-lt">岗位：</div>
-				                <div class="item-rt">
-				                	<input type="text" name="jobId" />
-				                </div>
-				            </div>
-				            <div class="kv-item kv-col-3">
-				                <div class="item-lt">职务：</div>
-				                <div class="item-rt">
-				                	<input type="text" name="titleId" />
-				                </div>
-				            </div>
-				            <div class="kv-item">
-				                <div class="item-lt">性别：</div>
-				                <div class="item-rt">
-				                   <select name="sex">
-				                        <option value="0">不限</option>
-				                        <option value="1">女</option>
-				                        <option value="2">男</option>
-				                    </select>
-				                </div>
-				            </div>
-	
-				            <div class="kv-item kv-col-1">
 				                <div class="item-lt">人员名称：</div>
 				                <div class="item-rt">
-				                   <input type="text" onClick="WdatePicker({crossFrame:false})" placeholder="填写人员名称" name="name">
-				                </div>
-				            </div>
-	
-				            <div class="kv-item kv-col-2">
-				                <div class="item-lt">职务：</div>
-				                <div class="item-rt">
-				                    <input type="text" placeholder="职务" name="titleName">
+				                   <input type="text" onClick="WdatePicker({crossFrame:false})" placeholder="人员名称" name="name" />
 				                </div>
 				            </div>
 				            <div class="kv-item kv-col-3">
-				                <div class="item-lt">登录账号：</div>
+				                <div class="item-lt">用户名：</div>
 				                <div class="item-rt">
-				                    <input type="text" placeholder="职务" name="">
+				                    <input type="text" placeholder="用户名" name="username" />
 				                </div>
 				            </div>
 				            <div class="kv-item kv-col-1">

@@ -1,5 +1,6 @@
-package com.ruban.rbac.backend.account;
+package com.ruban.rbac.backend.user;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,158 +18,176 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ruban.common.dict.DictionaryGroupKey;
+import com.ruban.common.dict.Sex;
+import com.ruban.common.dict.UserState;
 import com.ruban.common.domain.Dictionary;
-import com.ruban.framework.core.utils.commons.StringUtil;
+import com.ruban.framework.core.spring.SpringContext;
+import com.ruban.framework.core.utils.commons.DateUtil;
+import com.ruban.framework.core.utils.commons.RandomUtil;
 import com.ruban.framework.dao.helper.ResultInfo;
 import com.ruban.framework.web.page.JsonResult;
 import com.ruban.rbac.backend.BackendController;
-import com.ruban.rbac.backend.account.form.AccountForm;
-import com.ruban.rbac.backend.account.form.SearchForm;
+import com.ruban.rbac.backend.role.form.RoleCondition;
+import com.ruban.rbac.backend.user.form.UserCondition;
+import com.ruban.rbac.backend.user.form.UserForm;
+import com.ruban.rbac.backend.user.form.UserMapping;
+import com.ruban.rbac.backend.user.form.UserRoleCondition;
 import com.ruban.rbac.base.Pagination;
-import com.ruban.rbac.domain.authz.Account;
-import com.ruban.rbac.service.ServiceLocator;
+import com.ruban.rbac.domain.authz.Role;
+import com.ruban.rbac.domain.authz.User;
+import com.ruban.rbac.domain.authz.UserRole;
+import com.ruban.rbac.service.IRoleService;
+import com.ruban.rbac.service.IUserRoleService;
+import com.ruban.rbac.service.IUserService;
+import com.ruban.rbac.vo.user.UserRoleVo;
+import com.ruban.rbac.vo.user.UserVo;
 
 /**
- * 帐号管理
+ * 用户帐号管理
  * 
  * @author yjwang
  *
  */
 @Controller
-public class AccountController extends BackendController {
+public class UserController extends BackendController {
 
-    Logger logger = LoggerFactory.getLogger(AccountController.class);
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private ServiceLocator serviceLocator;
+    private IUserService userService;
 
-    @RequestMapping("/account/main")
+    @Autowired
+    private IRoleService roleService;
+
+    @Autowired
+    private IUserRoleService userRoleService;
+
+    @RequestMapping(UserMapping.URI_MAIN)
     public String main(Model model) {
 
-        SearchForm searchForm = new SearchForm();
+        UserCondition searchForm = new UserCondition();
         search(model, searchForm);
 
-        return "backend/account/main";
+        return UserMapping.PAGE_MAIN;
     }
 
-    @RequestMapping(value = "/account/search", method = RequestMethod.POST)
-    public String search(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
+    @RequestMapping(value = UserMapping.URI_SEARCH, method = RequestMethod.POST)
+    public String search(Model model, @ModelAttribute("searchForm") UserCondition searchForm) {
 
-        ResultInfo<Account> resultInfo = serviceLocator.getAccountService().selectByPage(searchForm);
+        // 预置数据
+        prepareData(model);
 
-        Pagination<Account> pagination = new Pagination<>();
+        ResultInfo<User> resultInfo = userService.selectByPage(searchForm);
+
+        Pagination<User> pagination = new Pagination<>();
         pagination.gereate(resultInfo);
 
-        Map<String,Dictionary> dicts = getDictionaryMap(DictionaryGroupKey.ACCOUNT_STATE);
-        
-        model.addAttribute("stateMap",dicts);
         model.addAttribute("pagination", pagination);
         model.addAttribute("resultInfo", resultInfo);
 
-        return "backend/account/list";
+        return UserMapping.PAGE_LIST;
     }
 
     /**
-     * 添加账户
+     * 跳转到添加页面
      * 
      * @param model
-     * @param accountForm
+     * @return
+     */
+    @RequestMapping(value = UserMapping.URI_ADD_PAGE, method = RequestMethod.POST)
+    public String addPage(Model model) {
+
+        // 预置数据
+        prepareData(model);
+
+        return UserMapping.PAGE_ADD;
+
+    }
+
+    /**
+     * 添加用户
+     * 
+     * @param model
+     * @param userForm
      * @param bindingResult
      * @param response
      * @return
      */
-    @RequestMapping(value = "/account/add", method = RequestMethod.POST)
-    public String add(Model model, @Valid @ModelAttribute("accountForm") AccountForm accountForm,
+    @RequestMapping(value = UserMapping.URI_ADD_SAVE, method = RequestMethod.POST)
+    public JsonResult add(Model model, @Valid @ModelAttribute("userForm") UserForm userForm,
             BindingResult bindingResult, HttpServletResponse response) {
-
-        // 展示页面
-        if (accountForm.getIsForm() == 0) {
-            // 数据字典：性别
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.PERSON_SEX);
-            model.addAttribute("dicts", dicts);
-
-            return "backend/account/add";
-        }
 
         JsonResult result = new JsonResult();
 
-        if (bindingResult.hasErrors()) {
-            result.getResult().put("error", bindingResult.getAllErrors());
-
-            printJson(response, result);
-
-            return null;
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
+            return result;
         }
 
-        for(int i = 0 ; i <15;i++)
-        serviceLocator.getAccountService().insert(accountForm);
+        userService.insert(userForm);
 
-        result.setFlag(1);
-        result.setMsg("添加成功！");
+        wrapSuccess(result, "添加成功");
 
-        printJson(response, result);
-
-        return null;
+        return result;
     }
 
     /**
-     * 更新账号
+     * 跳转到更新页面
      * 
      * @param model
      * @param id
-     * @param accountForm
+     * @return
+     */
+    @RequestMapping(value = UserMapping.URI_UPDATE_PAGE, method = RequestMethod.POST)
+    public String updatePage(Model model, Long id) {
+
+        // 预置数据
+        prepareData(model);
+
+        User user = userService.findById(id);
+        model.addAttribute("result", user);
+
+        return UserMapping.PAGE_UPDATE;
+    }
+
+    /**
+     * 更新用户信息
+     * 
+     * @param model
+     * @param id
+     * @param userForm
      * @param bindingResult
      * @param response
      * @return
      */
-    @RequestMapping(value = "/account/update", method = RequestMethod.POST)
-    public String update(Model model, String id, @Valid @ModelAttribute("accountForm") AccountForm accountForm,
+    @ResponseBody
+    @RequestMapping(value = UserMapping.URI_UPDATE_SAVE, method = RequestMethod.POST)
+    public JsonResult update(Model model, String id, @Valid @ModelAttribute("userForm") UserForm userForm,
             BindingResult bindingResult, HttpServletResponse response) {
-
-        // 展示页面
-        if (accountForm.getIsForm() == 0) {
-            // 数据字典：性别
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.PERSON_SEX);
-            model.addAttribute("dicts", dicts);
-
-            Account person = serviceLocator.getAccountService().findById(accountForm.getId());
-            model.addAttribute("result", person);
-
-            return "backend/account/update";
-        }
 
         JsonResult result = new JsonResult();
 
-        if (bindingResult.hasErrors()) {
-            result.getResult().put("error", bindingResult.getAllErrors());
-
-            printJson(response, result);
-
-            return null;
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
+            return result;
         }
 
         // 乐观锁
-        if (accountForm.getHoldLock() == null) {
-            result.getResult().put("error", "未持有锁，无法更新！");
+        if (userForm.getHoldLock() == null) {
+            result.getResult().put("error", SpringContext.getText("holdLockNo"));
 
-            printJson(response, result);
-
-            return null;
+            return result;
         }
 
-        int count = serviceLocator.getAccountService().update(accountForm);
+        int count = userService.update(userForm);
 
         if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("修改成功！");
+            wrapSuccess(result, SpringContext.getText("updateOk"));
         } else {
-            result.setFlag(0);
-            result.setMsg("修改失败，数据已发生变化，无法保存！");
+            wrapError(result, SpringContext.getText("updateNoLock"));
         }
-        printJson(response, result);
 
-        return null;
+        return result;
     }
 
     /**
@@ -177,143 +196,276 @@ public class AccountController extends BackendController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/account/detail", method = RequestMethod.POST)
+    @RequestMapping(value = UserMapping.URI_DETAIL, method = RequestMethod.POST)
     public String detail(Model model, String id, HttpServletResponse response) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
 
+        // 校验Id是否正确
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
             printJson(response, result);
 
             return null;
         }
 
-        Account person = serviceLocator.getAccountService().findById(Long.parseLong(id));
+        User user = userService.findById(Long.parseLong(id));
 
-        if (person != null) {
-            model.addAttribute("result", person);
+        if (user != null) {
+            // 预置数据
+            prepareData(model);
+
+            model.addAttribute("result", user);
+
+            // 获取当前用户所
+            UserRoleCondition userRoleCondition = new UserRoleCondition();
+            List<UserRole> userRoles = userRoleService.selectByCondition(userRoleCondition);
+            model.addAttribute("userRoles", userRoles);
+
         } else {
-            result.setFlag(0);
-            result.setMsg("未找到相应的记录！");
-
+            wrapError(result, SpringContext.getText("noResult"));
             printJson(response, result);
 
             return null;
         }
 
-        return "backend/account/detail";
+        return UserMapping.PAGE_DETAIL;
     }
 
     /**
-     * 根据ID删除人员
+     * 根据ID删除用户
      * 
      * @param id
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/account/delete", method = RequestMethod.POST)
+    @RequestMapping(value = UserMapping.URI_DELETE, method = RequestMethod.POST)
     public JsonResult delete(String id) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
+
+        // 校验Id是否正确
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             return result;
         }
 
-        int count = serviceLocator.getAccountService().deleteById(Long.parseLong(id));
+        int count = userService.deleteById(Long.parseLong(id));
 
-        if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
-        }
+        // 校验删除结果
+        checkDelete(result, count);
 
         return result;
     }
 
     /**
-     * 根据ID批量删除人员
+     * 根据ID批量删除用户
      * 
      * @param id
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/account/batchDelete", method = RequestMethod.POST)
+    @RequestMapping(value = UserMapping.URI_BATCH_DELETE, method = RequestMethod.POST)
     public JsonResult deleteByIds(String ids) {
 
         JsonResult result = new JsonResult();
-        if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
+        if (!checkId(ids)) {
+            wrapError(result, SpringContext.getText("paramError", "ids"));
 
             return result;
         }
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getAccountService().deleteByIds(idArr);
+        int count = userService.deleteByIds(idArr);
+
+        checkDelete(result, count);
+
+        return result;
+    }
+
+    /**
+     * 根据ID改变用户状态
+     * 
+     * @param id
+     * @return
+     */
+    private JsonResult changeState(String id, int state, String status) {
+
+        JsonResult result = new JsonResult();
+
+        // 校验id是否正确
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
+
+            return result;
+        }
+
+        UserVo userVo = new UserVo();
+        userVo.setId(Long.parseLong(id));
+        userVo.setModTime(DateUtil.getNowTime());
+        userVo.setUpdateLock(RandomUtil.getUpdateLock());
+        userVo.setModUserId(1L);
+        userVo.setState(state);
+
+        int count = 0;
+        if (UserState.Stop.getValue() == state) {
+            count = userService.stop(userVo);
+        } else if (UserState.Normal.getValue() == state) {
+            count = userService.start(userVo);
+        } else if (UserState.Disable.getValue() == state) {
+            count = userService.disable(userVo);
+        }
 
         if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
+            wrapSuccess(result, "成功" + status);
         } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
+            wrapError(result, status + "失败");
         }
 
         return result;
     }
 
     /**
-     * 排序查询数据
-     * 
-     * @return
-     */
-    @RequestMapping(value = "/account/sortList", method = RequestMethod.POST)
-    public String sortList(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
-
-        List<Account> list = serviceLocator.getAccountService().selectByCondition(searchForm);
-        model.addAttribute("list", list);
-
-        return "backend/account/sortList";
-    }
-
-    /**
-     * 结果排序
+     * 根据ID停用用户
      * 
      * @param id
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/account/sort", method = RequestMethod.POST)
-    public JsonResult sort(String ids) {
+    @RequestMapping(value = UserMapping.URI_STOP, method = RequestMethod.POST)
+    public JsonResult stop(String id) {
+        return changeState(id, UserState.Stop.getValue(), "停用");
+    }
+
+    /**
+     * 根据ID启用用户
+     * 
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = UserMapping.URI_START, method = RequestMethod.POST)
+    public JsonResult start(String id) {
+        return changeState(id, UserState.Normal.getValue(), "启用");
+    }
+
+    /**
+     * 根据ID禁用用户
+     * 
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = UserMapping.URI_DISABLE, method = RequestMethod.POST)
+    public JsonResult disable(String id) {
+        return changeState(id, UserState.Stop.getValue(), "禁用");
+    }
+
+    /**
+     * 根据ID停用用户
+     * 
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = UserMapping.URI_UNLOCK, method = RequestMethod.POST)
+    public JsonResult unlock(String id) {
+        return changeState(id, UserState.Normal.getValue(), "解锁");
+    }
+
+    /**
+     * 用户授权
+     * 
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = UserMapping.URI_GRANT, method = RequestMethod.POST)
+    public String grant(Model model, String id) {
 
         JsonResult result = new JsonResult();
-        if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
 
+        // 校验id是否正确
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
+
+            return null;
+        }
+
+        User user = userService.findById(Long.parseLong(id));
+        model.addAttribute("result", user);
+
+        // 依条件查询角色
+        RoleCondition condition = new RoleCondition();
+        List<Role> roles = roleService.selectByCondition(condition);
+        model.addAttribute("roles", roles);
+
+        // 获取当前用户所
+        Map<Long, UserRole> resultMap = new HashMap<>();
+        UserRoleCondition userRoleCondition = new UserRoleCondition();
+        List<UserRole> userRoles = userRoleService.selectByCondition(userRoleCondition);
+        if (userRoles != null) {
+            for (UserRole userRole : userRoles) {
+                resultMap.put(userRole.getRoleId(), userRole);
+            }
+        }
+        model.addAttribute("userRoles", resultMap);
+
+        // 查询所有的角色，
+        return UserMapping.PAGE_GRANT;
+    }
+
+    /**
+     * 用户授权保存
+     * 
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = UserMapping.URI_GRANT_SAVE, method = RequestMethod.POST)
+    public JsonResult grantSave(Model model, String id, @Valid @ModelAttribute("userForm") UserForm userForm,
+            BindingResult bindingResult, HttpServletResponse response) {
+
+        JsonResult result = new JsonResult();
+
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
             return result;
         }
 
-        String[] idArr = ids.split(",");
+        // 校验userId是否正确
+        if (!checkId(userForm.getUserId())) {
+            wrapError(result, SpringContext.getText("paramError", "userId"));
 
-        int count = serviceLocator.getAccountService().sortByIds(idArr);
+            return null;
+        }
 
-        if (count == idArr.length) {
-            result.setFlag(1);
-            result.setMsg("排序成功！");
+        UserRoleVo userRoleVo = new UserRoleVo();
+        userRoleVo.setRoleIds(userForm.getRoles());
+        userRoleVo.setUserId(Long.parseLong(userForm.getUserId()));
+        userRoleVo.setModTime(DateUtil.getNowTime());
+        userRoleVo.setModUserId(1L);
+
+        int count = userRoleService.grant(userRoleVo);
+
+        if (count > 0) {
+            wrapSuccess(result, SpringContext.getText("updateOk"));
         } else {
-            result.setFlag(0);
-            result.setMsg("排序失败！");
+            wrapError(result, SpringContext.getText("updateNoLock"));
         }
 
         return result;
     }
+
+    @Override
+    protected void prepareData(Model model) {
+        // 数据字典：性别
+        List<Dictionary> sexs = getDictionarys(Sex.KEY);
+        model.addAttribute("sexs", sexs);
+
+        Map<String, Dictionary> states = getDictionaryMap(UserState.KEY);
+        model.addAttribute("stateMap", states);
+    }
+
 }

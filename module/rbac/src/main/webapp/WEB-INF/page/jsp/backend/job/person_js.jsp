@@ -160,10 +160,6 @@
     	}
 	 });
     
-    $('body').on('click', '.search', function(){
-    	person.search();
-    });
-    
     // 查询
     person.search = function(){
 

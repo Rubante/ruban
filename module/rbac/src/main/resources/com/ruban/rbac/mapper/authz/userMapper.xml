@@ -1,68 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruban.rbac.dao.authz.IAccountMapper">
+<mapper namespace="com.ruban.rbac.dao.authz.IUserMapper">
 
-	<select id="selectAll" resultType="com.ruban.rbac.domain.authz.Account">
+	<select id="selectAll" resultType="com.ruban.rbac.domain.authz.User">
 		SELECT 
-			s.ID as id, s.ACCOUNT_NO as accountNo, s.PASSWORD as password, s.NAME as name, 
+			s.ID as id, s.USERNAME as username, s.PASSWORD as password, s.NICK as nick, 
 			s.LAST_LOGIN_TIME as lastLoginTime, s.MEMO as memo, s.STATE as state,
 			s.PERSON_ID as personId, p.name as personName,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
-		FROM AUTHZ_T_ACCOUNT s 
+		FROM AUTHZ_T_USER s 
 		LEFT JOIN ORG_T_PERSON p on s.PERSON_ID = p.ID
-		ORDER BY s.MOD_TIME desc
+		ORDER BY s.MOD_TIME DESC
 	</select>
 	
-	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.authz.Account">
+	<select id="selectWithCondition" resultType="com.ruban.rbac.domain.authz.User">
 		SELECT 
-			s.ID as id, s.ACCOUNT_NO as accountNo, s.PASSWORD as password, s.NAME as name, 
+			s.ID as id, s.USERNAME as username, s.PASSWORD as password, s.NICK as nick, 
 			s.LAST_LOGIN_TIME as lastLoginTime, s.MEMO as memo, s.STATE as state,
 			s.PERSON_ID as personId, p.name as personName,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
-		FROM AUTHZ_T_ACCOUNT s 
+		FROM AUTHZ_T_USER s 
 		LEFT JOIN ORG_T_PERSON p on s.PERSON_ID = p.ID
-		WHERE 1 = 1 
-		<if test="name != null and name != ''">
-			and s.name like "%" + #{name} + "%"
-		</if>
-		<if test="personId != null">
-			and s.PERSON_ID = #{personId}
-		</if>
-		ORDER BY s.MOD_TIME desc
+		<where>
+			<if test="name != null and name != ''">
+				and s.NAME like CONCAT('%', #{name}, '%')
+			</if>
+			<if test="personId != null">
+				and s.PERSON_ID = #{personId}
+			</if>
+			<if test="username != null">
+				and s.USERNAME = #{username}
+			</if>
+			<if test="password != null">
+				and s.PASSWORD = #{password}
+			</if>
+		</where>
+		ORDER BY s.MOD_TIME DESC
 	</select>
 
-	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.authz.Account">
+	<select id="findById" parameterType="java.lang.Long" resultType="com.ruban.rbac.domain.authz.User">
 		SELECT 
-			s.ID as id, s.ACCOUNT_NO as accountNo, s.PASSWORD as password, s.NAME as name, 
+			s.ID as id, s.USERNAME as username, s.PASSWORD as password, s.NICK as nick, 
 			s.LAST_LOGIN_TIME as lastLoginTime, s.MEMO as memo, s.STATE as state,
 			s.PERSON_ID as personId, p.name as personName,
 			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
-		FROM AUTHZ_T_ACCOUNT s 
+		FROM AUTHZ_T_USER s 
 		LEFT JOIN ORG_T_PERSON p on s.PERSON_ID = p.ID
 		WHERE s.id = #{id}
 	</select>
+
+	<select id="findByUsername" resultType="com.ruban.rbac.domain.authz.User">
+		SELECT 
+			s.ID as id, s.USERNAME as username, s.PASSWORD as password, s.NICK as nick, 
+			s.LAST_LOGIN_TIME as lastLoginTime, s.MEMO as memo, s.STATE as state,
+			s.PERSON_ID as personId, p.name as personName,
+			s.ADD_TIME as addTime, s.ADD_USER_ID as addUserId, s.MOD_TIME as modTime, s.MOD_USER_ID as modUserId, s.UPDATE_LOCK as updateLock
+		FROM AUTHZ_T_USER s 
+		LEFT JOIN ORG_T_PERSON p on s.PERSON_ID = p.ID
+		WHERE s.USERNAME = #{username}
+	</select>
 	
 	<delete id="deleteById" parameterType="java.lang.Long">
-		DELETE FROM AUTHZ_T_ACCOUNT
+		DELETE FROM AUTHZ_T_USER
 		WHERE id = #{id}
 	</delete>
 	
 	<delete id="deleteByIds" parameterType="java.lang.String">
-		DELETE FROM AUTHZ_T_ACCOUNT
+		DELETE FROM AUTHZ_T_USER
 		WHERE id in 
         <foreach item="ids" collection="array" open="(" separator="," close=")">  
         	#{ids}  
         </foreach> 
 	</delete>
 	
-	<insert id="insert" parameterType="com.ruban.rbac.domain.authz.Account" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO AUTHZ_T_ACCOUNT(
-			ACCOUNT_NO, PASSWORD, NAME, PERSON_ID, STATE, MEMO, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
+	<insert id="insert" parameterType="com.ruban.rbac.domain.authz.User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO AUTHZ_T_USER(
+			USERNAME, PASSWORD, NICK, PERSON_ID, STATE, MEMO, ADD_TIME, ADD_USER_ID, MOD_TIME, MOD_USER_ID, UPDATE_LOCK
 		)
 		VALUES(
-			#{accountNo, jdbcType=VARCHAR},
+			#{username, jdbcType=VARCHAR},
 			#{password, jdbcType=VARCHAR},
-			#{name, jdbcType=VARCHAR},
+			#{nick, jdbcType=VARCHAR},
 			#{personId, jdbcType=INTEGER},
 			#{state, jdbcType=TINYINT},
 			#{memo, jdbcType=VARCHAR},
@@ -74,12 +92,12 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="com.ruban.rbac.domain.authz.Account">
-		UPDATE AUTHZ_T_ACCOUNT
+	<update id="update" parameterType="com.ruban.rbac.domain.authz.User">
+		UPDATE AUTHZ_T_USER
 		SET 
-			ACCOUNT_NO = #{accountNo, jdbcType=VARCHAR},
+			USERNAME = #{username, jdbcType=VARCHAR},
 			PASSWORD = #{password, jdbcType=VARCHAR},
-			NAME = #{name, jdbcType=VARCHAR},
+			NICK = #{nick, jdbcType=VARCHAR},
 			PERSON_ID = #{personId, jdbcType=INTEGER},
 			STATE = #{state, jdbcType=TINYINT},
 			MEMO = #{memo, jdbcType=VARCHAR},
@@ -87,5 +105,15 @@
 			MOD_USER_ID = #{modUserId, jdbcType=INTEGER},
 			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
 		WHERE ID = #{id, jdbcType=INTEGER} and UPDATE_LOCK = #{holdLock, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateState" parameterType="com.ruban.rbac.domain.authz.User">
+		UPDATE AUTHZ_T_USER
+		SET 
+			STATE = #{state, jdbcType=TINYINT},
+			MOD_TIME = #{modTime, jdbcType=TIMESTAMP},
+			MOD_USER_ID = #{modUserId, jdbcType=INTEGER},
+			UPDATE_LOCK = #{updateLock, jdbcType=VARCHAR}
+		WHERE ID = #{id, jdbcType=INTEGER}
 	</update>
 </mapper>

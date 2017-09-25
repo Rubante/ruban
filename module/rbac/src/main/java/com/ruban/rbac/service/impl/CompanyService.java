@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ruban.common.dao.IDictionaryMapper;
-import com.ruban.common.dict.DictionaryGroupKey;
+import com.ruban.common.dict.CompanyType;
 import com.ruban.common.domain.Dictionary;
 import com.ruban.framework.core.utils.commons.DateUtil;
 import com.ruban.framework.core.utils.commons.RandomUtil;
+import com.ruban.framework.core.utils.commons.StringUtil;
 import com.ruban.framework.dao.IRubanDao;
 import com.ruban.framework.dao.helper.Condition;
 import com.ruban.framework.dao.helper.ResultInfo;
@@ -20,6 +21,7 @@ import com.ruban.rbac.backend.company.form.SearchForm;
 import com.ruban.rbac.dao.organization.ICompanyMapper;
 import com.ruban.rbac.domain.organization.Company;
 import com.ruban.rbac.service.ICompanyService;
+import com.ruban.rbac.vo.company.CompanyCondition;
 
 @Service
 public class CompanyService implements ICompanyService {
@@ -72,15 +74,15 @@ public class CompanyService implements ICompanyService {
         company.setUpdateLock(RandomUtil.getUpdateLock());
 
         // 父节点
-        if (companyForm.getCompanyId() != null) {
+        if (companyForm.getCompanyId() != null && companyForm.getCompanyId() != 0) {
             Long parentId = new Long(companyForm.getCompanyId());
             company.setCompanyId(parentId);
 
             int count = companyMapper.countByParentId(parentId);
             company.setOrderCode(count + 1);
-            Company parent = companyMapper.findById(parentId);
 
-            company.setPathCode(parent.getCode() + companyForm.getCode());
+            Company parent = companyMapper.findById(parentId);
+            company.setPathCode(parent.getPathCode() + companyForm.getCode());
         } else {
             company.setCompanyId(0L);
             company.setCode(companyForm.getCode());
@@ -90,7 +92,7 @@ public class CompanyService implements ICompanyService {
         companyMapper.insert(company);
 
         // 更新父节点的叶子节点数量
-        updateHasChildren(companyForm);
+        updateChildrenNum(companyForm);
 
         return company;
     }
@@ -99,6 +101,10 @@ public class CompanyService implements ICompanyService {
     public int update(CompanyForm companyForm) {
 
         Company company = findById(companyForm.getId());
+
+        // 保留原有的父节点ID
+        companyForm.setOldParentId(company.getCompanyId());
+
         company.setCode(companyForm.getCode());
         company.setPathCode(companyForm.getCode());
         company.setName(companyForm.getName());
@@ -115,16 +121,31 @@ public class CompanyService implements ICompanyService {
         company.setHoldLock(companyForm.getHoldLock());
 
         // 父节点
-        if (companyForm.getCompanyId() != null) {
-            company.setCompanyId(companyForm.getCompanyId());
+        if (companyForm.getCompanyId() != null && companyForm.getCompanyId() != 0) {
+            Long parentId = companyForm.getCompanyId();
+            String pathCode = company.getPathCode();
+
+            Company parent = companyMapper.findById(parentId);
+
+            company.setPathCode(parent.getPathCode() + companyForm.getCode());
+
+            // 改变父节点
+            if (companyForm.getCompanyId() != company.getCompanyId()) {
+                companyMapper.updatePathCode(company.getPathCode(), pathCode);
+            }
+
+            company.setCompanyId(parentId);
         } else {
             company.setCompanyId(0L);
+
+            company.setCode(companyForm.getCode());
+            company.setPathCode(companyForm.getCode());
         }
 
         int result = companyMapper.update(company);
 
         // 更新父节点的叶子节点数量
-        updateHasChildren(companyForm);
+        updateChildrenNum(companyForm);
 
         return result;
     }
@@ -134,16 +155,19 @@ public class CompanyService implements ICompanyService {
      * 
      * @param companyForm
      */
-    private void updateHasChildren(CompanyForm companyForm) {
+    private void updateChildrenNum(CompanyForm companyForm) {
 
         // 如果父节点不为空，则更新其子节点数量
         if (companyForm.getCompanyId() != null && companyForm.getCompanyId() != 0) {
-            Long parentId = companyForm.getCompanyId();
-            Company parent = companyMapper.findById(parentId);
-            int count = companyMapper.countByParentId(parentId);
+            companyMapper.updateChildrenNum(companyForm.getCompanyId());
+        }
 
-            parent.setHasChildren(count);
-            companyMapper.updateHasChildren(parent);
+        // 当前节点
+        companyMapper.updateChildrenNum(companyForm.getId());
+
+        // 原有父节点
+        if (companyForm.getOldParentId() != null && companyForm.getOldParentId() != 0) {
+            companyMapper.updateChildrenNum(companyForm.getOldParentId());
         }
     }
 
@@ -189,21 +213,41 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    public String getJsonTree(Long parentId) {
-        SearchForm searchForm = new SearchForm();
-        searchForm.setCompanyId(parentId);
-        List<Company> list = companyMapper.selectWithCondition(searchForm);
+    public String getJsonTree() {
+        return getJsonTree(null, null);
+    }
+
+    @Override
+    public String getJsonTreeByType(String type) {
+        return getJsonTree(null, type);
+    }
+
+    @Override
+    public String getJsonTree(Long parentId, String type) {
+        CompanyCondition condition = new CompanyCondition();
+        condition.setCompanyId(parentId);
+        condition.setType(type);
+        List<Company> list = companyMapper.selectWithCondition(condition);
 
         List<String> ztree = new ArrayList<>();
 
         // 组织机构类型
-        List<Dictionary> dicts = dictionaryMapper.selectByGroup(DictionaryGroupKey.COMPANY_TYPE);
+        List<Dictionary> dicts = dictionaryMapper.selectByGroup(CompanyType.KEY);
 
         for (int i = 0; dicts != null && i < dicts.size(); i++) {
             Dictionary dictionary = dicts.get(i);
-            String node = "{id:'t" + dictionary.getCode() + "', sId:'" + dictionary.getCode() + "', pId:null, name:'"
-                    + dictionary.getValue() + "',open: true}";
-            ztree.add(node);
+            if (StringUtil.isNotNullOrEmpty(type)) {
+                if (dictionary.getCode().equals(type)) {
+                    String node = "{id:'t" + dictionary.getCode() + "', sId:'" + dictionary.getCode()
+                            + "', pId:null, name:'" + dictionary.getValue() + "',open: true}";
+                    ztree.add(node);
+
+                }
+            } else {
+                String node = "{id:'t" + dictionary.getCode() + "', sId:'" + dictionary.getCode()
+                        + "', pId:null, name:'" + dictionary.getValue() + "',open: true}";
+                ztree.add(node);
+            }
         }
 
         // 构建组织机构树
@@ -222,10 +266,12 @@ public class CompanyService implements ICompanyService {
             }
 
             // 图标
-            // node += ",iconSkin:'company_tree_icon_" + company.getType() +
+            // node +=
+            // ",iconSkin:'company_tree_icon_" +
+            // company.getType() +
             // "'";
 
-            if (company.getHasChildren() > 0) {
+            if (company.getChildrenNum() > 0) {
                 node += ",open: true}";
             } else {
                 node += "}";

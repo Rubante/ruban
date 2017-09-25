@@ -1,7 +1,8 @@
 package com.ruban.rbac.login.form;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 public class LoginForm {
 
@@ -9,12 +10,14 @@ public class LoginForm {
      * 用户名
      * 
      */
-    private String userno;
+    @NotBlank
+    private String username;
 
     /**
      * 密码
      * 
      */
+    @NotBlank
     private String password;
 
     /**
@@ -24,12 +27,14 @@ public class LoginForm {
     @Min(value=4)
     private String validation;
 
-    public String getUserno() {
-        return userno;
+
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserno(String userno) {
-        this.userno = userno;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

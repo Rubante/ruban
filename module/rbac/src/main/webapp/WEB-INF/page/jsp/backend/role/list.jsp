@@ -7,7 +7,7 @@
 <table class="grid">
 	<thead>
 		<tr>
-			<th class="grid-checkbox"><input type="checkbox" onclick="checkedByName(event,'role_checkbox')"></th>
+			<th class="grid-checkbox"><input type="checkbox" onclick="checkedByName(event,'role_checkbox')" style="margin-right:9px;"></th>
 			<th>名称</th>
 			<th>是否可委托</th>
 			<th>状态</th>
@@ -28,7 +28,6 @@
 				<td>
 					<a href="javascript:rubanRole.detail('${result.id}');">查看</a>
 					<a href="javascript:rubanRole.update('${result.id}');">修改</a>
-
 					<c:choose>
 						<c:when test="${result.state == 1}">
 							<a href="javascript:rubanRole.unable('${result.id}');" style="color:red">禁用</a>

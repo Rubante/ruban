@@ -8,16 +8,16 @@
 		<tbody>
 			<tr>
 				<td class="kv-label">
-					账号：
+					用户名：
 				</td>
 				<td class="kv-content">
-					${result.accountNo}
+					${result.username}
 				</td>
 				<td class="kv-label">
-					昵称：
+					显示名：
 				</td>
 				<td class="kv-content">
-					${result.name}
+					${result.nick}
 				</td>
 			</tr>
 			<tr>
@@ -32,6 +32,20 @@
 				</td>
 				<td class="kv-content">
 					${result.personName}
+				</td>
+			</tr>
+			<tr>
+				<td class="kv-label">
+					拥有的角色：
+				</td>
+				<td class="kv-content" colspan="3">
+					<c:set value="1" var="index" />
+					<c:forEach items="${userRoles}" var="item">
+						<c:if test="${item.role != null}">
+							${index}.<span style="margin-left: 10px;">${item.role.name}</span><br />
+							<c:set var="index" value="${index + 1 }"></c:set>
+						</c:if>
+					</c:forEach>
 				</td>
 			</tr>
 			<tr>

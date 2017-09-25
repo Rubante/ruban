@@ -2,9 +2,11 @@ package com.ruban.rbac.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ruban.common.dict.CommonState;
 import com.ruban.framework.core.utils.commons.DateUtil;
 import com.ruban.framework.core.utils.commons.RandomUtil;
 import com.ruban.framework.dao.IRubanDao;
@@ -13,13 +15,19 @@ import com.ruban.framework.dao.helper.ResultInfo;
 import com.ruban.rbac.backend.role.form.RoleForm;
 import com.ruban.rbac.dao.authz.IRoleMapper;
 import com.ruban.rbac.domain.authz.Role;
+import com.ruban.rbac.service.IRolePermissionService;
 import com.ruban.rbac.service.IRoleService;
+import com.ruban.rbac.vo.permission.PermissionVo;
+import com.ruban.rbac.vo.role.RoleVo;
 
 @Service
 public class RoleService implements IRoleService {
 
     @Autowired
     private IRoleMapper roleMapper;
+
+    @Autowired
+    private IRolePermissionService permissionServcie;
 
     @Autowired
     private IRubanDao rubanDao;
@@ -46,15 +54,8 @@ public class RoleService implements IRoleService {
 
         Role role = new Role();
 
-        role.setName(roleForm.getName());
-        role.setType(roleForm.getType());
-        role.setCompanyId(roleForm.getCompanyId());
-        role.setMemo(roleForm.getMemo());
+        BeanUtils.copyProperties(roleForm, role);
 
-        role.setAddTime(DateUtil.getToday());
-        role.setModTime(DateUtil.getToday());
-        role.setAddUserId(0L);
-        role.setModUserId(0L);
         role.setUpdateLock(RandomUtil.getUpdateLock());
 
         roleMapper.insert(role);
@@ -65,16 +66,9 @@ public class RoleService implements IRoleService {
 
         Role role = findById(roleForm.getId());
 
-        role.setName(roleForm.getName());
-        role.setType(roleForm.getType());
-        role.setCompanyId(roleForm.getCompanyId());
-        role.setMemo(roleForm.getMemo());
+        BeanUtils.copyProperties(roleForm, role);
 
-        role.setModTime(DateUtil.getToday());
-        role.setModUserId(0L);
         role.setUpdateLock(RandomUtil.getUpdateLock());
-
-        role.setHoldLock(roleForm.getHoldLock());
 
         int result = roleMapper.update(role);
 
@@ -82,7 +76,7 @@ public class RoleService implements IRoleService {
     }
 
     /**
-     * 根据ID删除人员
+     * 根据ID删除角色
      * 
      * @param id
      * @return
@@ -92,7 +86,7 @@ public class RoleService implements IRoleService {
     }
 
     /**
-     * 批量删除人员
+     * 批量删除角色
      * 
      * @param ids
      * @return
@@ -101,20 +95,48 @@ public class RoleService implements IRoleService {
         return roleMapper.deleteByIds(ids);
     }
 
-    /**
-     * 排序人员
-     * 
-     * @param id
-     * @return
-     */
-    public int sortByIds(String[] ids) {
-        int count = 0;
-        for (int i = 0; ids != null && i < ids.length; i++) {
-            Long id = Long.parseLong(ids[i]);
-            count += roleMapper.updateOrderCode(id, i + 1);
-        }
+    @Override
+    public int enable(Long id) {
+        Role role = findById(id);
 
-        return count;
+        Role vo = new Role();
+        vo.setId(role.getId());
+        vo.setModTime(DateUtil.getNowTime());
+        vo.setHoldLock(role.getUpdateLock());
+        vo.setUpdateLock(RandomUtil.getUpdateLock());
+        vo.setState(CommonState.Enable.getValue());
+
+        return roleMapper.updateState(vo);
+    }
+
+    @Override
+    public int unable(Long id) {
+        Role role = findById(id);
+
+        Role vo = new Role();
+        vo.setId(role.getId());
+        vo.setModTime(DateUtil.getNowTime());
+        vo.setHoldLock(role.getUpdateLock());
+        vo.setUpdateLock(RandomUtil.getUpdateLock());
+        vo.setState(CommonState.Unable.getValue());
+
+        return roleMapper.updateState(vo);
+    }
+
+    @Override
+    public int grant(RoleVo roleVo) {
+
+        // 删除原有的授权
+        permissionServcie.deleteByRoleId(roleVo.getId());
+
+        PermissionVo vo = new PermissionVo();
+        vo.setRoleId(roleVo.getId());
+        vo.setResources(roleVo.getResources());
+        vo.setFlags(roleVo.getFlags());
+        vo.setModTime(roleVo.getModTime());
+        vo.setModUserId(roleVo.getModUserId());
+
+        return permissionServcie.grant(vo);
     }
 
     @Override

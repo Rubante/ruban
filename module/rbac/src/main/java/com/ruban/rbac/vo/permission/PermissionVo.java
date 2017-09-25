@@ -1,89 +1,33 @@
 package com.ruban.rbac.vo.permission;
 
-import java.io.Serializable;
+import java.util.List;
 
-import org.springframework.validation.annotation.Validated;
+import com.ruban.rbac.domain.authz.RolePermission;
 
-@Validated
-public class PermissionVo implements Serializable {
+public class PermissionVo extends RolePermission {
 
-    private static final long serialVersionUID = -8068180251093563415L;
+    private static final long serialVersionUID = 1L;
 
-    /** 主键 **/
-    private Long id;
+    /** 可授权的权限树 **/
+    private List<String> resources;
 
-    /** 权限类型 **/
-    private String type;
+    /** 是否可授权给别人 **/
+    private List<String> flags;
 
-    /** 权限名 **/
-    private String name;
-
-    /** 说明 **/
-    private String memo;
-
-    /** 状态 **/
-    private int state;
-
-    /** 所属组织机构 **/
-    private Long companyId;
-
-    /** 持有的锁 **/
-    private String holdLock;
-
-    public Long getId() {
-        return id;
+    public List<String> getResources() {
+        return resources;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setResources(List<String> resources) {
+        this.resources = resources;
     }
 
-    public String getType() {
-        return type;
+    public List<String> getFlags() {
+        return flags;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getHoldLock() {
-        return holdLock;
-    }
-
-    public void setHoldLock(String holdLock) {
-        this.holdLock = holdLock;
+    public void setFlags(List<String> flags) {
+        this.flags = flags;
     }
 
 }

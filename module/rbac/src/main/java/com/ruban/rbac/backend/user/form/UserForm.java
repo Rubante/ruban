@@ -1,94 +1,35 @@
-package com.ruban.rbac.backend.account.form;
+package com.ruban.rbac.backend.user.form;
 
-import java.io.Serializable;
+import com.ruban.rbac.vo.user.UserVo;
 
-import javax.validation.constraints.NotNull;
+/**
+ * 用户上送数据
+ * 
+ * @author yjwang
+ *
+ */
+public class UserForm extends UserVo {
 
-import org.springframework.validation.annotation.Validated;
+    /** 用户Id **/
+    private String userId;
 
-import com.ruban.rbac.backend.BackendForm;
+    /** 用户所选角色 **/
+    private String roles;
 
-@Validated
-public class AccountForm extends BackendForm implements Serializable {
-
-    private static final long serialVersionUID = -8068180251093563415L;
-
-    /** 实体ID **/
-    private Long id;
-
-    /** 登录账号 **/
-    private String accountNo;
-
-    /** 姓名 **/
-    @NotNull(message = "{account.name.notnull}")
-    private String name;
-
-    /** 密码 **/
-    private String password;
-
-    /** 备注 **/
-    private String memo;
-
-    /** 所属人员 **/
-    private Long personId;
-
-    /** 持有的锁 **/
-    private String holdLock;
-
-    public Long getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getAccountNo() {
-        return accountNo;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setAccountNo(String accountNo) {
-        this.accountNo = accountNo;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    public Long getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(Long personId) {
-        this.personId = personId;
-    }
-
-    public String getHoldLock() {
-        return holdLock;
-    }
-
-    public void setHoldLock(String holdLock) {
-        this.holdLock = holdLock;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ruban.framework.dao.helper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ import java.util.List;
  * @param <T>
  */
 public class ResultInfo<T> {
+
     // 当前页
     private int pageNum;
     // 每页的数量
@@ -25,6 +27,9 @@ public class ResultInfo<T> {
     private int pages;
     // 结果集
     private List<T> list;
+
+    // 结果集(转化对象)
+    private List<Object> items = new ArrayList<>();
 
     // 第一页
     private int firstPage;
@@ -100,6 +105,18 @@ public class ResultInfo<T> {
         this.list = list;
     }
 
+    public List<Object> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Object> items) {
+        this.items = items;
+    }
+
+    public <E> void addItem(E item) {
+        items.add(item);
+    }
+
     public int getFirstPage() {
         return firstPage;
     }
@@ -163,5 +180,4 @@ public class ResultInfo<T> {
     public void setHasNextPage(boolean hasNextPage) {
         this.hasNextPage = hasNextPage;
     }
-
 }

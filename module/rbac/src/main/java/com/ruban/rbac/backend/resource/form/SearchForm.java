@@ -11,13 +11,13 @@ import com.ruban.framework.dao.helper.Condition;
  */
 public class SearchForm extends Condition<Resource> {
 
-    private static final long serialVersionUID = 6438864561965004773L;
+    private static final long serialVersionUID = 1L;
 
     private String type;
 
     private String name;
 
-    private String flag;
+    private int displayFlag;
 
     public String getType() {
         return type;
@@ -35,12 +35,12 @@ public class SearchForm extends Condition<Resource> {
         this.name = name;
     }
 
-    public String getFlag() {
-        return flag;
+    public int getDisplayFlag() {
+        return displayFlag;
     }
 
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setDisplayFlag(int displayFlag) {
+        this.displayFlag = displayFlag;
     }
 
 }

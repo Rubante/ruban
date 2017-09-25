@@ -1,93 +1,44 @@
 package com.ruban.rbac.vo.role;
 
-import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import com.ruban.rbac.domain.authz.Role;
 
-import org.springframework.validation.annotation.Validated;
+public class RoleVo extends Role {
 
-@Validated
-public class RoleVo implements Serializable {
+    /** 可授权的权限树 **/
+    private List<String> resources;
 
-    private static final long serialVersionUID = -8068180251093563415L;
+    /** 是否可授权给别人 **/
+    private List<String> flags;
 
-    /** 实体ID **/
-    private Long id;
+    /** id字符串 **/
+    private String resourceIds;
 
-    /** 姓名 **/
-    @NotNull(message = "{person.name.notnull}")
-    private String name;
-
-    /** 角色类型 **/
-    private String type;
-
-    /** 备注说明 **/
-    private String memo;
-
-    /** 所属公司 **/
-    @NotNull(message = "{person.company.notnull}")
-    private Long companyId;
-
-    /** 更新锁 **/
-    private String updateLock;
-
-    /** 持有的锁 **/
-    private String holdLock;
-
-    public Long getId() {
-        return id;
+    public List<String> getResources() {
+        resources = Arrays.asList(resourceIds.split(","));
+        return resources;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setResources(List<String> resources) {
+        this.resources = resources;
     }
 
-    public String getName() {
-        return name;
+    public List<String> getFlags() {
+        return flags;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFlags(List<String> flags) {
+        this.flags = flags;
     }
 
-    public String getType() {
-        return type;
+    public String getResourceIds() {
+        return resourceIds;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getUpdateLock() {
-        return updateLock;
-    }
-
-    public void setUpdateLock(String updateLock) {
-        this.updateLock = updateLock;
-    }
-
-    public String getHoldLock() {
-        return holdLock;
-    }
-
-    public void setHoldLock(String holdLock) {
-        this.holdLock = holdLock;
+    public void setResourceIds(String resourceIds) {
+        this.resourceIds = resourceIds;
     }
 
 }

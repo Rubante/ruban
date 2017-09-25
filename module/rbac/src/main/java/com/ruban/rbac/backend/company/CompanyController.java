@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ruban.common.dict.DictionaryGroupKey;
+import com.ruban.common.dict.CompanyType;
 import com.ruban.common.domain.Dictionary;
+import com.ruban.framework.core.spring.SpringContext;
 import com.ruban.framework.core.utils.commons.StringUtil;
 import com.ruban.framework.web.page.JsonResult;
 import com.ruban.rbac.backend.BackendController;
 import com.ruban.rbac.backend.company.form.CompanyForm;
+import com.ruban.rbac.backend.company.form.CompanyMapping;
 import com.ruban.rbac.backend.company.form.SearchForm;
 import com.ruban.rbac.domain.organization.Company;
-import com.ruban.rbac.service.ServiceLocator;
+import com.ruban.rbac.service.ICompanyService;
 
 /**
  * 组织机构管理
@@ -35,22 +37,22 @@ import com.ruban.rbac.service.ServiceLocator;
 public class CompanyController extends BackendController {
 
     @Autowired
-    private ServiceLocator serviceLocator;
+    private ICompanyService companyService;
 
-    @RequestMapping("/company/main")
+    @RequestMapping(CompanyMapping.URI_MAIN)
     public String main(Model model) {
 
-        String companyTree = getCompanyTree();
-        model.addAttribute("companyTree", companyTree);
-        model.addAttribute("ztree", companyTree);
+        SearchForm searchForm = new SearchForm();
 
-        return "backend/company/main";
+        search(model, searchForm);
+
+        return CompanyMapping.PAGE_MAIN;
     }
 
-    @RequestMapping("/company/getTree")
+    @RequestMapping(CompanyMapping.URI_GET_TREE)
     @ResponseBody
-    public String getTree() {
-        return getCompanyTree();
+    public String getTree(String type) {
+        return getCompanyTree(type);
     }
 
     /**
@@ -58,41 +60,39 @@ public class CompanyController extends BackendController {
      * 
      * @return
      */
-    @RequestMapping(value = "/company/list", method = RequestMethod.POST)
-    public String list(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
+    @RequestMapping(value = CompanyMapping.URI_SEARCH, method = RequestMethod.POST)
+    public String search(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
 
-        // 数据字典：机构类型
-        List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.COMPANY_TYPE);
-        model.addAttribute("dicts", dicts);
-        Map<String, Dictionary> dictMap = getDictionaryMap(dicts);
+        // 初始化数据
+        prepareData(model);
 
-        List<Company> list = serviceLocator.getCompanyService().selectByCondition(searchForm);
+        // 设定只查询父节点分页
+        searchForm.setCompanyId(0L);
+
+        List<Company> list = companyService.selectByCondition(searchForm);
 
         model.addAttribute("list", list);
-        model.addAttribute("dictMap", dictMap);
 
-        return "backend/company/list";
+        // 下级节点是否显示
+        model.addAttribute("childDisplay", searchForm.getChildDisplay());
+
+        return CompanyMapping.PAGE_LIST;
     }
 
     /**
-     * 排序查询数据
+     * 跳转到添加页面
      * 
+     * @param model
      * @return
      */
-    @RequestMapping(value = "/company/sortList", method = RequestMethod.POST)
-    public String sortList(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
+    @RequestMapping(value = CompanyMapping.URI_ADD_PAGE, method = RequestMethod.POST)
+    public String addPage(Model model) {
 
-        // 数据字典：机构类型
-        List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.COMPANY_TYPE);
-        model.addAttribute("dicts", dicts);
-        Map<String, Dictionary> dictMap = getDictionaryMap(dicts);
+        // 预置数据
+        prepareData(model);
 
-        List<Company> list = serviceLocator.getCompanyService().selectByCondition(searchForm);
+        return CompanyMapping.PAGE_ADD;
 
-        model.addAttribute("list", list);
-        model.addAttribute("dictMap", dictMap);
-
-        return "backend/company/sortList";
     }
 
     /**
@@ -103,38 +103,46 @@ public class CompanyController extends BackendController {
      * @param bindingResult
      * @return
      */
-    @RequestMapping(value = "/company/add", method = RequestMethod.POST)
-    public String add(Model model, @Valid @ModelAttribute("companyForm") CompanyForm companyForm,
+    @ResponseBody
+    @RequestMapping(value = CompanyMapping.URI_ADD_SAVE, method = RequestMethod.POST)
+    public JsonResult add(Model model, @Valid @ModelAttribute("companyForm") CompanyForm companyVo,
             BindingResult bindingResult, HttpServletResponse response) {
 
         JsonResult result = new JsonResult();
 
-        // 展示页面
-        if (companyForm.getIsForm() == 0) {
-            // 数据字典：机构类型
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.COMPANY_TYPE);
-            model.addAttribute("items", dicts);
-
-            return "backend/company/add";
-        }
-
-        // 数据校验错误
-        if (bindingResult.hasErrors()) {
-            return "backend/company/add";
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
+            return result;
         }
 
         // 登录信息
-        companyForm.setAddUserId(0L);
-        companyForm.setModUserId(0L);
+        companyVo.setAddUserId(0L);
+        companyVo.setModUserId(0L);
 
-        serviceLocator.getCompanyService().insert(companyForm);
+        companyService.insert(companyVo);
 
-        result.setFlag(1);
-        result.setMsg("修改成功！");
+        wrapSuccess(result, "添加成功");
 
-        printJson(response, result);
+        return result;
+    }
 
-        return null;
+    /**
+     * 跳转到更新页面
+     * 
+     * @param model
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = CompanyMapping.URI_UPDATE_PAGE, method = RequestMethod.POST)
+    public String updatePage(Model model, Long id) {
+
+        // 预置数据
+        prepareData(model);
+
+        Company company = companyService.findById(id);
+        model.addAttribute("result", company);
+
+        return CompanyMapping.PAGE_UPDATE;
     }
 
     /**
@@ -147,90 +155,76 @@ public class CompanyController extends BackendController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/company/update", method = RequestMethod.POST)
-    public String update(String id, Model model, @Valid @ModelAttribute("companyForm") CompanyForm companyForm,
+    @ResponseBody
+    @RequestMapping(value = CompanyMapping.URI_UPDATE_SAVE, method = RequestMethod.POST)
+    public JsonResult update(String id, Model model, @Valid @ModelAttribute("companyForm") CompanyForm companyForm,
             BindingResult bindingResult, HttpServletResponse response) {
 
-        // 展示页面
-        if (companyForm.getIsForm() == 0) {
-            Company company = serviceLocator.getCompanyService().findById(Long.parseLong(id));
-
-            if (company != null) {
-                model.addAttribute("result", company);
-            }
-
-            // 数据字典：机构类型
-            List<Dictionary> dicts = getDictionarys(DictionaryGroupKey.COMPANY_TYPE);
-            model.addAttribute("dicts", dicts);
-
-            return "backend/company/update";
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "backend/company/update";
-        }
-
         JsonResult result = new JsonResult();
+
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
+            return result;
+        }
+
         // 乐观锁
         if (companyForm.getHoldLock() == null) {
-            result.setMsg("未持有锁，无法更新！");
-            return "backend/company/update";
+            result.getResult().put("error", SpringContext.getText("holdLockNo"));
+            return result;
         }
 
         // 登录信息
         companyForm.setModUserId(0L);
 
-        int count = serviceLocator.getCompanyService().update(companyForm);
+        int count = companyService.update(companyForm);
 
         if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("修改成功！");
+            wrapSuccess(result, SpringContext.getText("updateOk"));
         } else {
-            result.setFlag(0);
-            result.setMsg("修改失败，数据已发生变化，无法保存！");
+            wrapError(result, SpringContext.getText("updateNoLock"));
         }
 
-        printJson(response, result);
-
-        return null;
+        return result;
     }
 
     /**
      * 根据ID获取组织机构
      * 
      * @param id
+     * @param model
+     * @param response
      * @return
      */
-    @RequestMapping(value = "/company/detail", method = RequestMethod.POST)
+    @RequestMapping(value = CompanyMapping.URI_DETAIL, method = RequestMethod.POST)
     public String detail(String id, Model model, HttpServletResponse response) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
+
+        if (!checkId(id)) {
+
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             printJson(response, result);
 
             return null;
         }
 
-        // 数据字典：机构类型
-        Map<String, Dictionary> dictMap = getDictionaryMap(DictionaryGroupKey.COMPANY_TYPE);
-
-        Company company = serviceLocator.getCompanyService().findById(Long.parseLong(id));
+        Company company = companyService.findById(Long.parseLong(id));
 
         if (company != null) {
 
+            // 预置数据
+            prepareData(model);
+
             model.addAttribute("company", company);
-            model.addAttribute("dictMap", dictMap);
 
+            return CompanyMapping.PAGE_DETAIL;
         } else {
-            result.setFlag(0);
-            result.setMsg("未找到相应的记录！");
+            wrapError(result, SpringContext.getText("noResult"));
             printJson(response, result);
-        }
 
-        return "backend/company/detail";
+            return null;
+        }
     }
 
     /**
@@ -240,26 +234,21 @@ public class CompanyController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/company/delete", method = RequestMethod.POST)
+    @RequestMapping(value = CompanyMapping.URI_DELETE, method = RequestMethod.POST)
     public JsonResult delete(String id) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
+
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             return result;
         }
 
-        int count = serviceLocator.getCompanyService().deleteById(Long.parseLong(id));
+        int count = companyService.deleteById(Long.parseLong(id));
 
-        if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
-        }
+        // 校验删除结果
+        checkDelete(result, count);
 
         return result;
     }
@@ -271,30 +260,43 @@ public class CompanyController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/company/batchDelete", method = RequestMethod.POST)
+    @RequestMapping(value = CompanyMapping.URI_BATCH_DELETE, method = RequestMethod.POST)
     public JsonResult deleteByIds(String ids) {
 
         JsonResult result = new JsonResult();
-        if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
+
+        if (!checkId(ids)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             return result;
         }
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getCompanyService().deleteByIds(idArr);
+        int count = companyService.deleteByIds(idArr);
 
-        if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
-        }
+        // 校验删除结果
+        checkDelete(result, count);
 
         return result;
+    }
+
+    /**
+     * 排序查询数据
+     * 
+     * @return
+     */
+    @RequestMapping(value = CompanyMapping.URI_SORT_LIST, method = RequestMethod.POST)
+    public String sortList(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
+
+        // 初始化数据
+        prepareData(model);
+
+        List<Company> list = companyService.selectByCondition(searchForm);
+
+        model.addAttribute("list", list);
+
+        return CompanyMapping.PAGE_SORT_LIST;
     }
 
     /**
@@ -304,29 +306,41 @@ public class CompanyController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/company/sort", method = RequestMethod.POST)
+    @RequestMapping(value = CompanyMapping.URI_SORT, method = RequestMethod.POST)
     public JsonResult sort(String ids) {
 
         JsonResult result = new JsonResult();
+
+        // 排序ids为空
         if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
+            wrapError(result, SpringContext.getText("paramError", "ids"));
 
             return result;
         }
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getCompanyService().sortByIds(idArr);
+        int count = companyService.sortByIds(idArr);
 
         if (count == idArr.length) {
-            result.setFlag(1);
-            result.setMsg("排序成功！");
+            wrapSuccess(result, SpringContext.getText("sortOk"));
         } else {
-            result.setFlag(0);
-            result.setMsg("排序失败！");
+            wrapError(result, SpringContext.getText("sortError"));
         }
 
         return result;
     }
+
+    @Override
+    protected void prepareData(Model model) {
+
+        // 数据字典：机构类型
+        List<Dictionary> types = getDictionarys(CompanyType.KEY);
+        model.addAttribute("types", types);
+
+        // 数据字典:机构类型
+        Map<String, Dictionary> typeMap = getDictionaryMap(CompanyType.KEY);
+        model.addAttribute("typeMap", typeMap);
+    }
+
 }

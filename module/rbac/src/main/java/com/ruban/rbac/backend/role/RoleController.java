@@ -1,6 +1,7 @@
 package com.ruban.rbac.backend.role;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -17,15 +18,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ruban.framework.core.utils.commons.StringUtil;
+import com.ruban.common.dict.CommonState;
+import com.ruban.common.dict.YesNo;
+import com.ruban.common.domain.Dictionary;
+import com.ruban.framework.core.spring.SpringContext;
+import com.ruban.framework.core.utils.commons.DateUtil;
 import com.ruban.framework.dao.helper.ResultInfo;
 import com.ruban.framework.web.page.JsonResult;
 import com.ruban.rbac.backend.BackendController;
 import com.ruban.rbac.backend.role.form.RoleForm;
-import com.ruban.rbac.backend.role.form.SearchForm;
+import com.ruban.rbac.backend.role.form.RoleMapping;
+import com.ruban.rbac.backend.role.form.RoleCondition;
 import com.ruban.rbac.base.Pagination;
 import com.ruban.rbac.domain.authz.Role;
-import com.ruban.rbac.service.ServiceLocator;
+import com.ruban.rbac.domain.authz.RolePermission;
+import com.ruban.rbac.service.IRolePermissionService;
+import com.ruban.rbac.service.IRoleService;
+import com.ruban.rbac.vo.permission.PermissionCondition;
 
 /**
  * 角色管理
@@ -39,25 +48,30 @@ public class RoleController extends BackendController {
     Logger logger = LoggerFactory.getLogger(RoleController.class);
 
     @Autowired
-    private ServiceLocator serviceLocator;
+    private IRoleService roleService;
 
-    @RequestMapping("/role/main")
+    @Autowired
+    private IRolePermissionService permissionService;
+
+    @RequestMapping(RoleMapping.URI_MAIN)
     public String main(Model model) {
 
-        SearchForm searchForm = new SearchForm();
+        RoleCondition searchForm = new RoleCondition();
 
         search(model, searchForm);
 
-        return "backend/role/main";
+        return RoleMapping.PAGE_MAIN;
     }
 
-    @RequestMapping(value = "/role/search", method = RequestMethod.POST)
-    public String search(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
+    @RequestMapping(value = RoleMapping.URI_SEARCH, method = RequestMethod.POST)
+    public String search(Model model, @ModelAttribute("searchForm") RoleCondition searchForm) {
+
+        prepareData(model);
 
         String companyTree = getCompanyTree();
         model.addAttribute("companyTree", companyTree);
 
-        ResultInfo<Role> resultInfo = serviceLocator.getRoleService().selectByPage(searchForm);
+        ResultInfo<Role> resultInfo = roleService.selectByPage(searchForm);
 
         Pagination<Role> pagination = new Pagination<>();
         pagination.gereate(resultInfo);
@@ -65,7 +79,7 @@ public class RoleController extends BackendController {
         model.addAttribute("pagination", pagination);
         model.addAttribute("resultInfo", resultInfo);
 
-        return "backend/role/list";
+        return RoleMapping.PAGE_LIST;
     }
 
     /**
@@ -74,96 +88,97 @@ public class RoleController extends BackendController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/role/addPage", method = RequestMethod.POST)
+    @RequestMapping(value = RoleMapping.URI_ADD_PAGE, method = RequestMethod.POST)
     public String addPage(Model model) {
 
         // 预置数据
         prepareData(model);
 
-        return "backend/role/add";
+        return RoleMapping.PAGE_ADD;
     }
 
     /**
      * 添加角色
      * 
-     * @param model
      * @param roleForm
      * @param bindingResult
+     * @param model
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/role/addSave", method = RequestMethod.POST)
-    public JsonResult add(@Valid @ModelAttribute("roleForm") RoleForm roleForm, BindingResult bindingResult) {
+    @RequestMapping(value = RoleMapping.URI_ADD_SAVE, method = RequestMethod.POST)
+    public JsonResult add(@Valid @ModelAttribute("roleForm") RoleForm roleForm, BindingResult bindingResult,
+            Model model) {
 
         JsonResult result = new JsonResult();
 
-        if (bindingResult.hasErrors()) {
-            result.getResult().put("error", bindingResult.getAllErrors());
-
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
             return result;
         }
 
-        serviceLocator.getRoleService().insert(roleForm);
+        roleService.insert(roleForm);
 
-        result.setFlag(1);
-        result.setMsg("添加成功！");
+        wrapSuccess(result, "添加成功");
 
         return result;
     }
 
     /**
-     * 跳转到更新页面
+     * 跳转到修改页面
      * 
      * @param model
-     * @param id
      * @return
      */
-    @RequestMapping(value = "/role/updatePage", method = RequestMethod.POST)
+    @RequestMapping(value = RoleMapping.URI_UPDATE_PAGE, method = RequestMethod.POST)
     public String updatePage(Model model, Long id) {
 
         // 预置数据
         prepareData(model);
 
-        Role role = serviceLocator.getRoleService().findById(id);
+        Role role = roleService.findById(id);
         model.addAttribute("result", role);
 
-        return "backend/role/update";
+        return RoleMapping.PAGE_UPDATE;
     }
 
     /**
      * 更新角色
      * 
+     * @param model
+     * @param id
      * @param roleForm
      * @param bindingResult
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/role/updateSave", method = RequestMethod.POST)
-    public JsonResult update(@Valid @ModelAttribute("roleForm") RoleForm roleForm, BindingResult bindingResult) {
+    @RequestMapping(value = RoleMapping.URI_UPDATE_SAVE, method = RequestMethod.POST)
+    public JsonResult update(Model model, String id, @Valid @ModelAttribute("roleForm") RoleForm roleForm,
+            BindingResult bindingResult) {
 
         JsonResult result = new JsonResult();
 
-        if (bindingResult.hasErrors()) {
-            result.getResult().put("error", bindingResult.getAllErrors());
-
+        // 校验表单是否错误
+        if (!checkForm(result, bindingResult)) {
             return result;
         }
 
         // 乐观锁
         if (roleForm.getHoldLock() == null) {
-            result.getResult().put("error", "未持有锁，无法更新！");
-
+            result.getResult().put("error", SpringContext.getText("holdLockNo"));
             return result;
         }
 
-        int count = serviceLocator.getRoleService().update(roleForm);
+        // 设置修改人
+        roleForm.setModUserId(1L);
+        roleForm.setModTime(DateUtil.getNowTime());
+
+        int count = roleService.update(roleForm);
 
         if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("修改成功！");
+            wrapSuccess(result, SpringContext.getText("updateOk"));
         } else {
-            result.setFlag(0);
-            result.setMsg("修改失败，数据已发生变化，无法保存！");
+            wrapSuccess(result, SpringContext.getText("updateNoLock"));
         }
 
         return result;
@@ -175,33 +190,30 @@ public class RoleController extends BackendController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/role/detail", method = RequestMethod.POST)
+    @RequestMapping(value = RoleMapping.URI_DETAIL, method = RequestMethod.POST)
     public String detail(Model model, String id, HttpServletResponse response) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             printJson(response, result);
 
             return null;
         }
 
-        Role role = serviceLocator.getRoleService().findById(Long.parseLong(id));
+        Role role = roleService.findById(Long.parseLong(id));
 
         if (role != null) {
             model.addAttribute("result", role);
-        } else {
-            result.setFlag(0);
-            result.setMsg("未找到相应的记录！");
+            return RoleMapping.PAGE_DETAIL;
 
+        } else {
+            wrapError(result, SpringContext.getText("noResult"));
             printJson(response, result);
 
             return null;
         }
-
-        return "backend/role/detail";
     }
 
     /**
@@ -211,26 +223,68 @@ public class RoleController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/role/delete", method = RequestMethod.POST)
+    @RequestMapping(value = RoleMapping.URI_DELETE, method = RequestMethod.POST)
     public JsonResult delete(String id) {
 
         JsonResult result = new JsonResult();
-        if (!StringUtil.isDigit(id)) {
-            result.setFlag(0);
-            result.setMsg("id 参数不正确！");
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
 
             return result;
         }
 
-        int count = serviceLocator.getRoleService().deleteById(Long.parseLong(id));
+        int count = roleService.deleteById(Long.parseLong(id));
 
-        if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
+        // 校验删除结果
+        checkDelete(result, count);
+
+        return result;
+    }
+
+    /**
+     * 启用角色
+     * 
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = RoleMapping.URI_ENABLE, method = RequestMethod.POST)
+    public JsonResult enable(String id) {
+
+        JsonResult result = new JsonResult();
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
+
+            return result;
         }
+
+        roleService.enable(Long.parseLong(id));
+
+        wrapSuccess(result, "启用成功");
+
+        return result;
+    }
+
+    /**
+     * 启用角色
+     * 
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = RoleMapping.URI_UNABLE, method = RequestMethod.POST)
+    public JsonResult unable(String id) {
+
+        JsonResult result = new JsonResult();
+        if (!checkId(id)) {
+            wrapError(result, SpringContext.getText("paramError", "id"));
+
+            return result;
+        }
+
+        roleService.unable(Long.parseLong(id));
+
+        wrapSuccess(result, "禁用成功");
 
         return result;
     }
@@ -242,19 +296,36 @@ public class RoleController extends BackendController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/role/grantPage", method = RequestMethod.POST)
+    @RequestMapping(value = RoleMapping.URI_GRANT_PAGE, method = RequestMethod.POST)
     public String grantPage(Model model, Long id) {
 
         // 预置数据
         prepareData(model);
 
-        Role role = serviceLocator.getRoleService().findById(id);
-        RoleForm form = new RoleForm();
-        BeanUtils.copyProperties(role, form);
+        // 角色信息
+        Role role = roleService.findById(id);
+        model.addAttribute("result", role);
 
-        model.addAttribute("result", form);
+        return RoleMapping.PAGE_GRANT;
+    }
 
-        return "backend/role/grant";
+    /**
+     * 授权列表数据
+     * 
+     * @param model
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = RoleMapping.URI_GRANT_LIST, method = RequestMethod.POST)
+    public List<RolePermission> grantList(Model model, Long roleId) {
+
+        PermissionCondition condition = new PermissionCondition();
+        condition.setRoleId(roleId);
+
+        List<RolePermission> list = permissionService.selectByCondition(condition);
+
+        return list;
     }
 
     /**
@@ -265,8 +336,8 @@ public class RoleController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/role/grantSave", method = RequestMethod.POST)
-    public JsonResult grant(@Valid @ModelAttribute("roleForm") RoleForm roleForm, BindingResult bindingResult) {
+    @RequestMapping(value = RoleMapping.URI_GRANT_SAVE, method = RequestMethod.POST)
+    public JsonResult grant(@Valid @ModelAttribute("role_grant_form") RoleForm roleForm, BindingResult bindingResult) {
 
         JsonResult result = new JsonResult();
 
@@ -276,21 +347,15 @@ public class RoleController extends BackendController {
             return result;
         }
 
-        // 乐观锁
-        if (roleForm.getHoldLock() == null) {
-            result.getResult().put("error", "未持有锁，无法授权！");
+        roleForm.setModTime(DateUtil.getNowTime());
+        roleForm.setModUserId(1L);
 
-            return result;
-        }
-
-        int count = serviceLocator.getRoleService().update(roleForm);
+        int count = roleService.grant(roleForm);
 
         if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("授权成功！");
+            wrapSuccess(result, "授权成功");
         } else {
-            result.setFlag(0);
-            result.setMsg("授权失败，数据已发生变化，无法保存！");
+            wrapError(result, "授权失败");
         }
 
         return result;
@@ -303,75 +368,21 @@ public class RoleController extends BackendController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/role/batchDelete", method = RequestMethod.POST)
+    @RequestMapping(value = RoleMapping.URI_BATCH_DELETE, method = RequestMethod.POST)
     public JsonResult deleteByIds(String ids) {
 
         JsonResult result = new JsonResult();
-        if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
+        if (!checkId(ids)) {
+            wrapError(result, SpringContext.getText("paramError", "ids"));
 
             return result;
         }
 
         String[] idArr = ids.split(",");
 
-        int count = serviceLocator.getRoleService().deleteByIds(idArr);
+        int count = roleService.deleteByIds(idArr);
 
-        if (count > 0) {
-            result.setFlag(1);
-            result.setMsg("删除成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("删除失败！");
-        }
-
-        return result;
-    }
-
-    /**
-     * 排序查询数据
-     * 
-     * @return
-     */
-    @RequestMapping(value = "/role/sortList", method = RequestMethod.POST)
-    public String sortList(Model model, @ModelAttribute("searchForm") SearchForm searchForm) {
-
-        List<Role> list = serviceLocator.getRoleService().selectByCondition(searchForm);
-        model.addAttribute("list", list);
-
-        return "backend/role/sortList";
-    }
-
-    /**
-     * 结果排序
-     * 
-     * @param id
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/role/sort", method = RequestMethod.POST)
-    public JsonResult sort(String ids) {
-
-        JsonResult result = new JsonResult();
-        if (StringUtil.isNullOrEmpty(ids)) {
-            result.setFlag(0);
-            result.setMsg("ids 参数不正确！");
-
-            return result;
-        }
-
-        String[] idArr = ids.split(",");
-
-        int count = serviceLocator.getRoleService().sortByIds(idArr);
-
-        if (count == idArr.length) {
-            result.setFlag(1);
-            result.setMsg("排序成功！");
-        } else {
-            result.setFlag(0);
-            result.setMsg("排序失败！");
-        }
+        checkDelete(result, count);
 
         return result;
     }
@@ -379,5 +390,20 @@ public class RoleController extends BackendController {
     @Override
     protected void prepareData(Model model) {
 
+        // 是否map对象
+        Map<String, Dictionary> yesnoMap = getDictionaryMap(YesNo.KEY);
+        model.addAttribute("yesnoMap", yesnoMap);
+
+        // 是否可委托：list
+        List<Dictionary> yesnos = getDictionarys(YesNo.KEY);
+        model.addAttribute("yesnos", yesnos);
+
+        // 状态：map
+        Map<String, Dictionary> stateMap = getDictionaryMap(CommonState.KEY);
+        model.addAttribute("stateMap", stateMap);
+
+        // 状态：map
+        List<Dictionary> states = getDictionarys(CommonState.KEY);
+        model.addAttribute("states", states);
     }
 }
